@@ -90,6 +90,14 @@ So "Opus 5.5 is less Claude-ish" is too simple. It writes *longer*, leans
 dropped the em-dash. The judge's lower score reflects a real shift in register,
 not a retreat into plain prose.
 
+**The consequence matters if you are building a detector.** Any
+"was this written by Claude?" heuristic built on the Opus 5 signature —
+em-dashes, `load-bearing`, antithesis pivots — will **under-read Opus 5.5**,
+because the structures 5.5 leans on went *up* rather than down. A metric set
+needs both halves. In this harness only the local scan measures the ones that
+increased; the AX code evaluator currently sees em-dashes alone, which is the
+gap worth closing first.
+
 ### What this does not establish
 
 - **2 repeats, not 3.** Per-cell stochasticity is only lightly averaged; the
@@ -104,6 +112,9 @@ not a retreat into plain prose.
   are carrying the result.
 
 Cost: ~$15 of briefs (one-off, committed as fixtures) + $7.00 of posts.
+Briefs averaged ~$0.88 each, but split by domain: ~$1.00 for `ai` topics
+against ~$0.56 for travel/cooking/games/books, since fewer search results
+accumulate as input tokens.
 
 ---
 
@@ -371,6 +382,11 @@ ax tasks create-evaluation --name "Em Dash Scoring (code)" \
 
 The **eval index lags ingestion by 1–2 hours.** A window ending "now" over
 freshly written spans completes successfully and scores nothing, so leave a gap.
+
+Leave slack at **both** ends, too. On the 80-post run a window ending at the
+moment generation finished missed the single most recent span — it was 15
+seconds inside the boundary — giving 39/40 for one model. A second trigger over
+a later window picked it up.
 
 ```bash
 ax tasks trigger-run <TASK_ID> \
