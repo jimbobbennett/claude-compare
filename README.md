@@ -213,6 +213,7 @@ Then edit `.env`:
 | `ANTHROPIC_API_KEY` | Required. Used for both research and writing. |
 | `ARIZE_API_KEY` | Required, for tracing. |
 | `ARIZE_SPACE_ID` | Required, for tracing. |
+| `ARIZE_SPACE` | Space name or ID, used by `blogwriter-ax-report`. Find it with `ax spaces list`. |
 | `BLOGWRITER_PROJECT_NAME` | Optional. Defaults to `claude-compare-blogwriter`. |
 | `ARIZE_COLLECTOR_ENDPOINT` | Only if your Arize account is outside the US region. |
 

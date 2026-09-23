@@ -1,6 +1,6 @@
 """Read AX evaluation results back and rank the models.
 
-The evaluators run **in Arize AX** (see AX_SETUP.md), not here. This module
+The evaluators run **in Arize AX** (see the README), not here. This module
 only reads what AX produced and aggregates it, so the answer to "which model
 scores best" comes out of AX's own scoring rather than a local reimplementation.
 
@@ -17,6 +17,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import re
 import statistics
 import subprocess
@@ -28,6 +29,8 @@ from pathlib import Path
 from .determinism import print_stderr
 
 DEFAULT_PROJECT = "claude-compare-blogwriter"
+# No default space: it is account-specific. Set ARIZE_SPACE or pass --space.
+DEFAULT_SPACE = os.environ.get("ARIZE_SPACE", "")
 # Only spans AX has actually scored.
 SCORED_FILTER = "eval.claudism_density.label IS NOT NULL"
 BRIEF_GROUP = "BRIEFS (baseline)"
@@ -394,6 +397,12 @@ def print_crosstab(
 
 
 def run(args: argparse.Namespace) -> int:
+    if not args.space:
+        print_stderr(
+            "error: no Arize space given. Pass --space, or set ARIZE_SPACE. "
+            "List them with: ax spaces list"
+        )
+        return 2
     try:
         spans = export_scored_spans(args.project, args.space, args.limit)
     except Exception as exc:
@@ -452,7 +461,11 @@ def main() -> int:
         description="Read AX evaluation results and rank the models.",
     )
     parser.add_argument("--project", default=DEFAULT_PROJECT)
-    parser.add_argument("--space", default="jbennett Space")
+    parser.add_argument(
+        "--space",
+        default=DEFAULT_SPACE,
+        help="Arize space name or ID. Defaults to $ARIZE_SPACE.",
+    )
     parser.add_argument("--limit", type=int, default=200)
     parser.add_argument(
         "--run-id",
