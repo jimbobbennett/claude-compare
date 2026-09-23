@@ -8,8 +8,6 @@ dependencies = [
     "arize-otel>=0.13.0",
     "openinference-instrumentation>=0.1.0",
     "openinference-instrumentation-anthropic>=2.1.5",
-    "openai>=1.0.0",
-    "openinference-instrumentation-openai>=0.1.0",
     "openinference-semantic-conventions>=0.1.0",
     "python-dotenv>=1.0.0",
     "pyyaml>=6.0",
@@ -19,8 +17,17 @@ dependencies = [
 blogwriter = "blogwriter.cli:main"
 blogwriter-batch = "blogwriter.batch:main"
 blogwriter-research = "blogwriter.research:main"
-blogwriter-eval = "blogwriter.evaluate:main"
+blogwriter-scan = "blogwriter.scan:main"
 blogwriter-ax-report = "blogwriter.ax_report:main"
+
+[dependency-groups]
+dev = [
+    "pytest>=8.0",
+    "ruff>=0.14",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
 
 [build-system]
 requires = ["hatchling"]

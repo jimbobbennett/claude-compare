@@ -60,7 +60,6 @@ def init_tracing():
 
     from arize.otel import register
     from openinference.instrumentation.anthropic import AnthropicInstrumentor
-    from openinference.instrumentation.openai import OpenAIInstrumentor
 
     kwargs = {
         "space_id": _require_env("ARIZE_SPACE_ID"),
@@ -76,8 +75,6 @@ def init_tracing():
 
     _tracer_provider = register(**kwargs)
     AnthropicInstrumentor().instrument(tracer_provider=_tracer_provider)
-    # The evaluator's judge runs on OpenAI, so its calls are traced too.
-    OpenAIInstrumentor().instrument(tracer_provider=_tracer_provider)
     _tracer = OITracer(
         _tracer_provider.get_tracer(__name__), config=TraceConfig()
     )

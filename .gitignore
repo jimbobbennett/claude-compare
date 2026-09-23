@@ -1,6 +1,18 @@
+# Secrets
 .env
+
+# Python
 .venv/
 __pycache__/
 *.py[cod]
+
+# Generated posts and scoring output -- regenerate with blogwriter-batch.
+# Briefs are NOT ignored: they are committed fixtures.
 output/
 .scratch/
+.arize-tmp-traces/
+
+# Vendored Arize skills, reinstallable from skills-lock.json (source + hash
+# per skill), plus local Claude Code session config. Not project code.
+.agents/
+.claude/
