@@ -213,3 +213,100 @@ def test_topic_set_spans_domains_and_genres():
     topics = load_topics()
     assert len({t.domain for t in topics}) >= 4
     assert len({t.genre for t in topics}) >= 4
+
+
+# --- judge spec / template sync -------------------------------------------
+
+
+def test_ax_template_matches_the_spec():
+    """The deployed judge prompt is generated from judge_spec.py. If this
+    fails, someone edited one without regenerating the other."""
+    from blogwriter.judge_spec import TEMPLATE_PATH, render_template
+
+    assert TEMPLATE_PATH.read_text() == render_template(), (
+        "ax/claudism_template.txt is stale -- "
+        "run: uv run python -m blogwriter.judge_spec --write"
+    )
+
+
+def test_template_has_exactly_one_variable():
+    from blogwriter.judge_spec import render_template
+
+    rendered = render_template()
+    assert rendered.count("{output}") == 1
+    assert "{{" not in rendered, "server rejects double braces"
+
+
+def test_classification_choices_cover_the_scale():
+    from blogwriter.judge_spec import RATING_SCALE, classification_choices
+
+    choices = classification_choices()
+    assert set(choices) == set(RATING_SCALE)
+    assert sorted(choices.values()) == [1, 2, 3, 4, 5]
+
+
+# --- destyle safety rails --------------------------------------------------
+
+
+def test_code_and_tables_are_protected_from_the_model():
+    from blogwriter.destyle import protect, restore
+
+    doc = (
+        "Prose.\n\n```bash\nuv run thing --flag 3.45\n```\n\n"
+        "| a | b |\n|---|---|\n| 1 | 2 |\n\nMore."
+    )
+    protected, blocks = protect(doc)
+    assert "uv run thing" not in protected, "code reached the model"
+    assert "| a | b |" not in protected, "table reached the model"
+    assert len(blocks) == 2
+    assert restore(protected, blocks) == doc
+
+
+def test_rewrite_rejected_when_a_number_is_lost():
+    from blogwriter.destyle import check
+
+    before = "The score was 3.45 against 2.77."
+    after = "The score was 3.4 against 2.77."
+    assert "lost" in (check(before, after, 0) or "")
+
+
+def test_rewrite_rejected_when_a_heading_changes():
+    from blogwriter.destyle import check
+
+    before = "## The results\n\nSome prose here that is long enough to pass."
+    after = "## Results\n\nSome prose here that is long enough to pass."
+    assert check(before, after, 0) == "headings changed"
+
+
+def test_rewrite_rejected_when_a_sentinel_is_dropped():
+    from blogwriter.destyle import check
+
+    before = "Text ⟦BLOCK0⟧ more text here to keep the length up."
+    after = "Text more text here to keep the length up and then some."
+    assert "sentinel" in (check(before, after, 1) or "")
+
+
+def test_rewrite_rejected_when_content_vanishes():
+    from blogwriter.destyle import check
+
+    before = "A long paragraph " * 20
+    after = "Short."
+    assert "shrank" in (check(before, after, 0) or "")
+
+
+def test_clean_rewrite_is_accepted():
+    from blogwriter.destyle import check
+
+    before = "## H\n\nIt is not slow, it is fast, scoring 3.45 on the scale."
+    after = "## H\n\nIt is fast. It scored 3.45 on the scale, which is good news."
+    assert check(before, after, 0) is None
+
+
+def test_section_split_and_rejoin_is_lossless():
+    """Sections must rejoin byte-identically, or headings glue together."""
+    from blogwriter.destyle import split_sections
+
+    doc = "# Title\n\nIntro.\n\n## One\n\nBody one.\n\n## Two\n\nBody two.\n"
+    parts = split_sections(doc)
+    assert "".join(body for _, body in parts) == doc
+    assert [h for h, _ in parts] == ["", "## One", "## Two"]

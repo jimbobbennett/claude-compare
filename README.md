@@ -4,31 +4,29 @@
 
 ## What this is
 
-Claude has a recognisable writing voice. If you have read much of its prose you
-will know the tells: the em-dash aside, the "it's not X — it's Y" pivot, the
-"load-bearing" metaphor, the short punchy closer, the habit of announcing an
-insight just before delivering it. People call these *claudisms*.
+Claude has a recognisable writing voice. Common features include em-dash
+asides, the "it's not X, it's Y" pivot, the "load-bearing" metaphor, short
+punchy closers, and announcing an insight just before delivering it. People call
+these *claudisms*.
 
 When Claude Opus 5.5 arrived, the obvious question was whether that voice came
-with it. This repository answers it with a measurement rather than an
-impression.
+with it. This repository measures that voice.
 
-It works in three parts. A local harness writes blog posts under a configurable
-model and traces every run to **Arize AX**. Two evaluators hosted **inside AX**
-score those posts — an LLM-as-judge that rates how heavily the prose leans on
-Claude's signature constructions, and a deterministic code evaluator that counts
-em-dashes. A small reporting command reads the scores back out of AX and ranks
-the models.
+A local harness writes blog posts under a configurable model and traces every
+run to **Arize AX**. Two evaluators hosted **inside AX** score the posts. An
+LLM-as-judge rates how heavily the prose leans on Claude's signature
+constructions, and a deterministic code evaluator counts em-dashes. A small
+reporting command reads the scores back out of AX and ranks the models.
 
-The short answer: **Opus 5 writes more like Claude than Opus 5.5 does, and the
-clearest single tell is the em-dash.** The fuller answer is more interesting,
-because Opus 5.5 did not simply become plainer.
+**Opus 5 writes more like Claude than Opus 5.5 does, and the clearest single
+tell is the em-dash.** Opus 5.5 also changed its use of other stylistic
+constructions.
 
 ---
 
 ## The results
 
-The experiment ran 20 topics across 2 models with 2 repeats each — 80 posts,
+The experiment ran 20 topics across 2 models with 2 repeats each, for 80 posts,
 balanced at 40 per model, no failures.
 
 ```
@@ -47,8 +45,7 @@ evaluator is measuring the writing rather than the subject matter.
 
 ### The em-dash is the clearest single signal
 
-This one needs no judge at all. It is a regular expression counting a
-character:
+A regular expression counts the character directly:
 
 | | em-dashes per 1000 words |
 |---|---|
@@ -56,9 +53,8 @@ character:
 | Opus 5.5 | **0.05** |
 
 Across 40 posts and roughly 55,000 words, Opus 5.5 used **two em-dashes in
-total.** Opus 5 reached for them constantly. If you have been using the em-dash
-as a quick "did Claude write this?" heuristic, it worked well on Opus 5 and it
-does not work on 5.5.
+total.** Opus 5 used them frequently. The em-dash heuristic for identifying
+Claude writing worked well on Opus 5 and does not work on 5.5.
 
 ### The difference holds everywhere
 
@@ -85,15 +81,14 @@ The same holds across the five writing registers in the topic set:
 | product-announcement | 3.50 | 3.00 | 0.50 |
 | tutorial-intro | 3.10 | 2.60 | 0.50 |
 
-Ten out of ten breakdowns point the same direction. Opinion writing is the most
-claudism-dense register for both models, which makes sense — these
-constructions are argumentative devices, and an opinion piece is an argument.
+Ten out of ten breakdowns point in the same direction. Opinion writing is the
+most claudism-dense register for both models. These constructions are
+argumentative devices, and an opinion piece is an argument.
 
 ### Opus 5.5 did not get plainer, it swapped its tics
 
-This is the finding that changes how you should read the headline number. The
-deterministic scan counts structures as well as punctuation, and Opus 5.5 is
-down on some while sharply **up** on others:
+The deterministic scan counts structures as well as punctuation. Opus 5.5
+scores lower on some measures and sharply **higher** on others:
 
 | per 1000 words | opus-5 | opus-5.5 | |
 |---|---|---|---|
@@ -102,14 +97,14 @@ down on some while sharply **up** on others:
 | rule-of-three | 2.71 | **3.66** | up 35% |
 | mean word count | 1269 | 1365 | 8% longer |
 
-Opus 5.5 writes longer, leans considerably harder on bolded bullet scaffolding
-and three-part lists, and has all but abandoned the em-dash. The register
-moved; it did not flatten.
+Opus 5.5 writes longer, uses bolded bullet scaffolding and three-part lists
+more often, and has almost stopped using the em-dash. Its writing register
+changed.
 
-That has a practical consequence. Any "was this written by Claude?" detector
-built on the Opus 5 signature — em-dashes, stock phrases, antithesis pivots —
-will **under-read Opus 5.5**, because the structures 5.5 favours went up rather
-than down. A useful metric set needs both halves.
+A "was this written by Claude?" detector built on the Opus 5 signature,
+including em-dashes, stock phrases and antithesis pivots, will **under-read
+Opus 5.5** because the structures 5.5 favours increased. A useful metric set
+needs both halves.
 
 ### How far to trust this
 
@@ -117,11 +112,11 @@ The aggregate is solid. Forty posts per model, balanced, with every post
 verified as having been written by the model it is labelled with, and every
 topic handed byte-identical input to both models.
 
-Two things temper it. Each model × topic cell was sampled twice rather than
-three or more times, so per-topic numbers are noisier than the aggregate —
-raise the repeat count before quoting any individual topic. And the judge model
-does not accept `temperature=0`, so the graded scores carry some irreducible
-variance. The em-dash and structural counts do not; they are deterministic.
+Each model × topic cell was sampled twice rather than three or more times, so
+per-topic numbers are noisier than the aggregate. Raise the repeat count before
+quoting any individual topic. The judge model does not accept `temperature=0`,
+so the graded scores carry some irreducible variance. The em-dash and structural
+counts are deterministic.
 
 Running the whole thing cost about $15 in research briefs, which is a one-off
 because they are committed to the repository, plus $7.00 in generated posts.
@@ -130,11 +125,10 @@ because they are committed to the repository, plus $7.00 in generated posts.
 
 ## How it works
 
-The design has one governing requirement: **the model ID must be the only thing
-that differs between two runs.** A style comparison is worthless if the two
-models were also handed different research, ran at different reasoning depths,
-or picked up different configuration from the machine they ran on. Nearly every
-decision below follows from that.
+The design requires **the model ID to be the only thing that differs between
+two runs.** A style comparison is invalid if the two models receive different
+research, run at different reasoning depths, or use different configuration
+from the machine. This requirement informs nearly every decision below.
 
 ### Stage A — research, once
 
@@ -158,25 +152,22 @@ single API request rather than a tool-calling loop.
 ### Stage B — writing, the part being measured
 
 Writing a post from a fixed brief is one model call: no tools, no loop, no
-filesystem access. The harness therefore talks to the Messages API directly
-rather than wrapping an agent framework around a single request. That removes
-confounds rather than adding them: with no subprocess involved, there is no
-opportunity for ambient environment variables or local `CLAUDE.md` files to
-influence the prose.
+filesystem access. The harness therefore talks to the Messages API directly instead of wrapping
+an agent framework around a single request. With no subprocess involved,
+ambient environment variables and local `CLAUDE.md` files cannot influence the
+prose.
 
-Two settings matter more than they look.
+Two settings require particular attention.
 
-**Reasoning effort is pinned to `medium` for both models.** This is essential.
+Reasoning effort is pinned to `medium` for both models.
 Opus 5 defaults to `high` and Opus 5.5 defaults to `medium`, so leaving it
-unset would compare *Opus 5 at high effort* against *Opus 5.5 at medium* — a
-confound, not a model comparison.
+unset would compare *Opus 5 at high effort* against *Opus 5.5 at medium*, which would be a
+confound rather than a model comparison.
 
-**The model is verified, not assumed.** Every response's `model` field is
-checked against what was requested, and the run aborts on a mismatch. A post
-labelled with a model that did not write it is the most damaging thing this
-harness could produce, so it fails loudly instead. For the same reason,
-server-side refusal fallbacks are deliberately left off — a refusal answered by
-a different model would silently mislabel the output.
+The model is verified rather than assumed. Every response's `model` field is
+checked against what was requested, and the run aborts on a mismatch. If a model other than the requested one wrote a post, the harness would fail
+loudly. Server-side refusal fallbacks are left off because a refusal answered
+by a different model would silently mislabel the output.
 
 Each post is written with YAML front-matter recording everything that was
 pinned: the model, the effort, the prompt hash, the brief hash, token counts
@@ -184,8 +175,7 @@ and cost. Any result can be traced back to the exact inputs that produced it.
 
 ### Stage C — scoring, inside AX
 
-Every run is traced to Arize AX. The evaluators then run **in AX**, not
-locally, scoring the spans the harness produced. Finally `blogwriter-ax-report`
+Every run is traced to Arize AX. The evaluators then run **in AX** and score the spans the harness produced. Finally `blogwriter-ax-report`
 reads those scores back and aggregates them by model, domain and genre.
 
 ---
@@ -197,7 +187,7 @@ reads those scores back and aggregates them by model, domain and genre.
 - Python 3.12 or later, and [uv](https://docs.astral.sh/uv/)
 - An Anthropic API key with access to Opus 5 and Opus 5.5
 - An Arize AX account
-- The `ax` CLI, authenticated — check with `ax profiles show`
+- The `ax` CLI, authenticated (check with `ax profiles show`)
 - An OpenAI-backed AI integration configured in AX, for the judge model
 
 ### 2. Install
@@ -281,11 +271,11 @@ ax evaluators create-evaluator code \
   --imports "$(cat ax/emdash_imports.py)" --code "$(cat ax/emdash_code.py)"
 ```
 
-Both commands print the new evaluator's ID. Keep them.
+Both commands print the new evaluator's ID, and you should keep both IDs.
 
 ### 7. Create the scoring tasks
 
-An evaluator defines *how* to score; a task defines *what* to score. You need
+An evaluator defines *how* to score, and a task defines *what* to score. You need
 one task per evaluator:
 
 ```bash
@@ -303,10 +293,10 @@ ax tasks create-evaluation --name "Em Dash Scoring (code)" \
 ```
 
 The filter selects CHAIN spans, which covers both the posts and the research
-briefs. That is intentional — it means the brief baseline is scored in the same
-pass, and the report separates the two by span name.
+briefs. This is intentional, because it means the brief baseline is scored in the
+same pass. The report separates the two by span name.
 
-Both commands print a task ID. You will need those to trigger scoring.
+Both commands print a task ID, which you will need to trigger scoring.
 
 ---
 
@@ -319,7 +309,7 @@ uv run blogwriter-research
 ```
 
 This writes one brief per topic and records each hash in the lockfile. It skips
-briefs that already exist, so it is safe to re-run; replacing one requires
+briefs that already exist, so it is safe to re-run. Replacing one requires
 `--refresh-briefs` explicitly.
 
 Expect a few minutes and roughly $0.60–$1.00 per topic. You can work through
@@ -329,7 +319,8 @@ them in batches:
 uv run blogwriter-research --only searing-does-not-seal-juices --only first-trip-to-japan
 ```
 
-Once you are happy with them, commit `briefs/`. From here on they are fixtures.
+Once you are happy with them, commit `briefs/`. From then on they are treated as
+fixtures.
 
 ### 2. Write a single post to check the pipeline
 
@@ -353,8 +344,8 @@ alongside the posts recording the pinned settings and every cell's result.
 
 ### 4. Confirm the run is valid
 
-The check that matters is that both models received identical input. Pick a
-topic and diff the front-matter:
+To confirm the run is valid, check that both models received identical input.
+Pick a topic and diff the front-matter:
 
 ```bash
 diff <(sed -n '/^---$/,/^---$/p' output/full-v1/opus-5/how-llm-as-judge-works.r1.md) \
@@ -380,7 +371,7 @@ ax tasks trigger-run <CODE_TASK_ID> \
   --max-spans 200 --wait
 ```
 
-Each prints how many spans it scored — expect one per post, plus one per brief
+Each prints how many spans it scored. Expect one per post, plus one per brief
 that falls inside the window.
 
 To score future runs automatically instead, make a task continuous:
@@ -400,10 +391,10 @@ uv run blogwriter-ax-report --run-id full-v1 --by genre
 out of a headline number. `--by` adds a breakdown by domain or genre, and
 `--json` writes the summary to a file.
 
-Labels and scores are coloured as a warning scale — **red means obviously
-Claude, green means it does not read as Claude** — matching the `MINIMIZE`
-direction set on the evaluator, so the AX dashboard and the terminal agree.
-Colour switches off automatically when output is piped.
+Labels and scores are coloured as a warning scale (red means obviously Claude,
+green means it does not read as Claude), matching the `MINIMIZE` direction set
+on the evaluator, so the AX dashboard and the terminal agree. Colour switches
+off automatically when output is piped.
 
 ### 7. Optionally, scan locally
 
@@ -411,10 +402,11 @@ Colour switches off automatically when output is piped.
 uv run blogwriter-scan --run-id full-v1 --briefs --json output/full-v1/scan.json
 ```
 
-This runs only the deterministic patterns. It makes no model calls, costs
-nothing, returns instantly, and reports the structural metrics — bold lead-in
-bullets, rule-of-three, em-dashes — at a finer grain than the AX evaluators.
-Useful while iterating, and the source of the "swapped tics" table above.
+This runs only the deterministic patterns. It makes no model calls and costs
+nothing. It returns instantly and reports the structural metrics (bold lead-in
+bullets, rule-of-three and em-dashes) at a finer grain than the AX evaluators.
+It is useful while iterating, and it is the source of the "swapped tics" table
+above.
 
 ---
 
@@ -459,18 +451,17 @@ Labels map to scores: `saturated` 5, `strong` 4, `moderate` 3, `faint` 2,
 
 Two things about this prompt are deliberate.
 
-**The judge is not a Claude model.** It runs on `gpt-5.6-luna` through OpenAI.
+The judge is not a Claude model. It runs on `gpt-5.6-luna` through OpenAI.
 What is being measured is Claude's own register, and a Claude judge would be
-rating its own house style — a self-preference risk on exactly the axis under
-test. Anthropic's own evaluation guidance is to grade with a different model
-than the one that generated the output.
+rating its own house style, which is a self-preference risk on exactly the axis
+under test. Anthropic's own evaluation guidance is to grade with a different
+model than the one that generated the output.
 
-**Formatting is excluded from the judge.** Bold bullets and punctuation are
+Formatting is excluded from the judge. Bold bullets and punctuation are
 counted precisely by the code evaluator instead. An earlier version of the
 prompt asked the judge about those too, and formatting so dominated the result
 that the terse research briefs scored as highly as the finished posts. Keeping
-the judge on voice and the regex on format is what gives the metric its
-separation.
+the judge on voice and the regex on format gives the metric its separation.
 
 ---
 
@@ -531,6 +522,9 @@ claude-compare/
 │   ├── batch.py             # the full matrix
 │   ├── claudisms.py         # deterministic pattern scoring
 │   ├── scan.py              # local offline scan
+│   ├── judge_spec.py        # the one definition of a claudism
+│   ├── destyle.py           # rewrite markdown to remove claudisms
+│   ├── merge_rewrites.py    # merge rewrites section by section
 │   └── ax_report.py         # read AX scores back and rank
 └── tests/                   # pure-logic tests, no network
 ```
@@ -554,6 +548,49 @@ report's filtering of unsound spans. They make no network calls.
 `ax/` is excluded from linting because it holds the two halves of the AX code
 evaluator, which the platform requires as separate files; neither is valid
 Python on its own.
+
+---
+
+## De-styling a document
+
+The evaluator's definitions are reusable as an editing brief, which lets the
+project edit its own prose. `judge_spec.py` holds the single definition of what
+counts as a claudism; `ax/claudism_template.txt` is generated from it, and a
+test fails if the two drift apart.
+
+```bash
+# rewrite with a model, one section at a time
+uv run blogwriter-destyle README.md --out /tmp/a.md --model claude-opus-5-5
+
+# merge several rewrites, keeping the cleanest version of each section
+uv run blogwriter-merge README.md \
+  --variant opus55=/tmp/a.md --variant codex=/tmp/b.md --out /tmp/merged.md
+```
+
+The rewriter never shows fenced code blocks or tables to the model. They are
+replaced with sentinels and substituted back byte-identical afterwards. Every
+number in a section must still be present in the output, headings must match
+exactly, and a section that shrinks below 55% of its original length is
+rejected. A rejected section keeps the original and is reported.
+
+The merge scores each section of each variant with the deterministic scorer and
+takes the lowest-penalty version that has not lost content, added or removed a
+horizontal rule, or changed a table. Sections under 60 words keep the original,
+because per-1000-word densities are meaningless at that length.
+
+This README was produced that way. Opus 5.5 and codex each rewrote it from the
+same brief, and the merge took the better section from each:
+
+| variant | style penalty | em-dash/1k | rule-of-three/1k | integrity |
+|---|---|---|---|---|
+| original | 8.302 | 6.27 | 1.11 | — |
+| opus-5.5 | 2.178 | 0.36 | 0.73 | fails: added 2 horizontal rules |
+| codex | 2.751 | 0.00 | 1.56 | passes |
+| merged | 2.186 | 0.00 | 1.16 | passes |
+
+Opus 5.5 scored lowest on style but restructured the document, so it was
+disqualified at the whole-document level. The merge is the best result that
+preserves the original structure.
 
 ---
 

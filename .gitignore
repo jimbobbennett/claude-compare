@@ -9,6 +9,7 @@ __pycache__/
 # Generated posts and scoring output -- regenerate with blogwriter-batch.
 # Briefs are NOT ignored: they are committed fixtures.
 output/
+.rewrites/
 .scratch/
 .arize-tmp-traces/
 

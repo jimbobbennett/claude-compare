@@ -19,6 +19,8 @@ blogwriter-batch = "blogwriter.batch:main"
 blogwriter-research = "blogwriter.research:main"
 blogwriter-scan = "blogwriter.scan:main"
 blogwriter-ax-report = "blogwriter.ax_report:main"
+blogwriter-destyle = "blogwriter.destyle:main"
+blogwriter-merge = "blogwriter.merge_rewrites:main"
 
 [dependency-groups]
 dev = [
@@ -51,3 +53,8 @@ ignore = [
     # logging-style calls are not a concern here.
     "RUF001",
 ]
+
+[tool.ruff.lint.per-file-ignores]
+# judge_spec.py contains the AX judge prompt verbatim. Its lines must match the
+# deployed template byte for byte, so they cannot be wrapped to fit 88 columns.
+"src/blogwriter/judge_spec.py" = ["E501"]
