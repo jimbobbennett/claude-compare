@@ -2,23 +2,34 @@
 
 # Claude Compare!
 
-**Does Claude Opus 5.5 still write with Opus 5's signature style?**
+## What this is
 
-A local harness generates blog posts under a configurable model and traces them
-to Arize AX. **AX scores them** with an LLM-as-judge plus a deterministic code
-evaluator. A report reads the scores back and ranks the models.
+Claude has a recognisable writing voice. If you have read much of its prose you
+will know the tells: the em-dash aside, the "it's not X — it's Y" pivot, the
+"load-bearing" metaphor, the short punchy closer, the habit of announcing an
+insight just before delivering it. People call these *claudisms*.
 
-"Signature style" here means the rhetorical tics people recognise as Claude:
-`load-bearing`, `take a moment to read that again`, `it's not X — it's Y`,
-em-dash asides, rule-of-three closers.
+When Claude Opus 5.5 arrived, the obvious question was whether that voice came
+with it. This repository answers it with a measurement rather than an
+impression.
+
+It works in three parts. A local harness writes blog posts under a configurable
+model and traces every run to **Arize AX**. Two evaluators hosted **inside AX**
+score those posts — an LLM-as-judge that rates how heavily the prose leans on
+Claude's signature constructions, and a deterministic code evaluator that counts
+em-dashes. A small reporting command reads the scores back out of AX and ranks
+the models.
+
+The short answer: **Opus 5 writes more like Claude than Opus 5.5 does, and the
+clearest single tell is the em-dash.** The fuller answer is more interesting,
+because Opus 5.5 did not simply become plainer.
 
 ---
 
-## Results
+## The results
 
-**20 topics × 2 models × 2 repeats = 80 posts**, all scored in Arize AX.
-Balanced at n=40 per model, 0 failures, every post served by the model it is
-labelled with.
+The experiment ran 20 topics across 2 models with 2 repeats each — 80 posts,
+balanced at 40 per model, no failures.
 
 ```
   group                    n  claudism     sd   modal label  em_dash/1k
@@ -26,32 +37,35 @@ labelled with.
   opus-5                  40      3.45   0.50      moderate       12.90
   opus-5.5                40      2.77   0.53      moderate        0.05
   BRIEFS (baseline)        8      1.62      -        faint            -
-
-  Most obviously Claude: opus-5 (3.45)   Least: opus-5.5 (2.77)   gap 0.68
 ```
 
-**Opus 5 reads as more obviously Claude than Opus 5.5** — 3.45 vs 2.77 on the
-1–5 claudism scale. The brief baseline sits at 1.62 ("faint"), so the evaluator
-is discriminating rather than rating everything mid-scale.
+Opus 5 scores **3.45** on the judge's 1–5 claudism scale against Opus 5.5's
+**2.77**, a gap of 0.68. The third row is the control. The research briefs the
+writers worked from are deliberately terse bullet notes, and they score 1.62
+("faint"). That distance between the briefs and the posts is what tells you the
+evaluator is measuring the writing rather than the subject matter.
 
-### The em-dash is the headline
+### The em-dash is the clearest single signal
 
-No judge involved, pure regex, and it is close to binary:
+This one needs no judge at all. It is a regular expression counting a
+character:
 
 | | em-dashes per 1000 words |
 |---|---|
 | Opus 5 | **12.90** |
 | Opus 5.5 | **0.05** |
 
-Across 40 posts and roughly 55,000 words, **Opus 5.5 used two em-dashes in
-total.** Opus 5 used them constantly. If you want one cheap test for whether
-Claude wrote something, this is it — and it no longer works on 5.5.
+Across 40 posts and roughly 55,000 words, Opus 5.5 used **two em-dashes in
+total.** Opus 5 reached for them constantly. If you have been using the em-dash
+as a quick "did Claude write this?" heuristic, it worked well on Opus 5 and it
+does not work on 5.5.
 
-### The gap holds in every domain and every genre
+### The difference holds everywhere
 
-This is what the non-AI topics were for. If claudisms were an artefact of dense
-technical writing rather than a property of the model, the gap would collapse
-outside `ai`. It does not:
+Eight of the twenty topics are about AI and observability. The other twelve are
+about travel, cooking, video games and books, and that split exists for a
+reason: if claudisms were really an artefact of writing densely about technical
+material, the gap would vanish once the topics got lighter. It does not.
 
 | domain | opus-5 | opus-5.5 | gap |
 |---|---|---|---|
@@ -61,6 +75,8 @@ outside `ai`. It does not:
 | books | 3.33 | 2.83 | 0.50 |
 | games | 3.50 | 3.17 | 0.33 |
 
+The same holds across the five writing registers in the topic set:
+
 | genre | opus-5 | opus-5.5 | gap |
 |---|---|---|---|
 | opinion | 3.92 | 3.08 | 0.84 |
@@ -69,229 +85,343 @@ outside `ai`. It does not:
 | product-announcement | 3.50 | 3.00 | 0.50 |
 | tutorial-intro | 3.10 | 2.60 | 0.50 |
 
-Ten out of ten breakdowns point the same way. Opinion writing is the most
-claudism-dense register for both models — the constructions are argumentative
-devices, so that follows.
+Ten out of ten breakdowns point the same direction. Opinion writing is the most
+claudism-dense register for both models, which makes sense — these
+constructions are argumentative devices, and an opinion piece is an argument.
 
-### Opus 5.5 did not get plainer — it swapped tics
+### Opus 5.5 did not get plainer, it swapped its tics
 
-The deterministic scan is the interesting part. 5.5 is *down* on em-dashes and
-phrases but *up* on other signature structures:
+This is the finding that changes how you should read the headline number. The
+deterministic scan counts structures as well as punctuation, and Opus 5.5 is
+down on some while sharply **up** on others:
 
 | per 1000 words | opus-5 | opus-5.5 | |
 |---|---|---|---|
-| em-dashes | 13.30 | 0.05 | ↓ nearly eliminated |
-| bold lead-in bullets | 2.02 | **4.96** | ↑ 2.5× |
-| rule-of-three | 2.71 | **3.66** | ↑ 35% |
-| mean word count | 1269 | 1365 | ↑ 8% longer |
+| em-dashes | 13.30 | 0.05 | nearly eliminated |
+| bold lead-in bullets | 2.02 | **4.96** | up 2.5× |
+| rule-of-three | 2.71 | **3.66** | up 35% |
+| mean word count | 1269 | 1365 | 8% longer |
 
-So "Opus 5.5 is less Claude-ish" is too simple. It writes *longer*, leans
-*harder* on bolded bullet scaffolding and triads, and has almost entirely
-dropped the em-dash. The judge's lower score reflects a real shift in register,
-not a retreat into plain prose.
+Opus 5.5 writes longer, leans considerably harder on bolded bullet scaffolding
+and three-part lists, and has all but abandoned the em-dash. The register
+moved; it did not flatten.
 
-**The consequence matters if you are building a detector.** Any
-"was this written by Claude?" heuristic built on the Opus 5 signature —
-em-dashes, `load-bearing`, antithesis pivots — will **under-read Opus 5.5**,
-because the structures 5.5 leans on went *up* rather than down. A metric set
-needs both halves. In this harness only the local scan measures the ones that
-increased; the AX code evaluator currently sees em-dashes alone, which is the
-gap worth closing first.
+That has a practical consequence. Any "was this written by Claude?" detector
+built on the Opus 5 signature — em-dashes, stock phrases, antithesis pivots —
+will **under-read Opus 5.5**, because the structures 5.5 favours went up rather
+than down. A useful metric set needs both halves.
 
-### What this does not establish
+### How far to trust this
 
-- **2 repeats, not 3.** Per-cell stochasticity is only lightly averaged; the
-  aggregate is solid but individual topic numbers are noisy.
-- **One judge pass per post**, and these judge models reject `temperature=0`,
-  so the graded scores carry irreducible variance. The em-dash and structural
-  figures do not — they are deterministic.
-- **The brief baseline is n=8**, not 20: the earlier briefs fell outside the
-  scored time window. Low enough to be reassuring, too small to lean on.
-- **The phrase list still barely fires** (0.30 and 0.11 per 1000 words). Those
-  28 phrases were guessed, not derived. The structural metrics and the judge
-  are carrying the result.
+The aggregate is solid. Forty posts per model, balanced, with every post
+verified as having been written by the model it is labelled with, and every
+topic handed byte-identical input to both models.
 
-Cost: ~$15 of briefs (one-off, committed as fixtures) + $7.00 of posts.
-Briefs averaged ~$0.88 each, but split by domain: ~$1.00 for `ai` topics
-against ~$0.56 for travel/cooking/games/books, since fewer search results
-accumulate as input tokens.
+Two things temper it. Each model × topic cell was sampled twice rather than
+three or more times, so per-topic numbers are noisier than the aggregate —
+raise the repeat count before quoting any individual topic. And the judge model
+does not accept `temperature=0`, so the graded scores carry some irreducible
+variance. The em-dash and structural counts do not; they are deterministic.
+
+Running the whole thing cost about $15 in research briefs, which is a one-off
+because they are committed to the repository, plus $7.00 in generated posts.
 
 ---
 
-## The one design requirement
+## How it works
 
-**The model ID must be the only thing that differs between two runs.** A style
-comparison is worthless if the models were also handed different research, ran
-at different effort levels, or picked up different config off disk. Every
-decision below exists to pin one of those down.
+The design has one governing requirement: **the model ID must be the only thing
+that differs between two runs.** A style comparison is worthless if the two
+models were also handed different research, ran at different reasoning depths,
+or picked up different configuration from the machine they ran on. Nearly every
+decision below follows from that.
 
-| Drift source | How it's pinned |
-|---|---|
-| Research / tool variance | Briefs are committed fixtures; the writer gets no tools |
-| A brief changing silently | SHA-256 per brief in `briefs/briefs.lock.json`, verified every run |
-| Effort default mismatch | `effort="medium"` set explicitly for both models |
-| Thinking config | Adaptive only — Opus 5.5 returns 400 for `disabled` or `budget_tokens` |
-| Local config leakage | Impossible by construction: no subprocess, no filesystem settings |
-| Prompt text drift | `WRITER_PROMPT_VERSION` + SHA-256 of the rendered prompt, per run |
-| Model silently substituted | Run aborts unless `response.model` equals the requested ID |
-| A refusal answered by another model | Server-side `fallbacks` deliberately **not** enabled; refusal is fatal |
-| Harness version drift | Anthropic SDK version recorded in every manifest |
-| Post length skewing density | Same word target; every metric normalised per 1000 words |
-| Sampling stochasticity | `--repeats N` |
-| Subject-matter confound | 5 domains, so "the model's voice" is separable from "technical prose" |
+### Stage A — research, once
 
-### Why effort is pinned
+Before any post is written, a research agent gathers source material for each
+topic and writes it to `briefs/<slug>.md`. These briefs are **committed
+fixtures**, not something regenerated per run. Each brief's SHA-256 is recorded
+in `briefs/briefs.lock.json` and verified before any post is written; if a
+brief has changed, the run stops rather than quietly producing an incomparable
+result.
 
-Opus 5 defaults to `effort: high`. **Opus 5.5 defaults to `medium`.** Leave it
-unset and you are not comparing Opus 5 to Opus 5.5 — you are comparing *Opus 5
-at high* against *Opus 5.5 at medium*. 5.5 also thinks more per turn at any
-given effort, which shows up in the recorded `thinking_tokens` (21–26 for
-Opus 5 vs 108–265 for Opus 5.5 at the same setting).
+The briefs are deliberately terse bullet notes with source URLs rather than
+flowing prose. If the research model wrote in paragraphs, its own stylistic
+habits would sit in the writer's input, both models would echo them, and the
+evaluator would end up scoring the brief. Keeping them telegraphic is why the
+brief baseline scores so low.
 
-### Why briefs are fixtures, not a pipeline stage
+Research needs the web, so this stage uses Anthropic's **server-side** web
+search tool, which runs on Anthropic's infrastructure. That keeps the stage a
+single API request rather than a tool-calling loop.
 
-Research runs **once**, output is committed, and the writer reads a file under
-version control. `--refresh-briefs` is required to replace one, which rewrites
-the lockfile and so marks earlier results as a different input generation. Every
-run verifies each brief's hash and hard-fails on a mismatch.
+### Stage B — writing, the part being measured
 
-Briefs are deliberately **telegraphic** — fact bullets with source URLs, no
-prose. If a research model wrote flowing paragraphs, its own stylistic tics
-would sit in the writer's input and both models would echo them; the evaluator
-would then be scoring the brief. The briefs are scored too, as the
-contamination baseline — 1.62 ("faint") against 3.45 and 2.77 for the posts,
-which is what makes the post scores meaningful.
+Writing a post from a fixed brief is one model call: no tools, no loop, no
+filesystem access. The harness therefore talks to the Messages API directly
+rather than wrapping an agent framework around a single request. That removes
+confounds rather than adding them: with no subprocess involved, there is no
+opportunity for ambient environment variables or local `CLAUDE.md` files to
+influence the prose.
 
-### Why the Messages API, not the Claude Agent SDK
+Two settings matter more than they look.
 
-Writing a post from a fixed brief is one LLM call: no tools, no loop, no
-filesystem. Two concrete reasons beyond simplicity:
+**Reasoning effort is pinned to `medium` for both models.** This is essential.
+Opus 5 defaults to `high` and Opus 5.5 defaults to `medium`, so leaving it
+unset would compare *Opus 5 at high effort* against *Opus 5.5 at medium* — a
+confound, not a model comparison.
 
-1. **The Agent SDK cannot drive Opus 5.5.** Its only transport is spawning the
-   Claude Code CLI, and CLI 2.1.280 accepts `claude-opus-5-5` then silently
-   serves `claude-opus-5`. The raw Messages API serves it correctly.
-2. **It removes confounds.** No subprocess means no inherited `CLAUDE_*`
-   session state and no `CLAUDE.md` / `settings.json` leakage — nothing to
-   suppress, because there is nothing to inherit.
+**The model is verified, not assumed.** Every response's `model` field is
+checked against what was requested, and the run aborts on a mismatch. A post
+labelled with a model that did not write it is the most damaging thing this
+harness could produce, so it fails loudly instead. For the same reason,
+server-side refusal fallbacks are deliberately left off — a refusal answered by
+a different model would silently mislabel the output.
 
-Research needs the web but not an agent loop either: the **server-side**
-`web_search_20260209` tool runs on Anthropic's infrastructure, so Stage A is
-also a single request. (That tool does dynamic filtering via code execution
-internally — do **not** declare `code_execution` alongside it.)
+Each post is written with YAML front-matter recording everything that was
+pinned: the model, the effort, the prompt hash, the brief hash, token counts
+and cost. Any result can be traced back to the exact inputs that produced it.
+
+### Stage C — scoring, inside AX
+
+Every run is traced to Arize AX. The evaluators then run **in AX**, not
+locally, scoring the spans the harness produced. Finally `blogwriter-ax-report`
+reads those scores back and aggregates them by model, domain and genre.
 
 ---
 
-## Setup
+## Setting it up
 
-### Prerequisites
+### 1. Prerequisites
 
-- Python 3.12+, [uv](https://docs.astral.sh/uv/)
-- An Anthropic API key with Opus 5 and Opus 5.5 access
-- An Arize AX account, and the [`ax` CLI](https://arize.com/docs) authenticated
-  (`ax profiles show` to check)
-- An OpenAI-backed AI integration in AX for the judge
+- Python 3.12 or later, and [uv](https://docs.astral.sh/uv/)
+- An Anthropic API key with access to Opus 5 and Opus 5.5
+- An Arize AX account
+- The `ax` CLI, authenticated — check with `ax profiles show`
+- An OpenAI-backed AI integration configured in AX, for the judge model
+
+### 2. Install
 
 ```bash
+git clone git@github.com:jimbobbennett/claude-compare.git
+cd claude-compare
 uv sync
-cp .env.example .env    # then fill in ANTHROPIC_API_KEY
 ```
 
-### Environment
+That installs the runtime dependencies plus the dev tools, pytest and ruff.
+
+### 3. Configure credentials
+
+```bash
+cp .env.example .env
+```
+
+Then edit `.env`:
 
 | Variable | Purpose |
 |---|---|
-| `ANTHROPIC_API_KEY` | Required. Without it the SDK may fall back to other credentials and silently serve a different model. |
-| `ARIZE_API_KEY`, `ARIZE_SPACE_ID` | Required for tracing. |
-| `BLOGWRITER_PROJECT_NAME` | Optional, defaults to `claude-compare-blogwriter`. |
-| `ARIZE_COLLECTOR_ENDPOINT` | Only for non-US Arize accounts. |
+| `ANTHROPIC_API_KEY` | Required. Used for both research and writing. |
+| `ARIZE_API_KEY` | Required, for tracing. |
+| `ARIZE_SPACE_ID` | Required, for tracing. |
+| `BLOGWRITER_PROJECT_NAME` | Optional. Defaults to `claude-compare-blogwriter`. |
+| `ARIZE_COLLECTOR_ENDPOINT` | Only if your Arize account is outside the US region. |
 
-> **Note:** the project name is deliberately **not** read from
-> `ARIZE_PROJECT_NAME`. That variable is commonly already exported for
-> unrelated tracing, and `load_dotenv()` does not override an existing shell
-> variable — so inheriting it silently mixes this experiment's spans into
-> someone else's project.
+The project name is read from `BLOGWRITER_PROJECT_NAME` rather than the more
+usual `ARIZE_PROJECT_NAME`, because that second variable is often already set
+in a shell for unrelated tracing and would quietly send this experiment's
+traces somewhere else.
 
-### Version pin that matters
+### 4. Note the Anthropic SDK pin
 
-`anthropic` is pinned to **`==1.7.0`**. The OpenInference instrumentor (2.1.5)
-imports `anthropic._utils._transform`, which exists in 1.7.0 but was renamed by
-1.8.0 — on 1.8.0 `.instrument()` raises `ModuleNotFoundError` and you get **no
-LLM spans at all**, silently. Before raising the pin, check that import still
-resolves.
+`pyproject.toml` pins `anthropic==1.7.0`. The OpenInference instrumentor that
+produces the LLM spans imports a private module which later SDK versions
+renamed, so raising this pin stops spans being produced. If you do raise it,
+confirm `anthropic._utils._transform` still imports first.
+
+### 5. Verify the install
+
+```bash
+uv run pytest          # 29 tests, no network calls
+uv run ruff check src/
+uv run blogwriter --help
+```
+
+### 6. Create the two evaluators in AX
+
+First find the AI integration for the judge:
+
+```bash
+ax ai-integrations list --space "your space name" -o json
+```
+
+Note the `id` of an OpenAI integration, then create the LLM judge. Its prompt
+body lives in `ax/claudism_template.txt`:
+
+```bash
+SPACE="your space name"
+INT="<ai-integration-id>"
+
+ax evaluators create-evaluator template \
+  --name "Claudism Density" --space "$SPACE" \
+  --commit-message "v1" --template-name "claudism_density" \
+  --ai-integration-id "$INT" --model-name "gpt-5.6-luna" \
+  --include-explanations --use-function-calling \
+  --direction MINIMIZE --data-granularity span \
+  --classification-choices '{"saturated":5,"strong":4,"moderate":3,"faint":2,"absent":1}' \
+  --template "$(cat ax/claudism_template.txt)"
+```
+
+Then the deterministic evaluator, whose two halves live in `ax/`:
+
+```bash
+ax evaluators create-evaluator code \
+  --name "Em Dash Density" --space "$SPACE" \
+  --commit-message "v1" --code-type custom --code-name "em_dash_density" \
+  --variables '["output"]' --data-granularity span \
+  --imports "$(cat ax/emdash_imports.py)" --code "$(cat ax/emdash_code.py)"
+```
+
+Both commands print the new evaluator's ID. Keep them.
+
+### 7. Create the scoring tasks
+
+An evaluator defines *how* to score; a task defines *what* to score. You need
+one task per evaluator:
+
+```bash
+ax tasks create-evaluation --name "Claudism Scoring (LLM judge)" \
+  --task-type TEMPLATE_EVALUATION --project claude-compare-blogwriter \
+  --space "$SPACE" --query-filter "attributes.openinference.span.kind = 'CHAIN'" \
+  --evaluators '[{"evaluator_id":"<LLM_EVAL_ID>","column_mappings":{"output":"attributes.output.value"}}]' \
+  --no-continuous
+
+ax tasks create-evaluation --name "Em Dash Scoring (code)" \
+  --task-type CODE_EVALUATION --project claude-compare-blogwriter \
+  --space "$SPACE" --query-filter "attributes.openinference.span.kind = 'CHAIN'" \
+  --evaluators '[{"evaluator_id":"<CODE_EVAL_ID>","column_mappings":{"output":"attributes.output.value"}}]' \
+  --no-continuous
+```
+
+The filter selects CHAIN spans, which covers both the posts and the research
+briefs. That is intentional — it means the brief baseline is scored in the same
+pass, and the report separates the two by span name.
+
+Both commands print a task ID. You will need those to trigger scoring.
 
 ---
 
-## Usage
+## Running it
+
+### 1. Generate the research briefs
 
 ```bash
-# Stage A -- generate the frozen briefs (once), then commit briefs/
 uv run blogwriter-research
-uv run blogwriter-research --only how-llm-as-judge-works --refresh-briefs
-
-# Stage B -- one post
-uv run blogwriter --topic-slug how-llm-as-judge-works --model opus-5.5
-
-# Stage B -- the matrix
-uv run blogwriter-batch --models opus-5,opus-5.5 --repeats 2
-
-# Score in AX (see below), then read the ranking
-uv run blogwriter-ax-report --by domain
-
-# Free, offline, no model calls -- deterministic patterns only
-uv run blogwriter-scan --run-id <run> --briefs
 ```
 
-Posts land in `output/<run_id>/<model_alias>/<slug>.r<repeat>.md` with
-front-matter recording the full pinned surface, plus a `manifest.json` per
-batch. The repeat index is in the filename so repeated samples of a cell never
-overwrite each other.
+This writes one brief per topic and records each hash in the lockfile. It skips
+briefs that already exist, so it is safe to re-run; replacing one requires
+`--refresh-briefs` explicitly.
 
-Exit codes: `2` bad arguments · `3` brief integrity failure · `4` model
-substitution · `5` refusal.
-
-### The validity check
-
-Run the same topic under both models and diff the front-matter. It must differ
-**only** in model identity, word count, tokens and cost — `prompt_sha256`,
-`brief_sha256` and `effort` must be identical.
+Expect a few minutes and roughly $0.60–$1.00 per topic. You can work through
+them in batches:
 
 ```bash
-diff <(sed -n '/^---$/,/^---$/p' output/RUN/opus-5/SLUG.r1.md) \
-     <(sed -n '/^---$/,/^---$/p' output/RUN/opus-5.5/SLUG.r1.md)
+uv run blogwriter-research --only searing-does-not-seal-juices --only first-trip-to-japan
 ```
+
+Once you are happy with them, commit `briefs/`. From here on they are fixtures.
+
+### 2. Write a single post to check the pipeline
+
+```bash
+uv run blogwriter --topic-slug how-llm-as-judge-works --model opus-5.5
+```
+
+The post lands in `output/<run_id>/<model_alias>/<slug>.r1.md`. Read the
+front-matter and confirm `served_model` matches `model_id`.
+
+### 3. Run the full matrix
+
+```bash
+uv run blogwriter-batch --models opus-5,opus-5.5 --repeats 2 --run-id full-v1
+```
+
+That is 20 topics × 2 models × 2 repeats = 80 posts, around 50 minutes and
+about $7. Every brief hash is checked before the first post is written, so a
+problem surfaces before any money is spent. A `manifest.json` is written
+alongside the posts recording the pinned settings and every cell's result.
+
+### 4. Confirm the run is valid
+
+The check that matters is that both models received identical input. Pick a
+topic and diff the front-matter:
+
+```bash
+diff <(sed -n '/^---$/,/^---$/p' output/full-v1/opus-5/how-llm-as-judge-works.r1.md) \
+     <(sed -n '/^---$/,/^---$/p' output/full-v1/opus-5.5/how-llm-as-judge-works.r1.md)
+```
+
+It should differ only in model identity, word count, tokens and cost.
+`prompt_sha256`, `brief_sha256` and `effort` must be identical.
+
+### 5. Score the posts in AX
+
+Arize builds its evaluation index asynchronously, an hour or two behind
+ingestion, so wait before triggering and set the window to end comfortably
+before the present moment:
+
+```bash
+ax tasks trigger-run <LLM_TASK_ID> \
+  --data-start-time "2026-09-23T01:00:00" --data-end-time "2026-09-23T02:10:00" \
+  --max-spans 200 --wait
+
+ax tasks trigger-run <CODE_TASK_ID> \
+  --data-start-time "2026-09-23T01:00:00" --data-end-time "2026-09-23T02:10:00" \
+  --max-spans 200 --wait
+```
+
+Each prints how many spans it scored — expect one per post, plus one per brief
+that falls inside the window.
+
+To score future runs automatically instead, make a task continuous:
+
+```bash
+ax tasks update <TASK_ID> --is-continuous --sampling-rate 1.0
+```
+
+### 6. Read the results
+
+```bash
+uv run blogwriter-ax-report --run-id full-v1 --by domain
+uv run blogwriter-ax-report --run-id full-v1 --by genre
+```
+
+`--run-id` restricts the report to a single batch, which keeps exploratory runs
+out of a headline number. `--by` adds a breakdown by domain or genre, and
+`--json` writes the summary to a file.
+
+Labels and scores are coloured as a warning scale — **red means obviously
+Claude, green means it does not read as Claude** — matching the `MINIMIZE`
+direction set on the evaluator, so the AX dashboard and the terminal agree.
+Colour switches off automatically when output is piped.
+
+### 7. Optionally, scan locally
+
+```bash
+uv run blogwriter-scan --run-id full-v1 --briefs --json output/full-v1/scan.json
+```
+
+This runs only the deterministic patterns. It makes no model calls, costs
+nothing, returns instantly, and reports the structural metrics — bold lead-in
+bullets, rule-of-three, em-dashes — at a finer grain than the AX evaluators.
+Useful while iterating, and the source of the "swapped tics" table above.
 
 ---
 
-## The AX evaluators
+## The evaluator prompt
 
-Two evaluators, split on purpose:
-
-| Evaluator | Type | What it scores |
-|---|---|---|
-| `Claudism Density` | LLM judge (`gpt-5.6-luna`), graded 1–5 | The voice constructions regex cannot see |
-| `Em Dash Density` | Custom Python code evaluator | Em-dashes per 1000 words, deterministic |
-
-Both run at span granularity over CHAIN spans, which covers `write_post` spans
-(the posts) **and** `research` spans (the briefs) — so the contamination
-baseline is scored by the same pass, and the report separates them by span name.
-
-### Why the judge is not a Claude model
-
-The thing being measured is Claude's own register, and a Claude judge carries a
-self-preference risk on exactly that axis — MT-Bench put Claude-v1's
-self-enhancement at roughly 25% higher win rate, the largest of the models
-tested, and Anthropic's own guidance is to grade with a different model than the
-generator.
-
-Because the judge is cross-family, the constructions are defined
-*structurally*, with examples, rather than asking it to "find the claudisms" —
-an outside model has to be told the patterns, not asked to recognise a house
-style.
-
-### The evaluator prompt
-
-Lives in [`ax/claudism_template.txt`](ax/claudism_template.txt), reproduced here
-in full. `{output}` is the only variable; the task maps it to
+This is the judge prompt in full, as stored in `ax/claudism_template.txt`.
+`{output}` is its only variable, mapped by the task to
 `attributes.output.value`.
 
 ```text
@@ -324,169 +454,34 @@ BLOG POST
 Respond with exactly one of these labels: saturated, strong, moderate, faint, absent
 ```
 
-Label → score: `saturated` 5, `strong` 4, `moderate` 3, `faint` 2, `absent` 1.
+Labels map to scores: `saturated` 5, `strong` 4, `moderate` 3, `faint` 2,
+`absent` 1.
 
-**Format features are deliberately excluded from the judge.** An earlier version
-included `bold_leadin_bullet` and `em_dash_aside`; one telegraphic research
-brief returned **30** bold-bullet instances, which pushed the contamination
-baseline (16.7) level with the posts (16.8 and 15.0) and destroyed the metric's
-discriminative power. Removing them dropped the baseline to 1.14 and separated
-the models. **The judge covers voice; regex covers format.**
+Two things about this prompt are deliberate.
 
-### Creating the evaluators
+**The judge is not a Claude model.** It runs on `gpt-5.6-luna` through OpenAI.
+What is being measured is Claude's own register, and a Claude judge would be
+rating its own house style — a self-preference risk on exactly the axis under
+test. Anthropic's own evaluation guidance is to grade with a different model
+than the one that generated the output.
 
-```bash
-SPACE="your space name"
-INT="<ai-integration-id>"    # ax ai-integrations list --space "$SPACE" -o json
-
-# LLM judge
-ax evaluators create-evaluator template \
-  --name "Claudism Density" --space "$SPACE" \
-  --commit-message "v1" --template-name "claudism_density" \
-  --ai-integration-id "$INT" --model-name "gpt-5.6-luna" \
-  --include-explanations --use-function-calling \
-  --direction MINIMIZE --data-granularity span \
-  --classification-choices '{"saturated":5,"strong":4,"moderate":3,"faint":2,"absent":1}' \
-  --template "$(cat ax/claudism_template.txt)"
-
-# Deterministic code evaluator
-ax evaluators create-evaluator code \
-  --name "Em Dash Density" --space "$SPACE" \
-  --commit-message "v1" --code-type custom --code-name "em_dash_density" \
-  --variables '["output"]' --data-granularity span \
-  --imports "$(cat ax/emdash_imports.py)" --code "$(cat ax/emdash_code.py)"
-```
-
-Note `--direction MINIMIZE`: high claudism density is the *flagged* end, so AX's
-own column colouring matches the report's red = obviously Claude.
-
-### Creating the tasks
-
-One task per evaluator type — they cannot be mixed.
-
-```bash
-ax tasks create-evaluation --name "Claudism Scoring (LLM judge)" \
-  --task-type TEMPLATE_EVALUATION --project claude-compare-blogwriter \
-  --space "$SPACE" --query-filter "attributes.openinference.span.kind = 'CHAIN'" \
-  --evaluators '[{"evaluator_id":"<LLM_EVAL_ID>","column_mappings":{"output":"attributes.output.value"}}]' \
-  --no-continuous
-
-ax tasks create-evaluation --name "Em Dash Scoring (code)" \
-  --task-type CODE_EVALUATION --project claude-compare-blogwriter \
-  --space "$SPACE" --query-filter "attributes.openinference.span.kind = 'CHAIN'" \
-  --evaluators '[{"evaluator_id":"<CODE_EVAL_ID>","column_mappings":{"output":"attributes.output.value"}}]' \
-  --no-continuous
-```
-
-### Running a scoring pass
-
-The **eval index lags ingestion by 1–2 hours.** A window ending "now" over
-freshly written spans completes successfully and scores nothing, so leave a gap.
-
-Leave slack at **both** ends, too. On the 80-post run a window ending at the
-moment generation finished missed the single most recent span — it was 15
-seconds inside the boundary — giving 39/40 for one model. A second trigger over
-a later window picked it up.
-
-```bash
-ax tasks trigger-run <TASK_ID> \
-  --data-start-time "2026-09-22T19:00:00" --data-end-time "2026-09-22T23:20:00" \
-  --max-spans 60 --wait
-```
-
-Add `--is-continuous --sampling-rate 1.0` via `ax tasks update` to score new
-spans automatically instead of triggering backfills.
-
-### Six AX gotchas that cost real time
-
-1. **`query_filter` needs full attribute paths.** `span_kind = 'CHAIN'` matches
-   **zero** rows — and it surfaces as `400 No data found between <start> and
-   <end>`, which reads like an empty time window. Use
-   `attributes.openinference.span.kind = 'CHAIN'`. `name LIKE 'write_post%'`
-   also matched nothing. Diagnose by running with **no** filter: if that scores
-   rows, the filter is the problem, not the window.
-2. **Results come back in a top-level `evaluations` array**, not under
-   `attributes`. `attributes.eval.*` finds nothing. They are queryable
-   immediately via `--filter "eval.<name>.label IS NOT NULL"` even though they
-   never appear as attribute columns.
-3. **One task cannot mix evaluator types** — `All evaluators on a task must be
-   the same type`.
-4. **The CLI's `--template` help says `{{variable}}`, but the server rejects
-   double braces** ("must contain at least one f-string expression like
-   {variable_name}"). Use single braces. And `--template @file` is not
-   expanded — pass `"$(cat file)"`.
-5. **Custom code evaluators fail silently at `0/0/0`** unless you import *only*
-   from `arize.experimental.datasets.experiments.evaluators.base`, subclass
-   `CodeEvaluator`, give `evaluate()` explicitly named keyword params (bare
-   `**kwargs` exposes zero mappable variables), return `EvaluationResult`, and
-   keep imports in `--imports` rather than inline in `--code`.
-6. **Deleting a project orphans its tasks.** The project is recreated on the
-   next trace but with a **new ID**, while the tasks keep pointing at the dead
-   one — and `ax tasks update` has no `--project` flag, so they cannot be
-   repointed. Delete and recreate the tasks after deleting a project.
-   Evaluators are space-level and survive untouched.
-
-### AX cannot cost Opus 5.5
-
-AX's server-side pricing fills `llm.cost.total` for `claude-opus-5` (with an
-input/output breakdown) but leaves it **absent** for `claude-opus-5-5`. A cost
-comparison built on AX's built-in cost columns would read 5.5 as free. The
-harness computes cost itself from published rates and sets it on the CHAIN span
-for both models — use that until AX's pricing table catches up.
+**Formatting is excluded from the judge.** Bold bullets and punctuation are
+counted precisely by the code evaluator instead. An earlier version of the
+prompt asked the judge about those too, and formatting so dominated the result
+that the terse research briefs scored as highly as the finished posts. Keeping
+the judge on voice and the regex on format is what gives the metric its
+separation.
 
 ---
 
-## Reading the report
+## The topic set
 
-**Red = obviously Claude. Green = doesn't read as Claude.**
-
-| band | claudism label | claudism score | em_dash/1k |
-|---|---|---|---|
-| red | `strong`, `saturated` | >= 3.5 | >= 10 |
-| amber | `moderate` | >= 2.5 | >= 3 |
-| green | `faint`, `absent` | < 2.5 | < 3 |
-
-The direction lives in **two** places and must be changed together, or the
-terminal and the AX dashboard will disagree about which end is bad:
-`LABEL_COLOURS` in `src/blogwriter/ax_report.py`, and the evaluator's
-`--direction`.
-
-Colour is on for a TTY, off when piped or when `NO_COLOR` is set, forced with
-`--color`.
-
-`--by domain` (or `--by genre`) cross-tabs the score, which is what answers
-whether the gap between models holds outside technical writing.
-
-### The report filters its own inputs
-
-Spans accumulate in the project from every debugging run, and an evaluator task
-scores all of them indiscriminately — so a result read straight off "all spans"
-is computed partly on harness development. `blogwriter-ax-report` therefore:
-
-- **drops spans whose recorded `llm.model_name` contradicts their
-  `model_alias`** (aborted runs and pre-gate substitutions), printing each
-  exclusion in amber; and
-- takes `--run-id` (repeatable) to pin a result to intended runs only.
-
-An early headline figure of 3.54 vs 2.57 was inflated to 0.97 by exactly this
-contamination; the clean figure is 3.33 vs 2.83, a gap of 0.50.
-
----
-
-## Topic set
-
-`topics.yaml` holds **20 topics across two axes**, because either could confound
-a style measurement:
-
-- **genre** (5): technical-explainer, opinion, tutorial-intro,
-  product-announcement, news-analysis. Claudisms surface unevenly by register.
-- **domain** (5): `ai` (8 topics), plus `travel`, `cooking`, `games` and
-  `books` (3 each). An AI-only set cannot separate "this model's voice" from
-  "how anything writes about dense technical material"; lifestyle prose gives
-  the constructions room to appear.
-
-Both travel in span metadata. Adding a topic does not invalidate existing
-briefs — the writer prompt is built from the topic string alone.
+`topics.yaml` holds twenty topics, tagged along two axes so neither can be
+mistaken for the model's influence. Five **genres** cover different registers,
+because these constructions appear far more readily in argument than in
+instruction. Five **domains** cover different subject matter, because an
+AI-only topic set could not separate Claude's voice from the effect of writing
+about dense technical material.
 
 | # | Topic | Genre | Domain |
 |---|---|---|---|
@@ -511,74 +506,73 @@ briefs — the writer prompt is built from the topic string alone.
 | 19 | How to start reading poetry without a literature degree | `tutorial-intro` | `books` |
 | 20 | Why so many literary novels now open with a prologue | `news-analysis` | `books` |
 
+Adding a topic does not disturb the existing briefs, because the writer's
+prompt is built from the topic string alone.
+
 ---
 
-## Layout
+## Project layout
 
 ```
 claude-compare/
-├── topics.yaml              # 20 topics x genre x domain
-├── briefs/                  # COMMITTED FIXTURES + briefs.lock.json
-├── ax/                      # the AX evaluator sources (template + code halves)
+├── topics.yaml              # the 20 topics, tagged by genre and domain
+├── briefs/                  # committed fixtures + briefs.lock.json
+├── ax/                      # the AX evaluator sources
+├── results/                 # committed run summaries
 ├── src/blogwriter/
-│   ├── tracing.py           # Arize registration; call before the client exists
-│   ├── models.py            # alias -> model ID, effort, pricing, cost
-│   ├── prompts.py           # versioned research + writer prompts
-│   ├── determinism.py       # hashing, brief lockfile, version capture
-│   ├── topics.py            # topic set loading
-│   ├── agent.py             # the model call + Stage B (the measured step)
-│   ├── research.py          # Stage A -- fixture generation
-│   ├── cli.py               # one post
-│   ├── batch.py             # the model x topic x repeat matrix
+│   ├── tracing.py           # Arize registration
+│   ├── models.py            # model aliases, effort, pricing
+│   ├── prompts.py           # versioned research and writer prompts
+│   ├── determinism.py       # hashing, the brief lockfile, version capture
+│   ├── topics.py            # loading the topic set
+│   ├── agent.py             # the model call, and Stage B
+│   ├── research.py          # Stage A
+│   ├── cli.py               # write one post
+│   ├── batch.py             # the full matrix
 │   ├── claudisms.py         # deterministic pattern scoring
-│   ├── scan.py              # local offline scan (no model calls)
+│   ├── scan.py              # local offline scan
 │   └── ax_report.py         # read AX scores back and rank
 └── tests/                   # pure-logic tests, no network
 ```
+
+Generated posts under `output/` are not committed, since they are reproducible
+from the briefs, but the run summaries in `results/` are.
 
 ---
 
 ## Development
 
 ```bash
-uv run pytest        # 29 tests, no network or model calls
+uv run pytest
 uv run ruff check src/
 ```
 
-`ax/` is excluded from linting: it holds the two halves of the AX code
-evaluator, which the platform requires as separate `--imports` and `--code`
-blocks, so neither file is valid Python alone.
+The tests cover the places where a silent bug would corrupt a result: model
+resolution, prompt stability, brief integrity, length normalisation, and the
+report's filtering of unsound spans. They make no network calls.
+
+`ax/` is excluded from linting because it holds the two halves of the AX code
+evaluator, which the platform requires as separate files; neither is valid
+Python on its own.
 
 ---
 
-## Known limitations
+## Where to take it next
 
-- **Sample size.** All 20 briefs exist and all 20 topics are scored at n=2 per
-  model, so the aggregate is sound. Individual per-topic numbers are noisy at
-  that depth — raise `--repeats` before quoting any single topic.
-- **The hand-written phrase list in `claudisms.py` matched nothing** in any real
-  post. Those 28 phrases were chosen from intuition, not derived from output.
-  They should be rebuilt empirically from a generated corpus (n-gram frequency
-  compared across models). Until then treat `claude_leaning_per_1k` as
-  unvalidated and rely on the structural metrics and the judge.
-- **The judge is stochastic.** These OpenAI models reject `temperature=0` (only
-  the default is accepted), so repeated passes are the only damping available.
-- **The code evaluator does not strip markdown list markers**, so the *brief*
-  baseline reads ~35 em-dashes/1k — that is bullet punctuation, not prose. The
-  report prints it dimmed with a `*` and never colours it as comparable.
-- **Research is expensive**: ~$1.27 per brief, driven by ~197k prompt tokens as
-  web-search results accumulate. A cheaper, different-family research model
-  would cut that and reduce contamination risk at the same time.
+**Raise the repeat count.** At two samples per cell the aggregate is sound but
+individual topics are noisy. Three or more would make per-topic numbers
+quotable.
 
-## Next steps
+**Derive the phrase list from the corpus.** The hand-written list of stock
+phrases in `claudisms.py` was assembled from intuition and barely fires against
+real output. Comparing n-gram frequencies across the 80-post corpus would
+produce a list that actually discriminates.
 
-1. **Raise repeats to 3+** and re-score, so per-topic numbers become quotable
-   rather than just the aggregate.
-2. **Rebuild the phrase list empirically** from the 80-post corpus: compare
-   n-gram frequencies between the two models instead of guessing which phrases
-   matter. The current list barely fires and contributes nothing.
-3. **Add structural metrics to the AX code evaluator.** Bold lead-in bullets
-   and rule-of-three are where Opus 5.5's style actually *increased*, and right
-   now only the local scan measures them — AX sees em-dashes alone.
-4. **Multiple judge passes per post**, since `temperature=0` is unavailable and
-   a single pass leaves the graded score noisier than it needs to be.
+**Move the structural metrics into AX.** Bold lead-in bullets and rule-of-three
+are where Opus 5.5's style *increased*, and only the local scan measures them
+today. The AX code evaluator counts em-dashes alone, so the hosted scoring sees
+half the picture.
+
+**Average several judge passes.** The judge model will not accept
+`temperature=0`, so a single pass leaves more variance in the graded score than
+necessary.
