@@ -397,7 +397,7 @@ ax tasks trigger-run <TASK_ID> \
 Add `--is-continuous --sampling-rate 1.0` via `ax tasks update` to score new
 spans automatically instead of triggering backfills.
 
-### Five AX gotchas that cost real time
+### Six AX gotchas that cost real time
 
 1. **`query_filter` needs full attribute paths.** `span_kind = 'CHAIN'` matches
    **zero** rows — and it surfaces as `400 No data found between <start> and
