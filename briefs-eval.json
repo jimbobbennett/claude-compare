@@ -1,0 +1,84 @@
+{
+  "generated_at": "2026-09-22T22:44:40+00:00",
+  "run_id": null,
+  "pattern_version": "v1",
+  "judge_model": null,
+  "judge_passes": 0,
+  "summary": {
+    "BRIEFS (baseline)": {
+      "documents": 2,
+      "mean_word_count": 1079.0,
+      "claude_leaning_per_1k": 0.0,
+      "generic_llm_per_1k": 0.0,
+      "em_dash_per_1k": 32.64,
+      "bold_leadin_bullet_per_1k": 11.4,
+      "rule_of_three_per_1k": 0.38
+    }
+  },
+  "documents": [
+    {
+      "doc_id": "how-llm-as-judge-works.md",
+      "kind": "brief",
+      "model_alias": null,
+      "topic_slug": "how-llm-as-judge-works",
+      "word_count": 1316,
+      "deterministic": {
+        "pattern_version": "v1",
+        "claude_leaning": {},
+        "claude_leaning_total": 0,
+        "generic_llm": {},
+        "generic_llm_total": 0,
+        "structural": {
+          "em_dash": 39,
+          "bold_leadin_bullet": 30,
+          "rule_of_three": 1,
+          "sentence_count": 2,
+          "short_sentence": 0,
+          "punchy_closer": 0
+        },
+        "densities": {
+          "claude_leaning_per_1k": 0.0,
+          "generic_llm_per_1k": 0.0,
+          "em_dash_per_1k": 29.64,
+          "bold_leadin_bullet_per_1k": 22.8,
+          "rule_of_three_per_1k": 0.76,
+          "short_sentence_per_1k": 0.0
+        },
+        "matches": []
+      },
+      "judge": null
+    },
+    {
+      "doc_id": "otel-spans-for-ai-agents.md",
+      "kind": "brief",
+      "model_alias": null,
+      "topic_slug": "otel-spans-for-ai-agents",
+      "word_count": 842,
+      "deterministic": {
+        "pattern_version": "v1",
+        "claude_leaning": {},
+        "claude_leaning_total": 0,
+        "generic_llm": {},
+        "generic_llm_total": 0,
+        "structural": {
+          "em_dash": 30,
+          "bold_leadin_bullet": 0,
+          "rule_of_three": 0,
+          "sentence_count": 2,
+          "short_sentence": 0,
+          "punchy_closer": 0
+        },
+        "densities": {
+          "claude_leaning_per_1k": 0.0,
+          "generic_llm_per_1k": 0.0,
+          "em_dash_per_1k": 35.63,
+          "bold_leadin_bullet_per_1k": 0.0,
+          "rule_of_three_per_1k": 0.0,
+          "short_sentence_per_1k": 0.0
+        },
+        "matches": []
+      },
+      "judge": null
+    }
+  ]
+}

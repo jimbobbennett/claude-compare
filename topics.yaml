@@ -1,0 +1,119 @@
+# Topics for the Opus 5 vs Opus 5.5 style comparison.
+#
+# Two axes are spread deliberately, because either could confound a style
+# measurement:
+#
+#   genre  - stylistic tics surface unevenly across registers, so a set that is
+#            all technical explainers would misrepresent the effect.
+#   domain - an AI-only set cannot distinguish "this model's voice" from "how
+#            anything writes about dense technical material". Lifestyle prose
+#            gives the constructions room to appear.
+#
+# Adding a topic here does not invalidate existing briefs: the writer prompt is
+# built from the topic string alone, so hashes for other topics are unchanged.
+
+topics:
+  # --- AI / observability -------------------------------------------------
+  - slug: how-llm-as-judge-works
+    topic: "How LLM-as-judge evaluation actually works"
+    genre: technical-explainer
+    domain: ai
+
+  - slug: otel-spans-for-ai-agents
+    topic: "What OpenTelemetry spans look like for an AI agent"
+    genre: technical-explainer
+    domain: ai
+
+  - slug: why-agent-demos-fail-in-production
+    topic: "Why most AI agent demos fall apart in production"
+    genre: opinion
+    domain: ai
+
+  - slug: against-vibe-checking-llm-output
+    topic: "The case against vibe-checking your LLM outputs"
+    genre: opinion
+    domain: ai
+
+  - slug: first-trace-python-llm-app
+    topic: "Getting started with tracing a Python LLM application"
+    genre: tutorial-intro
+    domain: ai
+
+  - slug: build-your-first-evaluator
+    topic: "How to build your first LLM evaluator"
+    genre: tutorial-intro
+    domain: ai
+
+  - slug: prompt-optimization-from-traces
+    topic: "Optimizing prompts automatically from production trace data"
+    genre: product-announcement
+    domain: ai
+
+  - slug: effort-parameter-for-agent-builders
+    topic: "What the effort parameter means for people building agents"
+    genre: news-analysis
+    domain: ai
+
+  # --- Travel ---------------------------------------------------------------
+  - slug: against-the-48-hour-city-break
+    topic: "Why the 48-hour city break is a bad way to see a place"
+    genre: opinion
+    domain: travel
+
+  - slug: first-trip-to-japan
+    topic: "How to plan a first trip to Japan without overplanning it"
+    genre: tutorial-intro
+    domain: travel
+
+  - slug: what-happens-to-checked-luggage
+    topic: "What actually happens to your suitcase after you drop it off"
+    genre: technical-explainer
+    domain: travel
+
+  # --- Cooking --------------------------------------------------------------
+  - slug: searing-does-not-seal-juices
+    topic: "Why searing meat does not seal in the juices"
+    genre: technical-explainer
+    domain: cooking
+
+  - slug: weeknight-pasta-from-nothing
+    topic: "How to build a weeknight pasta from whatever is in the fridge"
+    genre: tutorial-intro
+    domain: cooking
+
+  - slug: against-the-stand-mixer
+    topic: "The case against buying a stand mixer"
+    genre: opinion
+    domain: cooking
+
+  # --- Video games ----------------------------------------------------------
+  - slug: why-open-worlds-got-boring
+    topic: "Why open world games stopped being interesting"
+    genre: opinion
+    domain: games
+
+  - slug: subscription-game-libraries
+    topic: "What the shift to subscription game libraries means for players"
+    genre: news-analysis
+    domain: games
+
+  - slug: how-frame-generation-works
+    topic: "How frame generation actually works, and what it costs you"
+    genre: technical-explainer
+    domain: games
+
+  # --- Books ----------------------------------------------------------------
+  - slug: in-defence-of-abandoning-books
+    topic: "In defence of abandoning a book halfway through"
+    genre: opinion
+    domain: books
+
+  - slug: start-reading-poetry
+    topic: "How to start reading poetry without a literature degree"
+    genre: tutorial-intro
+    domain: books
+
+  - slug: why-novels-open-with-prologues
+    topic: "Why so many literary novels now open with a prologue"
+    genre: news-analysis
+    domain: books

@@ -1,0 +1,27 @@
+You are a forensic style analyst. You judge the FORM of prose, never its subject matter, accuracy, or quality.
+
+Below is a blog post. Rate how heavily it uses the following rhetorical constructions.
+
+CONSTRUCTIONS TO LOOK FOR
+1. antithesis pivot - "It is not X, it is Y" / "X is not just Y, it is Z": a negation of one framing immediately replaced by a sharper one.
+2. concessive pivot - a concession followed by reversal: "Sure, X. But Y." / "That is true, as far as it goes. What it misses is..."
+3. reveal setup - a short sentence announcing an insight is coming rather than delivering it: "Here is the thing." / "And that is the part that matters."
+4. rule of three - three parallel items escalating in weight, especially closing a sentence.
+5. meta writing - the text commenting on itself or steering the reader: "take a moment to read that again" / "we will come back to this" / "the short version:".
+6. load-bearing idiom - engineering metaphors for abstract claims: "load-bearing", "the sharp edges", "where it falls over", "doing the heavy lifting".
+7. punchy closer - a final paragraph of one or two very short declarative sentences landing the argument.
+8. hedge then assert - a hedge immediately overridden: "This is probably overstated, but the direction is right."
+
+Judge the prose only. Do NOT count list formatting, bold text, headings, or punctuation choices - those are measured separately.
+
+RATING SCALE
+saturated - these constructions drive the prose; the argument advances through them.
+strong - recurring and noticeable across multiple sections.
+moderate - present in several places but not the dominant mode.
+faint - one or two instances, otherwise plain exposition.
+absent - reads as unmarked technical prose.
+
+BLOG POST
+{output}
+
+Respond with exactly one of these labels: saturated, strong, moderate, faint, absent
