@@ -1,6 +1,6 @@
 ![Claude Compare! - an operatic tenor in a blue tuxedo beside a dark green panel reading "CLAUDE COMPARE!"](docs/banner.jpg)
 
-# claude-compare
+# Claude Compare!
 
 **Does Claude Opus 5.5 still write with Opus 5's signature style?**
 
@@ -394,6 +394,29 @@ a style measurement:
 
 Both travel in span metadata. Adding a topic does not invalidate existing
 briefs — the writer prompt is built from the topic string alone.
+
+| # | Topic | Genre | Domain |
+|---|---|---|---|
+| 1 | How LLM-as-judge evaluation actually works | `technical-explainer` | `ai` |
+| 2 | What OpenTelemetry spans look like for an AI agent | `technical-explainer` | `ai` |
+| 3 | Why most AI agent demos fall apart in production | `opinion` | `ai` |
+| 4 | The case against vibe-checking your LLM outputs | `opinion` | `ai` |
+| 5 | Getting started with tracing a Python LLM application | `tutorial-intro` | `ai` |
+| 6 | How to build your first LLM evaluator | `tutorial-intro` | `ai` |
+| 7 | Optimizing prompts automatically from production trace data | `product-announcement` | `ai` |
+| 8 | What the effort parameter means for people building agents | `news-analysis` | `ai` |
+| 9 | Why the 48-hour city break is a bad way to see a place | `opinion` | `travel` |
+| 10 | How to plan a first trip to Japan without overplanning it | `tutorial-intro` | `travel` |
+| 11 | What actually happens to your suitcase after you drop it off | `technical-explainer` | `travel` |
+| 12 | Why searing meat does not seal in the juices | `technical-explainer` | `cooking` |
+| 13 | How to build a weeknight pasta from whatever is in the fridge | `tutorial-intro` | `cooking` |
+| 14 | The case against buying a stand mixer | `opinion` | `cooking` |
+| 15 | Why open world games stopped being interesting | `opinion` | `games` |
+| 16 | What the shift to subscription game libraries means for players | `news-analysis` | `games` |
+| 17 | How frame generation actually works, and what it costs you | `technical-explainer` | `games` |
+| 18 | In defence of abandoning a book halfway through | `opinion` | `books` |
+| 19 | How to start reading poetry without a literature degree | `tutorial-intro` | `books` |
+| 20 | Why so many literary novels now open with a prologue | `news-analysis` | `books` |
 
 ---
 
