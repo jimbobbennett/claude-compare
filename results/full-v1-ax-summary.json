@@ -1,0 +1,25 @@
+{
+  "opus-5.5": {
+    "n": 40,
+    "claudism_mean": 2.77,
+    "claudism_stdev": 0.53,
+    "claudism_modal_label": "moderate",
+    "em_dash_mean": 0.05,
+    "label_counts": {
+      "moderate": 27,
+      "faint": 11,
+      "strong": 2
+    }
+  },
+  "opus-5": {
+    "n": 40,
+    "claudism_mean": 3.45,
+    "claudism_stdev": 0.5,
+    "claudism_modal_label": "moderate",
+    "em_dash_mean": 12.9,
+    "label_counts": {
+      "moderate": 22,
+      "strong": 18
+    }
+  }
+}

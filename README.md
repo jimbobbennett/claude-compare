@@ -14,24 +14,96 @@ em-dash asides, rule-of-three closers.
 
 ---
 
-## Results so far
+## Results
+
+**20 topics × 2 models × 2 repeats = 80 posts**, all scored in Arize AX.
+Balanced at n=40 per model, 0 failures, every post served by the model it is
+labelled with.
 
 ```
   group                    n  claudism     sd   modal label  em_dash/1k
   ---------------------------------------------------------------------
-  opus-5                   6      3.33   0.52      moderate        15.8
-  opus-5.5                 6      2.83   0.41      moderate        0.00
+  opus-5                  40      3.45   0.50      moderate       12.90
+  opus-5.5                40      2.77   0.53      moderate        0.05
+  BRIEFS (baseline)        8      1.62      -        faint            -
 
-  Most obviously Claude: opus-5 (3.33)   Least: opus-5.5 (2.83)   gap 0.5
+  Most obviously Claude: opus-5 (3.45)   Least: opus-5.5 (2.77)   gap 0.68
 ```
 
-Opus 5 reads as more obviously Claude than Opus 5.5. The most striking signal
-is deterministic and needs no judge at all: across two posts each, **Opus 5
-used 18 and 21 em-dashes; Opus 5.5 used 0 and 0.**
+**Opus 5 reads as more obviously Claude than Opus 5.5** — 3.45 vs 2.77 on the
+1–5 claudism scale. The brief baseline sits at 1.62 ("faint"), so the evaluator
+is discriminating rather than rating everything mid-scale.
 
-**Treat this as directional, not a finding.** Only 2 of 20 topics have briefs,
-one of them contributes 18 of 20 scored posts, and both are the same genre. The
-intended matrix is 20 topics × 2 models × 3 repeats = 120 posts.
+### The em-dash is the headline
+
+No judge involved, pure regex, and it is close to binary:
+
+| | em-dashes per 1000 words |
+|---|---|
+| Opus 5 | **12.90** |
+| Opus 5.5 | **0.05** |
+
+Across 40 posts and roughly 55,000 words, **Opus 5.5 used two em-dashes in
+total.** Opus 5 used them constantly. If you want one cheap test for whether
+Claude wrote something, this is it — and it no longer works on 5.5.
+
+### The gap holds in every domain and every genre
+
+This is what the non-AI topics were for. If claudisms were an artefact of dense
+technical writing rather than a property of the model, the gap would collapse
+outside `ai`. It does not:
+
+| domain | opus-5 | opus-5.5 | gap |
+|---|---|---|---|
+| cooking | 3.83 | 2.67 | **1.16** |
+| ai | 3.38 | 2.69 | 0.69 |
+| travel | 3.33 | 2.67 | 0.66 |
+| books | 3.33 | 2.83 | 0.50 |
+| games | 3.50 | 3.17 | 0.33 |
+
+| genre | opus-5 | opus-5.5 | gap |
+|---|---|---|---|
+| opinion | 3.92 | 3.08 | 0.84 |
+| technical-explainer | 3.20 | 2.40 | 0.80 |
+| news-analysis | 3.50 | 3.00 | 0.50 |
+| product-announcement | 3.50 | 3.00 | 0.50 |
+| tutorial-intro | 3.10 | 2.60 | 0.50 |
+
+Ten out of ten breakdowns point the same way. Opinion writing is the most
+claudism-dense register for both models — the constructions are argumentative
+devices, so that follows.
+
+### Opus 5.5 did not get plainer — it swapped tics
+
+The deterministic scan is the interesting part. 5.5 is *down* on em-dashes and
+phrases but *up* on other signature structures:
+
+| per 1000 words | opus-5 | opus-5.5 | |
+|---|---|---|---|
+| em-dashes | 13.30 | 0.05 | ↓ nearly eliminated |
+| bold lead-in bullets | 2.02 | **4.96** | ↑ 2.5× |
+| rule-of-three | 2.71 | **3.66** | ↑ 35% |
+| mean word count | 1269 | 1365 | ↑ 8% longer |
+
+So "Opus 5.5 is less Claude-ish" is too simple. It writes *longer*, leans
+*harder* on bolded bullet scaffolding and triads, and has almost entirely
+dropped the em-dash. The judge's lower score reflects a real shift in register,
+not a retreat into plain prose.
+
+### What this does not establish
+
+- **2 repeats, not 3.** Per-cell stochasticity is only lightly averaged; the
+  aggregate is solid but individual topic numbers are noisy.
+- **One judge pass per post**, and these judge models reject `temperature=0`,
+  so the graded scores carry irreducible variance. The em-dash and structural
+  figures do not — they are deterministic.
+- **The brief baseline is n=8**, not 20: the earlier briefs fell outside the
+  scored time window. Low enough to be reassuring, too small to lean on.
+- **The phrase list still barely fires** (0.30 and 0.11 per 1000 words). Those
+  28 phrases were guessed, not derived. The structural metrics and the judge
+  are carrying the result.
+
+Cost: ~$15 of briefs (one-off, committed as fixtures) + $7.00 of posts.
 
 ---
 
@@ -76,8 +148,8 @@ Briefs are deliberately **telegraphic** — fact bullets with source URLs, no
 prose. If a research model wrote flowing paragraphs, its own stylistic tics
 would sit in the writer's input and both models would echo them; the evaluator
 would then be scoring the brief. The briefs are scored too, as the
-contamination baseline — currently 1.00 ("absent"), which is what makes the
-post scores meaningful.
+contamination baseline — 1.62 ("faint") against 3.45 and 2.77 for the posts,
+which is what makes the post scores meaningful.
 
 ### Why the Messages API, not the Claude Agent SDK
 
@@ -149,7 +221,7 @@ uv run blogwriter-research --only how-llm-as-judge-works --refresh-briefs
 uv run blogwriter --topic-slug how-llm-as-judge-works --model opus-5.5
 
 # Stage B -- the matrix
-uv run blogwriter-batch --models opus-5,opus-5.5 --repeats 3
+uv run blogwriter-batch --models opus-5,opus-5.5 --repeats 2
 
 # Score in AX (see below), then read the ranking
 uv run blogwriter-ax-report --by domain
@@ -332,6 +404,11 @@ spans automatically instead of triggering backfills.
    `CodeEvaluator`, give `evaluate()` explicitly named keyword params (bare
    `**kwargs` exposes zero mappable variables), return `EvaluationResult`, and
    keep imports in `--imports` rather than inline in `--code`.
+6. **Deleting a project orphans its tasks.** The project is recreated on the
+   next trace but with a **new ID**, while the tasks keep pointing at the dead
+   one — and `ax tasks update` has no `--project` flag, so they cannot be
+   repointed. Delete and recreate the tasks after deleting a project.
+   Evaluators are space-level and survive untouched.
 
 ### AX cannot cost Opus 5.5
 
@@ -460,8 +537,9 @@ blocks, so neither file is valid Python alone.
 
 ## Known limitations
 
-- **Sample size.** 2 of 20 briefs exist; one topic dominates the scored set.
-  Nothing here is a finding yet.
+- **Sample size.** All 20 briefs exist and all 20 topics are scored at n=2 per
+  model, so the aggregate is sound. Individual per-topic numbers are noisy at
+  that depth — raise `--repeats` before quoting any single topic.
 - **The hand-written phrase list in `claudisms.py` matched nothing** in any real
   post. Those 28 phrases were chosen from intuition, not derived from output.
   They should be rebuilt empirically from a generated corpus (n-gram frequency
@@ -478,7 +556,13 @@ blocks, so neither file is valid Python alone.
 
 ## Next steps
 
-1. Decide the research model (a non-Claude model reduces brief contamination).
-2. Generate the remaining 18 briefs.
-3. Run the full matrix at `--repeats 3` (120 posts across 5 domains).
-4. Rebuild the phrase list empirically from that corpus and re-score.
+1. **Raise repeats to 3+** and re-score, so per-topic numbers become quotable
+   rather than just the aggregate.
+2. **Rebuild the phrase list empirically** from the 80-post corpus: compare
+   n-gram frequencies between the two models instead of guessing which phrases
+   matter. The current list barely fires and contributes nothing.
+3. **Add structural metrics to the AX code evaluator.** Bold lead-in bullets
+   and rule-of-three are where Opus 5.5's style actually *increased*, and right
+   now only the local scan measures them — AX sees em-dashes alone.
+4. **Multiple judge passes per post**, since `temperature=0` is unavailable and
+   a single pass leaves the graded score noisier than it needs to be.

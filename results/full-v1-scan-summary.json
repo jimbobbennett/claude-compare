@@ -1,0 +1,33 @@
+{
+  "generated_at": "2026-09-23T02:11:39+00:00",
+  "pattern_version": "v1",
+  "summary": {
+    "BRIEFS (baseline)": {
+      "documents": 20,
+      "mean_word_count": 1014.35,
+      "claude_leaning_per_1k": 0.06,
+      "generic_llm_per_1k": 0.09,
+      "em_dash_per_1k": 31.45,
+      "bold_leadin_bullet_per_1k": 5.22,
+      "rule_of_three_per_1k": 0.56
+    },
+    "opus-5": {
+      "documents": 40,
+      "mean_word_count": 1269.17,
+      "claude_leaning_per_1k": 0.3,
+      "generic_llm_per_1k": 0.17,
+      "em_dash_per_1k": 13.3,
+      "bold_leadin_bullet_per_1k": 2.02,
+      "rule_of_three_per_1k": 2.71
+    },
+    "opus-5.5": {
+      "documents": 40,
+      "mean_word_count": 1365.33,
+      "claude_leaning_per_1k": 0.11,
+      "generic_llm_per_1k": 0.0,
+      "em_dash_per_1k": 0.05,
+      "bold_leadin_bullet_per_1k": 4.96,
+      "rule_of_three_per_1k": 3.66
+    }
+  }
+}
