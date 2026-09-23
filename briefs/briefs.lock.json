@@ -1,21 +1,111 @@
 {
   "lock_version": 1,
-  "updated_at": "2026-09-22T21:53:45+00:00",
+  "updated_at": "2026-09-23T01:21:45+00:00",
   "harness": {
-    "anthropic_sdk": "1.8.0",
+    "anthropic_sdk": "1.7.0",
     "python": "3.12.13",
     "platform": "Darwin-arm64"
   },
   "briefs": {
+    "against-the-48-hour-city-break": {
+      "sha256": "fd48d3721250a9e017a936ce68250dc3f3ef5974f94a39f7f3005de916b56910",
+      "research_model": "claude-opus-5",
+      "generated_at": "2026-09-23T00:55:44+00:00"
+    },
+    "against-the-stand-mixer": {
+      "sha256": "a6a02b77235ae35023cb08dd4c32218889887880da3417eebfcf18c86121f3a3",
+      "research_model": "claude-opus-5",
+      "generated_at": "2026-09-23T01:05:53+00:00"
+    },
+    "against-vibe-checking-llm-output": {
+      "sha256": "3d4a6029007b2350637f2d291b35770d450996d272a018dcff9d67f20a93b6dc",
+      "research_model": "claude-opus-5",
+      "generated_at": "2026-09-23T00:45:21+00:00"
+    },
+    "build-your-first-evaluator": {
+      "sha256": "18b4ede8a2e5bb1be807500723eddb892cb96605342045bf072681c9a72031d7",
+      "research_model": "claude-opus-5",
+      "generated_at": "2026-09-23T00:49:11+00:00"
+    },
+    "effort-parameter-for-agent-builders": {
+      "sha256": "c7a59da10574276d0ae41dbddfabf7820917c93ed38483edd8b0551928d9b82e",
+      "research_model": "claude-opus-5",
+      "generated_at": "2026-09-23T00:53:54+00:00"
+    },
+    "first-trace-python-llm-app": {
+      "sha256": "d6600b70f50c489ce3d8a244eee66be7bf9152f78b1cb5447baff6d02104ae58",
+      "research_model": "claude-opus-5",
+      "generated_at": "2026-09-23T00:47:07+00:00"
+    },
+    "first-trip-to-japan": {
+      "sha256": "e6c29a696124afa161dbb68a53ab23f8970f5f4098250f04f7e0fd12ebdd31c9",
+      "research_model": "claude-opus-5",
+      "generated_at": "2026-09-23T00:57:10+00:00"
+    },
+    "how-frame-generation-works": {
+      "sha256": "84f7cf0c3121a0a9f7d284bee8cacafec408aa272d29672dbdf948557b6a0c7c",
+      "research_model": "claude-opus-5",
+      "generated_at": "2026-09-23T01:14:32+00:00"
+    },
     "how-llm-as-judge-works": {
       "sha256": "4572cc094e7d4d7defd24882c6450adc30d95d7f31998a8b94050724e7553145",
       "research_model": "claude-opus-5",
       "generated_at": "2026-09-22T20:31:23+00:00"
     },
+    "in-defence-of-abandoning-books": {
+      "sha256": "4a0ebddfd1d9b35d51731a2d01cc3cb08bda75f2e736e6feab43e1bf534fb108",
+      "research_model": "claude-opus-5",
+      "generated_at": "2026-09-23T01:17:58+00:00"
+    },
     "otel-spans-for-ai-agents": {
       "sha256": "975790e780c1cd5418deea8d984cc865d39fec20377cfb8a3fc26b19cbf472f3",
       "research_model": "claude-opus-5",
       "generated_at": "2026-09-22T21:53:45+00:00"
+    },
+    "prompt-optimization-from-traces": {
+      "sha256": "e91869a8283f942c49e3bdfdefefbac6e5018286166d539670ffdb6423551ac1",
+      "research_model": "claude-opus-5",
+      "generated_at": "2026-09-23T00:50:57+00:00"
+    },
+    "searing-does-not-seal-juices": {
+      "sha256": "3dfcae551bb5afa84e420c8d5ceaa44c498ee6d9448dca830feab24d18fb1e09",
+      "research_model": "claude-opus-5",
+      "generated_at": "2026-09-23T00:59:52+00:00"
+    },
+    "start-reading-poetry": {
+      "sha256": "fdc11ca0fa202a5fd819dd99ce1dfdda14d848c7ccf65694f3371e89f2660352",
+      "research_model": "claude-opus-5",
+      "generated_at": "2026-09-23T01:19:54+00:00"
+    },
+    "subscription-game-libraries": {
+      "sha256": "abafef1740e8f88eb11cf1fa080d02bcfeda682215eb1feb0f0a732f088b3bec",
+      "research_model": "claude-opus-5",
+      "generated_at": "2026-09-23T01:11:12+00:00"
+    },
+    "weeknight-pasta-from-nothing": {
+      "sha256": "7ab9b882493134bbd344803a7cb9381e46746223549855982eb04406908acd8d",
+      "research_model": "claude-opus-5",
+      "generated_at": "2026-09-23T01:02:12+00:00"
+    },
+    "what-happens-to-checked-luggage": {
+      "sha256": "ce7c3f17fbe0984b6d80923ca9dbcb5652571869e11f530a995d9d8f3f109913",
+      "research_model": "claude-opus-5",
+      "generated_at": "2026-09-23T00:58:48+00:00"
+    },
+    "why-agent-demos-fail-in-production": {
+      "sha256": "7c4552ae3d69b38a9f6461b481801c8faa7dcca3657e011b47aa7c5381dc65c3",
+      "research_model": "claude-opus-5",
+      "generated_at": "2026-09-23T00:36:21+00:00"
+    },
+    "why-novels-open-with-prologues": {
+      "sha256": "ff6116aa9f346ce62e99f30bea92dd27d10eecb183c98520a52b4850121ee62e",
+      "research_model": "claude-opus-5",
+      "generated_at": "2026-09-23T01:21:45+00:00"
+    },
+    "why-open-worlds-got-boring": {
+      "sha256": "2ee9f07bb12c88e296660a328f91ced92343adde68427d60dac3ad0d35503406",
+      "research_model": "claude-opus-5",
+      "generated_at": "2026-09-23T01:09:35+00:00"
     }
   }
 }
