@@ -1,3 +1,5 @@
+![Claude Compare! - an operatic tenor in a blue tuxedo beside a dark green panel reading "CLAUDE COMPARE!"](docs/banner.jpg)
+
 # claude-compare
 
 **Does Claude Opus 5.5 still write with Opus 5's signature style?**
