@@ -4,7 +4,7 @@ The v1 judge runs inside AX. v2 cannot: AX template evaluators must return a
 classification label, and AX's own instructions override any attempt to put
 structured spans in the explanation (see ``judge_spec.render_template_v2``).
 So v2 runs here, with the same prompt text an AX evaluator would use and the
-same judge model as v1, ``gpt-5.6-luna`` through OpenAI. The judge is still
+a newer judge model than v1, ``gpt-6-luna`` through OpenAI. The judge is still
 deliberately not a Claude model.
 
 For each post the judge returns every claudism it finds as an exact quote plus
@@ -34,7 +34,7 @@ from .determinism import REPO_ROOT, print_stderr, utc_now
 from .judge_spec import parse_judge_output, render_template_v2, score_instances
 from .scan import collect_posts
 
-DEFAULT_MODEL = "gpt-5.6-luna"
+DEFAULT_MODEL = "gpt-6-luna"
 ENDPOINT = "https://api.openai.com/v1/chat/completions"
 
 

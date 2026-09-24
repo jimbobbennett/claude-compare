@@ -1,32 +1,32 @@
 {
   "run_id": "full-v1",
-  "judge_model": "gpt-5.6-luna",
-  "judged_at": "2026-09-24T22:19:01+00:00",
+  "judge_model": "gpt-6-luna",
+  "judged_at": "2026-09-24T23:11:20+00:00",
   "models": {
     "opus-5": {
       "n": 40,
-      "v2_mean": 4.95,
-      "spans_per_1k": 13.05,
+      "v2_mean": 4.15,
+      "spans_per_1k": 4.79,
       "by_category": {
-        "stock_metaphor": 177,
-        "contrast_reframe": 160,
-        "salience_flag": 119,
-        "signpost": 94,
-        "verdict_intensifier": 90,
-        "gotcha_framing": 24
+        "salience_flag": 89,
+        "verdict_intensifier": 54,
+        "signpost": 40,
+        "contrast_reframe": 29,
+        "stock_metaphor": 22,
+        "gotcha_framing": 10
       }
     },
     "opus-5.5": {
       "n": 40,
-      "v2_mean": 4.85,
-      "spans_per_1k": 9.58,
+      "v2_mean": 3.15,
+      "spans_per_1k": 2.43,
       "by_category": {
-        "stock_metaphor": 151,
-        "contrast_reframe": 132,
-        "salience_flag": 96,
-        "signpost": 81,
-        "verdict_intensifier": 49,
-        "gotcha_framing": 15
+        "salience_flag": 49,
+        "signpost": 30,
+        "verdict_intensifier": 24,
+        "contrast_reframe": 15,
+        "stock_metaphor": 9,
+        "gotcha_framing": 6
       }
     }
   }

@@ -1,18 +1,21 @@
 You are a forensic style analyst. You judge the FORM of prose, never its subject matter, accuracy, or quality.
 
-Below is a blog post. Find every instance of the constructions listed. Quote each one exactly, using the shortest span that shows the construction (usually one clause or sentence).
+Below is a blog post. Find every instance of the rhetorical tics listed below, which mark prose as machine-written. Quote each one exactly, using the shortest span that shows the tic (usually one clause or sentence).
 
-CONSTRUCTIONS
-1. salience_flag - the prose says something is important instead of showing why: "The interaction matters", "the critical detail", "a fact worth internalising", "deserves a moment".
-2. contrast_reframe - one framing negated and replaced with a sharper one: "Access is not ownership", "a difference of degree, not of kind", "It is not X. It is Y."
-3. verdict_intensifier - a word that marks a claim as final or sincere without adding information: "that's the whole point", "the honest answer", "that's a real difference", "that's not accidental".
-4. signpost - announces an insight instead of delivering it: "Here's the part that...", "Think about what that means", "Two things to keep in mind".
-5. gotcha_framing - presents a detail as a hidden trap: "The trap is...", "The catch is...", "one detail bites everyone".
-6. stock_metaphor - mechanical or economic metaphor for an abstract claim: "load-bearing", "doing a lot of work", "earns its keep", "a useful lens". Always tag any use of "load-bearing" (literal or figurative, hyphenated or not) and close variants like "bears the load" or "carries the weight".
+THE CORE TEST (apply to every candidate before tagging it)
+A tic adds emphasis, drama or suspense WITHOUT adding information. Mentally delete the span or rewrite it in flat plain words. If a fact, number, mechanism, condition or instruction would be lost, it is ordinary writing: do NOT tag it. Most sentences in a good post are ordinary writing.
+
+TICS
+1. salience_flag - the prose asserts that something is important instead of showing why: "The interaction matters", "That disagreement matters", "a fact worth internalising", "worth knowing cold", "Crucially,", "deserves a moment", "the highest-leverage decision", "This is the one people feel". Not a flag: a sentence that states a concrete effect ("That omission changes how you read the map" is a claim about an effect, not an assertion of importance).
+2. contrast_reframe - one framing is negated and replaced with a sharper label or verdict, usually as a punchy pair: "Access is not ownership", "It's not cowardice, it's arithmetic", "That's not failure. That's satiety", "Frame generation is smoothness amplification, not performance", "The cold open is not backstory; it is a tension deposit", "Demos are short. Real work is not." The replacement is typically a crisp noun phrase that recasts the thing. Not a reframe: a scope qualifier ("it applies to all output tokens, not only thinking"), a correction whose second half is a number or evidence ("Most bags aren't lost. Delays account for 74%"), or an ordinary "but" clause.
+3. verdict_intensifier - a word or phrase that marks a claim as final, sincere or significant without adding information: "that's the whole point", "the honest answer", "the real business model", "that's not accidental", "That's it.", "which is exactly the point". Not an intensifier: an ordinary evaluation with content ("straightforward and holds up well", "a real reason to choose one", "The industry's direction is clear: higher prices, more bundling").
+4. signpost - teases or defers an insight instead of delivering it: "Here's the part that bites people", "Here's why, and what to do instead", "The short answer is", "Think about what that means", "Two things worth internalising:", "Here's the structure", "Here's what actually happens", "Read that the other way round". Any "Here's the/what..." opener that sets up the next sentence counts. Not a signpost: a neutral structural transition ("First, a definition.", "More precisely:", "The following tools each offer...", "This post looks at why.", "In practice, that means a few habits:").
+5. gotcha_framing - a detail framed with trap vocabulary: "The trap is", "The catch is", "bites everyone", "catches people out", "Here is the thing nobody mentions". Not gotcha framing: a plain warning or condition with no trap framing ("Stays after 1 March are charged the new rates").
+6. stock_metaphor - a stock mechanical or economic metaphor from the well-worn set: "load-bearing", "doing a lot of work", "doing the heavy lifting", "earns its keep", "earns its counter space", "a useful lens", "the knob you aren't tuning", "sharp edges", "where it falls over", "where the real spending lives", "launder", "moving parts". Always tag any use of "load-bearing" (literal or figurative, hyphenated or not) and close variants like "bears the load" or "carries the weight". Not a stock metaphor: the ordinary dead metaphors of English and normal technical vocabulary ("breaks down", "strain the context window", "an asset", "the same machinery", "buys scale", "workhorse", "for free", "burned rollouts", "opportunity cost", "under the hood").
 
 RULES
 - Judge prose only. Ignore code blocks, headings, list formatting, bold, and punctuation.
-- A plain factual statement is not a salience flag. "Latency matters for voice agents because users hang up after two seconds" gives the reason; flag only when the importance is asserted and the reason is missing or comes after.
+- Text inside quotation marks that the post attributes to someone else is not a tic.
 - One span can have one category. Pick the best fit.
 - If there are none, return an empty list.
 

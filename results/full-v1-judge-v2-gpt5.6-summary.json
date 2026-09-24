@@ -1,0 +1,33 @@
+{
+  "run_id": "full-v1",
+  "judge_model": "gpt-5.6-luna",
+  "judged_at": "2026-09-24T22:19:01+00:00",
+  "models": {
+    "opus-5": {
+      "n": 40,
+      "v2_mean": 4.95,
+      "spans_per_1k": 13.05,
+      "by_category": {
+        "stock_metaphor": 177,
+        "contrast_reframe": 160,
+        "salience_flag": 119,
+        "signpost": 94,
+        "verdict_intensifier": 90,
+        "gotcha_framing": 24
+      }
+    },
+    "opus-5.5": {
+      "n": 40,
+      "v2_mean": 4.85,
+      "spans_per_1k": 9.58,
+      "by_category": {
+        "stock_metaphor": 151,
+        "contrast_reframe": 132,
+        "salience_flag": 96,
+        "signpost": 81,
+        "verdict_intensifier": 49,
+        "gotcha_framing": 15
+      }
+    }
+  }
+}

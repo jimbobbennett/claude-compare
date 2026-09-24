@@ -24,8 +24,8 @@ quotes every instance it finds, so its output can be checked against a human
 reader line by line.
 
 **Opus 5 writes more like Claude than Opus 5.5 does, and the clearest single
-tell is the em-dash.** Opus 5.5 almost stopped using the em-dash, but most of
-the rhetorical moves underneath are still there.
+tell is the em-dash.** Opus 5.5 almost stopped using the em-dash, and it uses
+the rhetorical moves underneath about half as often.
 
 ---
 
@@ -111,26 +111,36 @@ including em-dashes, stock phrases and antithesis pivots, will **under-read
 Opus 5.5** because the structures 5.5 favours increased. A useful metric set
 needs both halves.
 
-### The span judge: the moves outlasted the em-dash
+### The span judge: the moves halved, the em-dash vanished
 
 The v2 judge quotes each claudism it finds and tags it with one of six
 categories taken from the hand-flagged set. Counted per 1,000 words of prose:
 
 | per 1000 words | opus-5 | opus-5.5 | change |
 |---|---|---|---|
-| stock metaphor | 3.49 | 2.77 | −21% |
-| contrast reframe | 3.15 | 2.42 | −23% |
-| salience flag | 2.34 | 1.76 | −25% |
-| signpost | 1.85 | 1.48 | −20% |
-| verdict intensifier | 1.77 | 0.90 | −49% |
-| gotcha framing | 0.47 | 0.27 | −43% |
-| **all spans** | **13.05** | **9.58** | **−27%** |
+| salience flag | 1.75 | 0.90 | −49% |
+| verdict intensifier | 1.06 | 0.44 | −58% |
+| signpost | 0.79 | 0.55 | −30% |
+| contrast reframe | 0.57 | 0.27 | −53% |
+| stock metaphor | 0.43 | 0.16 | −63% |
+| gotcha framing | 0.20 | 0.11 | −45% |
+| **all spans** | **4.79** | **2.43** | **−49%** |
 
 Opus 5.5 cut its em-dashes by more than 99%. It cut these constructions by
-about a quarter. Every category went down, and the two that fell furthest,
-verdict intensifiers ("the honest answer", "that's the whole point") and gotcha
-framing ("the trap is"), are the rarest to begin with. The three most common
-moves, stock metaphors, contrast reframes and salience flags, fell by 21–25%.
+about half. Every category went down. Stock metaphors ("load-bearing", "doing
+a lot of work") fell furthest, and signposts ("Here's the part that...") held
+on best, at −30%. Salience flags, which assert that something matters without
+showing why, are the most common move in both models.
+
+An earlier version of this judge reported a much smaller gap: 13.05 against
+9.58, or −27%. Its prompt tagged ordinary prose as well as tics ("First, a
+definition.", "strain the context window", "It applies to all output tokens,
+not only thinking."), and that floor of false positives is present in any
+writing, so it shrank the difference between the models. The current prompt
+applies one test to every candidate span: delete it, and if a fact, number,
+mechanism or instruction is lost, it is not a tic. Each category also lists
+examples of what not to tag. That run is kept in
+`results/full-v1-judge-v2-gpt5.6-summary.json`.
 
 The hand-written phrase list tells the same story at a smaller scale. With the
 v2 patterns, a local rescan finds 1.32 stock phrases per 1,000 words in Opus 5
@@ -151,22 +161,20 @@ counts are deterministic.
 
 The span judge has three limits of its own:
 
-- **Recall is measured, precision is not.** On the r1 posts it finds 68 of the
-  83 hand-flagged claudisms (82%), where the regex finds 24 (29%). It also
-  tagged 240 spans nobody flagged. A sample of those includes real claudisms I
-  missed ("Here's the data point that should terrify anyone…") and plain
-  sentences it should have left alone ("Here's how to join them."). Until a
-  human marks them, the absolute density is an upper bound. The comparison
-  between models is fairer, because both models are over-tagged by the same
-  judge.
-- **The r2 posts are held out.** The r1 figure is the tuning set. The r2 split
-  has not been run against the flags yet, so that it can give one clean number
-  once the prompt is settled.
+- **Recall is measured, precision only roughly.** On the r1 posts it finds 57
+  of the 83 hand-flagged claudisms (69%), where the regex finds 24 (29%). On
+  the held-out r2 posts it finds 44 of 70 (63%). The r1 figure is flattered,
+  because the prompt quotes some r1 flags as examples. It also tags about 60
+  spans per split that nobody flagged. A spot check of those put precision at
+  roughly 26 in 30 on Opus 5.5, but Claude did that labelling, on Claude's
+  prose, and no human has checked it.
+- **The held-out split is spent.** r2 has now been used to judge the prompt, so
+  any further tuning needs fresh flags, ideally on Opus 5.5 posts, since all
+  153 current flags are on Opus 5.
 - **The 1–5 band is uncalibrated.** The density cut-offs were guessed before
-  the judge ran, from the rate of hand flags (about 3 per 1,000 words). The
-  judge tags about four times that, so 72 of the 80 posts land in the top band
-  and the v2 score (4.95 against 4.85) does not separate the models. Use spans
-  per 1,000 words until the bands are recalibrated.
+  the judge ran, from the rate of hand flags (about 3 per 1,000 words). The v2
+  score (4.15 against 3.15) separates the models, but the bands have not been
+  fitted to anything. Use spans per 1,000 words until they are recalibrated.
 
 Running the whole thing cost about $15 in research briefs, which is a one-off
 because they are committed to the repository, plus $7.00 in generated posts.
@@ -234,7 +242,7 @@ in AX too, but an AX template evaluator has to return one label from a fixed
 set: a freeform evaluator is rejected when you create it, and AX adds its own
 "explain, then label" instruction to the prompt, which overrides any request to
 put a list of quotes in the explanation field. So the local command sends the
-same prompt to the same judge model, `gpt-5.6-luna` through OpenAI, and writes
+same prompt to `gpt-6-luna` through OpenAI, and writes
 the quotes to a JSON file per model. The judge is still not a Claude model.
 
 ### Checking the evaluator against a human reader
@@ -287,7 +295,8 @@ still be reproduced.
 
 - Python 3.12 or later, and [uv](https://docs.astral.sh/uv/)
 - An Anthropic API key with access to Opus 5 and Opus 5.5
-- An OpenAI API key with access to `gpt-5.6-luna`, for the v2 span judge
+- An OpenAI API key with access to `gpt-5.6-luna` (the v1 judge in AX) and
+  `gpt-6-luna` (the v2 span judge)
 - An Arize AX account
 - The `ax` CLI, authenticated (check with `ax profiles show`)
 - An OpenAI-backed AI integration configured in AX, for the v1 judge
@@ -602,18 +611,25 @@ the judge on voice and the regex on format gives the metric its separation.
 
 ### v2: every instance, quoted
 
-The v2 prompt is in `ax/claudism_spans_template.txt`. It uses the same judge
-model and the same "form, not content" opening, and asks for JSON instead of a
-label. These are its categories:
+The v2 prompt is in `ax/claudism_spans_template.txt`. It runs on `gpt-6-luna`,
+keeps v1's "form, not content" opening, and asks for JSON instead of a label.
+Before the categories it states one test for every candidate:
 
 ```text
-CONSTRUCTIONS
-1. salience_flag - the prose says something is important instead of showing why: "The interaction matters", "the critical detail", "a fact worth internalising", "deserves a moment".
-2. contrast_reframe - one framing negated and replaced with a sharper one: "Access is not ownership", "a difference of degree, not of kind", "It is not X. It is Y."
-3. verdict_intensifier - a word that marks a claim as final or sincere without adding information: "that's the whole point", "the honest answer", "that's a real difference", "that's not accidental".
-4. signpost - announces an insight instead of delivering it: "Here's the part that...", "Think about what that means", "Two things to keep in mind".
-5. gotcha_framing - presents a detail as a hidden trap: "The trap is...", "The catch is...", "one detail bites everyone".
-6. stock_metaphor - mechanical or economic metaphor for an abstract claim: "load-bearing", "doing a lot of work", "earns its keep", "a useful lens". Always tag any use of "load-bearing" (literal or figurative, hyphenated or not) and close variants like "bears the load" or "carries the weight".
+THE CORE TEST (apply to every candidate before tagging it)
+A tic adds emphasis, drama or suspense WITHOUT adding information. Mentally delete the span or rewrite it in flat plain words. If a fact, number, mechanism, condition or instruction would be lost, it is ordinary writing: do NOT tag it. Most sentences in a good post are ordinary writing.
+```
+
+These are its categories:
+
+```text
+TICS
+1. salience_flag - the prose asserts that something is important instead of showing why: "The interaction matters", "That disagreement matters", "a fact worth internalising", "worth knowing cold", "Crucially,", "deserves a moment", "the highest-leverage decision", "This is the one people feel". Not a flag: a sentence that states a concrete effect ("That omission changes how you read the map" is a claim about an effect, not an assertion of importance).
+2. contrast_reframe - one framing is negated and replaced with a sharper label or verdict, usually as a punchy pair: "Access is not ownership", "It's not cowardice, it's arithmetic", "That's not failure. That's satiety", "Frame generation is smoothness amplification, not performance", "The cold open is not backstory; it is a tension deposit", "Demos are short. Real work is not." The replacement is typically a crisp noun phrase that recasts the thing. Not a reframe: a scope qualifier ("it applies to all output tokens, not only thinking"), a correction whose second half is a number or evidence ("Most bags aren't lost. Delays account for 74%"), or an ordinary "but" clause.
+3. verdict_intensifier - a word or phrase that marks a claim as final, sincere or significant without adding information: "that's the whole point", "the honest answer", "the real business model", "that's not accidental", "That's it.", "which is exactly the point". Not an intensifier: an ordinary evaluation with content ("straightforward and holds up well", "a real reason to choose one", "The industry's direction is clear: higher prices, more bundling").
+4. signpost - teases or defers an insight instead of delivering it: "Here's the part that bites people", "Here's why, and what to do instead", "The short answer is", "Think about what that means", "Two things worth internalising:", "Here's the structure", "Here's what actually happens", "Read that the other way round". Any "Here's the/what..." opener that sets up the next sentence counts. Not a signpost: a neutral structural transition ("First, a definition.", "More precisely:", "The following tools each offer...", "This post looks at why.", "In practice, that means a few habits:").
+5. gotcha_framing - a detail framed with trap vocabulary: "The trap is", "The catch is", "bites everyone", "catches people out", "Here is the thing nobody mentions". Not gotcha framing: a plain warning or condition with no trap framing ("Stays after 1 March are charged the new rates").
+6. stock_metaphor - a stock mechanical or economic metaphor from the well-worn set: "load-bearing", "doing a lot of work", "doing the heavy lifting", "earns its keep", "earns its counter space", "a useful lens", "the knob you aren't tuning", "sharp edges", "where it falls over", "where the real spending lives", "launder", "moving parts". Always tag any use of "load-bearing" (literal or figurative, hyphenated or not) and close variants like "bears the load" or "carries the weight". Not a stock metaphor: the ordinary dead metaphors of English and normal technical vocabulary ("breaks down", "strain the context window", "an asset", "the same machinery", "buys scale", "workhorse", "for free", "burned rollouts", "opportunity cost", "under the hood").
 ```
 
 The JSON shape is described in words rather than shown as an example, so the
@@ -761,13 +777,16 @@ preserves the original structure.
 
 ## Where to take it next
 
-**Mark the unflagged spans.** The span judge tagged 240 spans on the r1 posts
-that nobody flagged. Marking each as real or not gives a precision figure, and
-any real ones extend the flag set.
+**Mark the unflagged spans.** The span judge tags about 60 spans per split
+that nobody flagged. A human marking each as real or not would replace the
+rough precision figure, and any real ones extend the flag set.
 
-**Recalibrate the v2 bands, then run r2.** The density cut-offs need setting
-from the judge's own r1 distribution. After that, one run against r2 gives the
-held-out recall figure.
+**Flag some Opus 5.5 posts.** Every hand flag is on Opus 5, and the held-out
+split has been used. Flags on 5.5 give a fresh test set and check the judge on
+the model it scores lower.
+
+**Recalibrate the v2 bands.** The density cut-offs need setting from the
+judge's own distribution before the 1–5 score means anything.
 
 **Send the v2 spans back to AX.** The span judge runs outside AX today, so its
 results are not beside the v1 scores on the traces. Writing them back as span
