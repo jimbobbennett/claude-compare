@@ -18,9 +18,14 @@ LLM-as-judge rates how heavily the prose leans on Claude's signature
 constructions, and a deterministic code evaluator counts em-dashes. A small
 reporting command reads the scores back out of AX and ranks the models.
 
+A second-generation judge sits alongside them. I read all 40 Opus 5 posts and
+flagged 153 claudisms by hand, and the v2 judge was built from those flags. It
+quotes every instance it finds, so its output can be checked against a human
+reader line by line.
+
 **Opus 5 writes more like Claude than Opus 5.5 does, and the clearest single
-tell is the em-dash.** Opus 5.5 also changed its use of other stylistic
-constructions.
+tell is the em-dash.** Opus 5.5 almost stopped using the em-dash, but most of
+the rhetorical moves underneath are still there.
 
 ---
 
@@ -106,6 +111,32 @@ including em-dashes, stock phrases and antithesis pivots, will **under-read
 Opus 5.5** because the structures 5.5 favours increased. A useful metric set
 needs both halves.
 
+### The span judge: the moves outlasted the em-dash
+
+The v2 judge quotes each claudism it finds and tags it with one of six
+categories taken from the hand-flagged set. Counted per 1,000 words of prose:
+
+| per 1000 words | opus-5 | opus-5.5 | change |
+|---|---|---|---|
+| stock metaphor | 3.49 | 2.77 | −21% |
+| contrast reframe | 3.15 | 2.42 | −23% |
+| salience flag | 2.34 | 1.76 | −25% |
+| signpost | 1.85 | 1.48 | −20% |
+| verdict intensifier | 1.77 | 0.90 | −49% |
+| gotcha framing | 0.47 | 0.27 | −43% |
+| **all spans** | **13.05** | **9.58** | **−27%** |
+
+Opus 5.5 cut its em-dashes by more than 99%. It cut these constructions by
+about a quarter. Every category went down, and the two that fell furthest,
+verdict intensifiers ("the honest answer", "that's the whole point") and gotcha
+framing ("the trap is"), are the rarest to begin with. The three most common
+moves, stock metaphors, contrast reframes and salience flags, fell by 21–25%.
+
+The hand-written phrase list tells the same story at a smaller scale. With the
+v2 patterns, a local rescan finds 1.32 stock phrases per 1,000 words in Opus 5
+and 0.27 in Opus 5.5. Fixed wording is easy for a model to drop. The shape of
+the argument underneath it changes more slowly.
+
 ### How far to trust this
 
 The aggregate is solid. Forty posts per model, balanced, with every post
@@ -117,6 +148,25 @@ per-topic numbers are noisier than the aggregate. Raise the repeat count before
 quoting any individual topic. The judge model does not accept `temperature=0`,
 so the graded scores carry some irreducible variance. The em-dash and structural
 counts are deterministic.
+
+The span judge has three limits of its own:
+
+- **Recall is measured, precision is not.** On the r1 posts it finds 68 of the
+  83 hand-flagged claudisms (82%), where the regex finds 24 (29%). It also
+  tagged 240 spans nobody flagged. A sample of those includes real claudisms I
+  missed ("Here's the data point that should terrify anyone…") and plain
+  sentences it should have left alone ("Here's how to join them."). Until a
+  human marks them, the absolute density is an upper bound. The comparison
+  between models is fairer, because both models are over-tagged by the same
+  judge.
+- **The r2 posts are held out.** The r1 figure is the tuning set. The r2 split
+  has not been run against the flags yet, so that it can give one clean number
+  once the prompt is settled.
+- **The 1–5 band is uncalibrated.** The density cut-offs were guessed before
+  the judge ran, from the rate of hand flags (about 3 per 1,000 words). The
+  judge tags about four times that, so 72 of the 80 posts land in the top band
+  and the v2 score (4.95 against 4.85) does not separate the models. Use spans
+  per 1,000 words until the bands are recalibrated.
 
 Running the whole thing cost about $15 in research briefs, which is a one-off
 because they are committed to the repository, plus $7.00 in generated posts.
@@ -173,10 +223,61 @@ Each post is written with YAML front-matter recording everything that was
 pinned: the model, the effort, the prompt hash, the brief hash, token counts
 and cost. Any result can be traced back to the exact inputs that produced it.
 
-### Stage C — scoring, inside AX
+### Stage C — scoring
 
-Every run is traced to Arize AX. The evaluators then run **in AX** and score the spans the harness produced. Finally `blogwriter-ax-report`
-reads those scores back and aggregates them by model, domain and genre.
+Every run is traced to Arize AX. The v1 judge and the em-dash counter run **in
+AX** and score the spans the harness produced, and `blogwriter-ax-report` reads
+those scores back and aggregates them by model, domain and genre.
+
+The v2 span judge runs locally, through `blogwriter-judge`. It was built to run
+in AX too, but an AX template evaluator has to return one label from a fixed
+set: a freeform evaluator is rejected when you create it, and AX adds its own
+"explain, then label" instruction to the prompt, which overrides any request to
+put a list of quotes in the explanation field. So the local command sends the
+same prompt to the same judge model, `gpt-5.6-luna` through OpenAI, and writes
+the quotes to a JSON file per model. The judge is still not a Claude model.
+
+### Checking the evaluator against a human reader
+
+v1 gives each post one label, and there is no way to check one label against a
+human reader. So I read the 40 Opus 5 posts in a shared document and flagged
+every claudism I saw. The 153 flags are in `annotations/opus-5-full-v1.json`,
+with the post, section, line and full sentence for each one.
+
+The flags showed three problems with v1:
+
+- The regex phrase list matched 9 of the 153 flagged sentences.
+- The thing I flagged most, prose saying something is important without
+  showing why, had no category in the judge. That was 48 of the 153.
+- Three judge categories (concessive pivot, meta writing, hedge then assert)
+  matched almost none of the flags.
+
+v2 changes both halves of the evaluator. The regex half, `PATTERN_VERSION =
+"v2"` in `claudisms.py`, adds patterns for the fixed wording in the flags:
+"worth internalising", "the whole point", "the honest answer", "doing a lot of
+work", "the trap is". It widens `load_bearing` to catch "bears the load" and
+"carries the weight", and keeps the name, so load-bearing counts compare
+directly with v1. With these patterns the regex finds 45 of the 153 flags, up
+from 9. The patterns were written from those same flags, so that is an
+in-sample figure.
+
+The judge half returns every instance it finds as an exact quote with one of six
+categories: salience flag, contrast reframe, verdict intensifier, signpost,
+gotcha framing and stock metaphor. Code turns the quotes into instances per
+1,000 words. Rule of three and punchy closers are left out of the judge because
+`claudisms.py` already counts both.
+
+`blogwriter-validate` measures both halves against the flags. A flag counts as
+found if a detected span overlaps the flagged sentence. The prompt is tuned on
+the r1 posts and measured once on r2, so the reported number is not fitted to
+its own test set.
+
+"Load-bearing" is a must-catch. There are 3 uses in the Opus 5 posts and 0 in
+Opus 5.5. If either half misses any of the 3, `blogwriter-validate` exits
+non-zero, whatever the recall figure. Both halves currently catch all 3.
+
+The v1 judge and its template are unchanged, so every existing score can
+still be reproduced.
 
 ---
 
@@ -186,9 +287,10 @@ reads those scores back and aggregates them by model, domain and genre.
 
 - Python 3.12 or later, and [uv](https://docs.astral.sh/uv/)
 - An Anthropic API key with access to Opus 5 and Opus 5.5
+- An OpenAI API key with access to `gpt-5.6-luna`, for the v2 span judge
 - An Arize AX account
 - The `ax` CLI, authenticated (check with `ax profiles show`)
-- An OpenAI-backed AI integration configured in AX, for the judge model
+- An OpenAI-backed AI integration configured in AX, for the v1 judge
 
 ### 2. Install
 
@@ -211,6 +313,7 @@ Then edit `.env`:
 | Variable | Purpose |
 |---|---|
 | `ANTHROPIC_API_KEY` | Required. Used for both research and writing. |
+| `OPENAI_API_KEY` | Required for `blogwriter-judge`, the v2 span judge. |
 | `ARIZE_API_KEY` | Required, for tracing. |
 | `ARIZE_SPACE_ID` | Required, for tracing. |
 | `ARIZE_SPACE` | Space name or ID, used by `blogwriter-ax-report`. Find it with `ax spaces list`. |
@@ -232,7 +335,7 @@ confirm `anthropic._utils._transform` still imports first.
 ### 5. Verify the install
 
 ```bash
-uv run pytest          # 29 tests, no network calls
+uv run pytest          # 52 tests, no network calls
 uv run ruff check src/
 uv run blogwriter --help
 ```
@@ -273,6 +376,10 @@ ax evaluators create-evaluator code \
 ```
 
 Both commands print the new evaluator's ID, and you should keep both IDs.
+
+The v2 span judge needs nothing in AX. Its prompt is in
+`ax/claudism_spans_template.txt` alongside the others, but it runs locally (see
+[Stage C](#stage-c--scoring) for why).
 
 ### 7. Create the scoring tasks
 
@@ -397,7 +504,34 @@ green means it does not read as Claude), matching the `MINIMIZE` direction set
 on the evaluator, so the AX dashboard and the terminal agree. Colour switches
 off automatically when output is piped.
 
-### 7. Optionally, scan locally
+### 7. Run the span judge
+
+```bash
+uv run blogwriter-judge --run-id full-v1
+```
+
+This sends each post in the batch to the v2 judge, eight at a time, and writes
+`output/full-v1/judge-v2/<model>.json` with every quote, its category and the
+post's density, plus a `summary.json`. The 80-post run takes a few minutes. Use
+`--model opus-5` to judge one model only. A post whose reply cannot be parsed is
+reported and left out, and the command exits non-zero so a partial run is
+visible.
+
+### 8. Check the evaluator against the flags
+
+```bash
+uv run blogwriter-validate --split r1                      # regex half only
+uv run blogwriter-validate --split r1 \
+  --judge-spans output/full-v1/judge-v2/opus-5.json \
+  --unflagged-out /tmp/unflagged.json
+```
+
+This prints recall for each half, the spans found per category, and the
+load-bearing check. `--unflagged-out` writes the judge spans nobody flagged, so a
+human can mark which are real. Run `--split r2` once, when the prompt is
+settled, for the number you report.
+
+### 9. Optionally, scan locally
 
 ```bash
 uv run blogwriter-scan --run-id full-v1 --briefs --json output/full-v1/scan.json
@@ -411,9 +545,11 @@ above.
 
 ---
 
-## The evaluator prompt
+## The evaluator prompts
 
-This is the judge prompt in full, as stored in `ax/claudism_template.txt`.
+### v1: one label per post
+
+This is the v1 judge prompt in full, as stored in `ax/claudism_template.txt`.
 `{output}` is its only variable, mapped by the task to
 `attributes.output.value`.
 
@@ -464,6 +600,27 @@ prompt asked the judge about those too, and formatting so dominated the result
 that the terse research briefs scored as highly as the finished posts. Keeping
 the judge on voice and the regex on format gives the metric its separation.
 
+### v2: every instance, quoted
+
+The v2 prompt is in `ax/claudism_spans_template.txt`. It uses the same judge
+model and the same "form, not content" opening, and asks for JSON instead of a
+label. These are its categories:
+
+```text
+CONSTRUCTIONS
+1. salience_flag - the prose says something is important instead of showing why: "The interaction matters", "the critical detail", "a fact worth internalising", "deserves a moment".
+2. contrast_reframe - one framing negated and replaced with a sharper one: "Access is not ownership", "a difference of degree, not of kind", "It is not X. It is Y."
+3. verdict_intensifier - a word that marks a claim as final or sincere without adding information: "that's the whole point", "the honest answer", "that's a real difference", "that's not accidental".
+4. signpost - announces an insight instead of delivering it: "Here's the part that...", "Think about what that means", "Two things to keep in mind".
+5. gotcha_framing - presents a detail as a hidden trap: "The trap is...", "The catch is...", "one detail bites everyone".
+6. stock_metaphor - mechanical or economic metaphor for an abstract claim: "load-bearing", "doing a lot of work", "earns its keep", "a useful lens". Always tag any use of "load-bearing" (literal or figurative, hyphenated or not) and close variants like "bears the load" or "carries the weight".
+```
+
+The JSON shape is described in words rather than shown as an example, so the
+template can be pasted into AX, where literal braces would be read as extra
+variables. Both templates are generated from `judge_spec.py`, which holds the
+one definition of a claudism, and a test fails if either file drifts from it.
+
 ---
 
 ## The topic set
@@ -509,7 +666,8 @@ prompt is built from the topic string alone.
 claude-compare/
 ├── topics.yaml              # the 20 topics, tagged by genre and domain
 ├── briefs/                  # committed fixtures + briefs.lock.json
-├── ax/                      # the AX evaluator sources
+├── ax/                      # evaluator prompts and the AX code evaluator
+├── annotations/             # 153 hand-flagged claudisms in the Opus 5 posts
 ├── results/                 # committed run summaries
 ├── src/blogwriter/
 │   ├── tracing.py           # Arize registration
@@ -523,15 +681,18 @@ claude-compare/
 │   ├── batch.py             # the full matrix
 │   ├── claudisms.py         # deterministic pattern scoring
 │   ├── scan.py              # local offline scan
-│   ├── judge_spec.py        # the one definition of a claudism
+│   ├── judge_spec.py        # the one definition of a claudism (v1 and v2)
+│   ├── judge.py             # run the v2 span judge over a batch
+│   ├── validate.py          # check v2 against the hand-flagged claudisms
 │   ├── destyle.py           # rewrite markdown to remove claudisms
 │   ├── merge_rewrites.py    # merge rewrites section by section
 │   └── ax_report.py         # read AX scores back and rank
 └── tests/                   # pure-logic tests, no network
 ```
 
-Generated posts under `output/` are not committed, since they are reproducible
-from the briefs, but the run summaries in `results/` are.
+Generated posts and per-post judge output under `output/` are not committed,
+since they are reproducible from the briefs, but the run summaries in
+`results/` are.
 
 ---
 
@@ -543,8 +704,9 @@ uv run ruff check src/
 ```
 
 The tests cover the places where a silent bug would corrupt a result: model
-resolution, prompt stability, brief integrity, length normalisation, and the
-report's filtering of unsound spans. They make no network calls.
+resolution, prompt stability, brief integrity, length normalisation, the
+report's filtering of unsound spans, judge-output parsing and the load-bearing
+check. They make no network calls.
 
 `ax/` is excluded from linting because it holds the two halves of the AX code
 evaluator, which the platform requires as separate files; neither is valid
@@ -556,8 +718,9 @@ Python on its own.
 
 The evaluator's definitions are reusable as an editing brief, which lets the
 project edit its own prose. `judge_spec.py` holds the single definition of what
-counts as a claudism; `ax/claudism_template.txt` is generated from it, and a
-test fails if the two drift apart.
+counts as a claudism; the templates in `ax/` are generated from it, and a test
+fails if they drift apart. The rewriter targets the six v2 categories plus rule
+of three and punchy closers.
 
 ```bash
 # rewrite with a model, one section at a time
@@ -579,8 +742,9 @@ takes the lowest-penalty version that has not lost content, added or removed a
 horizontal rule, or changed a table. Sections under 60 words keep the original,
 because per-1000-word densities are meaningless at that length.
 
-This README was produced that way. Opus 5.5 and codex each rewrote it from the
-same brief, and the merge took the better section from each:
+An earlier version of this README was produced that way. Opus 5.5 and codex
+each rewrote it from the same brief, and the merge took the better section from
+each:
 
 | variant | style penalty | em-dash/1k | rule-of-three/1k | integrity |
 |---|---|---|---|---|
@@ -597,14 +761,26 @@ preserves the original structure.
 
 ## Where to take it next
 
+**Mark the unflagged spans.** The span judge tagged 240 spans on the r1 posts
+that nobody flagged. Marking each as real or not gives a precision figure, and
+any real ones extend the flag set.
+
+**Recalibrate the v2 bands, then run r2.** The density cut-offs need setting
+from the judge's own r1 distribution. After that, one run against r2 gives the
+held-out recall figure.
+
+**Send the v2 spans back to AX.** The span judge runs outside AX today, so its
+results are not beside the v1 scores on the traces. Writing them back as span
+annotations would put both judges in one place.
+
 **Raise the repeat count.** At two samples per cell the aggregate is sound but
 individual topics are noisy. Three or more would make per-topic numbers
 quotable.
 
-**Derive the phrase list from the corpus.** The hand-written list of stock
-phrases in `claudisms.py` was assembled from intuition and barely fires against
-real output. Comparing n-gram frequencies across the 80-post corpus would
-produce a list that actually discriminates.
+**Derive the phrase list from the corpus.** v2 adds patterns taken from the
+hand-flagged claudisms, but those are one reader's flags on one model.
+Comparing n-gram frequencies across the 80-post corpus would give a list that
+can be tested on text it wasn't built from.
 
 **Move the structural metrics into AX.** Bold lead-in bullets and rule-of-three
 are where Opus 5.5's style *increased*, and only the local scan measures them

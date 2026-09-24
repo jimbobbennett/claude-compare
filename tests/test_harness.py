@@ -310,3 +310,146 @@ def test_section_split_and_rejoin_is_lossless():
     parts = split_sections(doc)
     assert "".join(body for _, body in parts) == doc
     assert [h for h, _ in parts] == ["", "## One", "## Two"]
+
+
+# --- evaluator v2 ------------------------------------------------------------
+
+
+def test_v2_template_matches_the_spec():
+    from blogwriter.judge_spec import TEMPLATE_V2_PATH, render_template_v2
+
+    assert TEMPLATE_V2_PATH.read_text() == render_template_v2(), (
+        "ax/claudism_spans_template.txt is stale -- "
+        "run: uv run python -m blogwriter.judge_spec --write"
+    )
+
+
+def test_v2_template_has_exactly_one_variable_and_no_other_braces():
+    """Literal braces in an AX template can be read as variables, so the JSON
+    shape is described in words and {output} is the only brace pair."""
+    from blogwriter.judge_spec import CLAUDISM_CATEGORIES_V2, render_template_v2
+
+    rendered = render_template_v2()
+    assert rendered.count("{output}") == 1
+    assert rendered.replace("{output}", "").count("{") == 0
+    assert rendered.replace("{output}", "").count("}") == 0
+    for name in CLAUDISM_CATEGORIES_V2:
+        assert name in rendered
+
+
+@pytest.mark.parametrize(
+    "text",
+    [
+        "That's not backstory. It cannot be moved. It is load-bearing.",
+        "This is the load bearing argument for stand mixers.",
+        "The second clause bears the load of the whole paragraph.",
+        "Retrieval carries most of the weight here.",
+    ],
+)
+def test_load_bearing_is_always_caught(text):
+    """Load-bearing is a must-catch in both halves; the regex half is here."""
+    assert score_text(text).claude_leaning.get("load_bearing") == 1
+
+
+def test_v2_regex_patterns_fire_on_flagged_wording():
+    score = score_text(
+        "Two things worth internalising. That's the whole point. "
+        "The honest answer is no. The prompt is doing a lot of work. "
+        "The trap is defaults."
+    )
+    for name in (
+        "salience_flag",
+        "the_whole_x",
+        "the_honest_x",
+        "doing_work",
+        "gotcha_framing",
+    ):
+        assert score.claude_leaning.get(name) == 1, name
+
+
+def test_heavy_lifting_is_not_double_counted():
+    score = score_text("The retriever is doing the heavy lifting.")
+    assert score.claude_leaning == {"heavy_lifting": 1}
+
+
+def test_judge_output_parses_through_fences_and_drops_bad_items():
+    from blogwriter.judge_spec import parse_judge_output
+
+    raw = (
+        "```json\n"
+        '{"instances": [{"quote": "It is load-bearing.", "category": '
+        '"stock_metaphor"}, {"quote": "x", "category": "made_up"}, '
+        '{"quote": "", "category": "signpost"}]}\n```'
+    )
+    assert parse_judge_output(raw) == [
+        {"quote": "It is load-bearing.", "category": "stock_metaphor"}
+    ]
+    with pytest.raises(ValueError):
+        parse_judge_output("no json here")
+
+
+def test_v2_score_is_length_normalised_onto_the_shared_scale():
+    from blogwriter.judge_spec import score_instances
+
+    three = [{"quote": "q", "category": "signpost"}] * 3
+    assert score_instances([], 1000)["label"] == "absent"
+    assert score_instances(three, 1000)["label"] == "strong"
+    assert score_instances(three, 3000)["label"] == "moderate"
+    assert score_instances(three, 1000)["by_category"] == {"signpost": 3}
+
+
+def test_validate_counts_overlap_and_enforces_load_bearing():
+    from blogwriter.validate import KNOWN_LOAD_BEARING, validate
+
+    flags = [
+        {
+            "doc_id": "why-novels-open-with-prologues.r2.md",
+            "repeat": 2,
+            "quote": "It is load-bearing",
+            "sentence": "It is load-bearing.",
+        },
+        {
+            "doc_id": "why-novels-open-with-prologues.r2.md",
+            "repeat": 2,
+            "quote": "The interaction matters",
+            "sentence": "The interaction matters.",
+        },
+    ]
+    judge = {
+        doc: [{"quote": snippet, "category": "stock_metaphor"}]
+        for doc, snippet in KNOWN_LOAD_BEARING
+    }
+    judge["why-novels-open-with-prologues.r2.md"].append(
+        {"quote": "an unflagged span", "category": "signpost"}
+    )
+    result = validate(flags, judge=judge)
+    assert result.regex_found == 1
+    assert result.judge_found == 1
+    assert len(result.unflagged) == 1
+    assert result.load_bearing_misses == []
+
+    judge["against-the-stand-mixer.r1.md"] = []
+    missed = validate(flags, judge=judge)
+    assert missed.load_bearing_misses == ["judge missed against-the-stand-mixer.r1.md"]
+
+
+def test_judge_prompt_fills_the_template_without_front_matter():
+    from blogwriter.judge import build_prompt
+
+    prompt = build_prompt("---\nmodel_id: x\n---\nThe interaction matters.")
+    assert "The interaction matters." in prompt
+    assert "model_id" not in prompt
+    assert "{output}" not in prompt
+
+
+def test_judge_post_scores_the_reply(tmp_path, monkeypatch):
+    import blogwriter.judge as judge
+
+    post = tmp_path / "p.r1.md"
+    post.write_text("---\nslug: p\n---\n" + " ".join(["word"] * 1000))
+    reply = '{"instances": [{"quote": "a", "category": "signpost"}]}'
+    monkeypatch.setattr(judge, "call_judge", lambda *a, **k: reply)
+    result = judge.judge_post(post, model="m", api_key="k")
+    assert result["instances"] == [{"quote": "a", "category": "signpost"}]
+    assert result["instances_per_1k"] == 1.0
+    assert result["score"] == 3

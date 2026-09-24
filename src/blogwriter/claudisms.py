@@ -22,11 +22,22 @@ from __future__ import annotations
 import re
 from dataclasses import dataclass, field
 
-PATTERN_VERSION = "v1"
+PATTERN_VERSION = "v2"
+
+# v2 changelog (from 153 hand-flagged claudisms in output/full-v1/opus-5, see
+# annotations/): load_bearing widened to catch "bears the load" / "carries the
+# weight" (same name, so counts stay comparable with v1); added salience_flag,
+# the_whole_x, the_honest_x, doing_work and gotcha_framing. Pattern names match
+# the v2 judge categories in judge_spec.py where the two overlap.
 
 # Constructions strongly associated with Claude's register specifically.
 CLAUDE_LEANING: dict[str, str] = {
-    "load_bearing": r"load[- ]bearing",
+    # A must-catch: the best-known Claude tell. validate.py fails the run if
+    # any known instance is missed.
+    "load_bearing": (
+        r"\bload[- ]bearing\b"
+        r"|\b(?:bears?|carr(?:y|ies)) (?:the|most of the|real) (?:load|weight)\b"
+    ),
     "take_a_moment": r"take a (?:moment|second|beat)",
     "heres_the_thing": r"here'?s (?:the thing|what'?s|why|the part)",
     "the_real_question": r"the (?:real|actual|interesting) question (?:is|here)",
@@ -42,6 +53,26 @@ CLAUDE_LEANING: dict[str, str] = {
     "which_is_to_say": r"which is to say",
     "put_another_way": r"to put (?:it|that) another way",
     "the_part_that_matters": r"the (?:part|bit) that (?:actually )?matters",
+    # --- added in v2 ---
+    # "worth noting" is already counted above, so it is not repeated here.
+    "salience_flag": (
+        r"\bworth (?:internali[sz]ing|knowing|naming|taking seriously|explaining)\b"
+        r"|\bdeserves a (?:moment|closer look)\b"
+        r"|\bthe (?:real|critical|important) (?:lesson|detail|point)\b"
+    ),
+    "the_whole_x": (
+        r"\bthe whole (?:point|story|pitch|argument|thing|description|game)\b"
+    ),
+    "the_honest_x": r"\bthe honest (?:answer|version|framing|summary|take)\b",
+    # "doing the heavy lifting" stays under heavy_lifting; this excludes it so
+    # one phrase is never counted twice.
+    "doing_work": (
+        r"\bdoing (?:a lot of|real|most of the) (?:heavy )?(?:work|lifting)\b"
+        r"|\bdoing the work\b"
+    ),
+    "gotcha_framing": (
+        r"\bthe (?:\w+ )?(?:trap|catch|gotcha) is\b|\bbites (?:everyone|people|you)\b"
+    ),
 }
 
 # Common to most current LLMs. Tracked separately: if both models score high

@@ -1,0 +1,22 @@
+You are a forensic style analyst. You judge the FORM of prose, never its subject matter, accuracy, or quality.
+
+Below is a blog post. Find every instance of the constructions listed. Quote each one exactly, using the shortest span that shows the construction (usually one clause or sentence).
+
+CONSTRUCTIONS
+1. salience_flag - the prose says something is important instead of showing why: "The interaction matters", "the critical detail", "a fact worth internalising", "deserves a moment".
+2. contrast_reframe - one framing negated and replaced with a sharper one: "Access is not ownership", "a difference of degree, not of kind", "It is not X. It is Y."
+3. verdict_intensifier - a word that marks a claim as final or sincere without adding information: "that's the whole point", "the honest answer", "that's a real difference", "that's not accidental".
+4. signpost - announces an insight instead of delivering it: "Here's the part that...", "Think about what that means", "Two things to keep in mind".
+5. gotcha_framing - presents a detail as a hidden trap: "The trap is...", "The catch is...", "one detail bites everyone".
+6. stock_metaphor - mechanical or economic metaphor for an abstract claim: "load-bearing", "doing a lot of work", "earns its keep", "a useful lens". Always tag any use of "load-bearing" (literal or figurative, hyphenated or not) and close variants like "bears the load" or "carries the weight".
+
+RULES
+- Judge prose only. Ignore code blocks, headings, list formatting, bold, and punctuation.
+- A plain factual statement is not a salience flag. "Latency matters for voice agents because users hang up after two seconds" gives the reason; flag only when the importance is asserted and the reason is missing or comes after.
+- One span can have one category. Pick the best fit.
+- If there are none, return an empty list.
+
+BLOG POST
+{output}
+
+Respond with JSON only: one object with a single key, "instances", whose value is a list. Each list item is an object with two keys: "quote" (the exact text) and "category" (one of: salience_flag, contrast_reframe, verdict_intensifier, signpost, gotcha_framing, stock_metaphor).

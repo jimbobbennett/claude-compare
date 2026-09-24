@@ -21,6 +21,8 @@ blogwriter-scan = "blogwriter.scan:main"
 blogwriter-ax-report = "blogwriter.ax_report:main"
 blogwriter-destyle = "blogwriter.destyle:main"
 blogwriter-merge = "blogwriter.merge_rewrites:main"
+blogwriter-validate = "blogwriter.validate:main"
+blogwriter-judge = "blogwriter.judge:main"
 
 [dependency-groups]
 dev = [

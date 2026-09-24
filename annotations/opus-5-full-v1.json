@@ -1,0 +1,1537 @@
+{
+ "source": "Jim Bennett's Google Doc comments on output/full-v1/opus-5, each marked 'Claudism'",
+ "run_id": "full-v1",
+ "model_alias": "opus-5",
+ "flags": [
+  {
+   "id": 1,
+   "quote": "That's the whole description",
+   "doc_id": "effort-parameter-for-agent-builders.r1.md",
+   "topic": "effort-parameter-for-agent-builders",
+   "repeat": 1,
+   "line": 60,
+   "section": "What the knob actually does",
+   "sentence": "That's the whole description, and the important word is response — not thinking."
+  },
+  {
+   "id": 2,
+   "quote": "are the reason to care",
+   "doc_id": "effort-parameter-for-agent-builders.r1.md",
+   "topic": "effort-parameter-for-agent-builders",
+   "repeat": 1,
+   "line": 66,
+   "section": "What the knob actually does",
+   "sentence": "The numbers behind this are the reason to care."
+  },
+  {
+   "id": 3,
+   "quote": "The interaction matters",
+   "doc_id": "effort-parameter-for-agent-builders.r1.md",
+   "topic": "effort-parameter-for-agent-builders",
+   "repeat": 1,
+   "line": 78,
+   "section": "Effort vs thinking vs maxtokens",
+   "sentence": "The interaction matters: at high, xhigh, or max effort you need a generously sized maxtokens, because the model will actually use the room."
+  },
+  {
+   "id": 4,
+   "quote": "The trap is defaults",
+   "doc_id": "effort-parameter-for-agent-builders.r1.md",
+   "topic": "effort-parameter-for-agent-builders",
+   "repeat": 1,
+   "line": 100,
+   "section": "Cross-vendor mapping, and the migration trap",
+   "sentence": "The trap is defaults."
+  },
+  {
+   "id": 5,
+   "quote": "The part worth internalising",
+   "doc_id": "effort-parameter-for-agent-builders.r1.md",
+   "topic": "effort-parameter-for-agent-builders",
+   "repeat": 1,
+   "line": 106,
+   "section": "Defaults are a product decision",
+   "sentence": "The part worth internalising is why it took a month: \"neither our internal usage nor evals initially reproduced the issues identified.\" Effort regressions are hard to catch with benchmarks because benchmarks measure task completion, and what degrades first is the texture of the work — the check the model skips, the edge case it doesn't mention."
+  },
+  {
+   "id": 6,
+   "quote": "Which is the real lesson",
+   "doc_id": "effort-parameter-for-agent-builders.r1.md",
+   "topic": "effort-parameter-for-agent-builders",
+   "repeat": 1,
+   "line": 118,
+   "section": "Choosing a level",
+   "sentence": "Which is the real lesson: the defaults are moving, the pricing is moving, and the only durable answer is to run your own evals at two adjacent levels and look at the diffs by hand."
+  },
+  {
+   "id": 7,
+   "quote": "The effort parameter is the replacement",
+   "doc_id": "effort-parameter-for-agent-builders.r2.md",
+   "topic": "effort-parameter-for-agent-builders",
+   "repeat": 2,
+   "line": 128,
+   "section": "(intro)",
+   "sentence": "The effort parameter is the replacement."
+  },
+  {
+   "id": 8,
+   "quote": "What the knob actually does",
+   "doc_id": "effort-parameter-for-agent-builders.r2.md",
+   "topic": "effort-parameter-for-agent-builders",
+   "repeat": 2,
+   "line": 130,
+   "section": "What the knob actually does",
+   "sentence": "## What the knob actually does"
+  },
+  {
+   "id": 9,
+   "quote": "The critical detail, and the one most people miss on first read",
+   "doc_id": "effort-parameter-for-agent-builders.r2.md",
+   "topic": "effort-parameter-for-agent-builders",
+   "repeat": 2,
+   "line": 132,
+   "section": "What the knob actually does",
+   "sentence": "The critical detail, and the one most people miss on first read: it applies to all output tokens, not just thinking tokens."
+  },
+  {
+   "id": 10,
+   "quote": "Think about what that means in a loop",
+   "doc_id": "effort-parameter-for-agent-builders.r2.md",
+   "topic": "effort-parameter-for-agent-builders",
+   "repeat": 2,
+   "line": 163,
+   "section": "Agent-loop consequences",
+   "sentence": "Think about what that means in a loop."
+  },
+  {
+   "id": 11,
+   "quote": "The migration trap is defaults",
+   "doc_id": "effort-parameter-for-agent-builders.r2.md",
+   "topic": "effort-parameter-for-agent-builders",
+   "repeat": 2,
+   "line": 175,
+   "section": "Cross-vendor mapping",
+   "sentence": "The migration trap is defaults."
+  },
+  {
+   "id": 12,
+   "quote": "Subagents are the ragged edge",
+   "doc_id": "effort-parameter-for-agent-builders.r2.md",
+   "topic": "effort-parameter-for-agent-builders",
+   "repeat": 2,
+   "line": 199,
+   "section": "Choosing a level",
+   "sentence": "Subagents are the ragged edge."
+  },
+  {
+   "id": 13,
+   "quote": "The practical advice is boring but correct",
+   "doc_id": "effort-parameter-for-agent-builders.r2.md",
+   "topic": "effort-parameter-for-agent-builders",
+   "repeat": 2,
+   "line": 205,
+   "section": "Modelling the cost",
+   "sentence": "The practical advice is boring but correct."
+  },
+  {
+   "id": 14,
+   "quote": "That single decision is a useful lens",
+   "doc_id": "subscription-game-libraries.r1.md",
+   "topic": "subscription-game-libraries",
+   "repeat": 1,
+   "line": 215,
+   "section": "(intro)",
+   "sentence": "That single decision is a useful lens on where subscription gaming has ended up."
+  },
+  {
+   "id": 15,
+   "quote": "The mechanics matter as much as the number",
+   "doc_id": "subscription-game-libraries.r1.md",
+   "topic": "subscription-game-libraries",
+   "repeat": 1,
+   "line": 221,
+   "section": "The price trajectory",
+   "sentence": "The mechanics matter as much as the number."
+  },
+  {
+   "id": 16,
+   "quote": "So the honest framing",
+   "doc_id": "subscription-game-libraries.r1.md",
+   "topic": "subscription-game-libraries",
+   "repeat": 1,
+   "line": 233,
+   "section": "Access is not ownership — and buying isn't either",
+   "sentence": "So the honest framing isn't \"subscriptions took ownership away.\" It's that most digital game purchases were already licences, and the law now requires vendors to say so."
+  },
+  {
+   "id": 17,
+   "quote": "The asymmetry is important.",
+   "doc_id": "subscription-game-libraries.r1.md",
+   "topic": "subscription-game-libraries",
+   "repeat": 1,
+   "line": 241,
+   "section": "How catalog churn actually works",
+   "sentence": "The asymmetry is important. First-party titles rarely leave; the platform holder owns them and has no counterparty to renegotiate with."
+  },
+  {
+   "id": 18,
+   "quote": "Here's the part that explains the pricing behaviour",
+   "doc_id": "subscription-game-libraries.r1.md",
+   "topic": "subscription-game-libraries",
+   "repeat": 1,
+   "line": 249,
+   "section": "The subscriber plateau",
+   "sentence": "Here's the part that explains the pricing behaviour."
+  },
+  {
+   "id": 19,
+   "quote": "is doing real work in that sentence",
+   "doc_id": "subscription-game-libraries.r1.md",
+   "topic": "subscription-game-libraries",
+   "repeat": 1,
+   "line": 265,
+   "section": "Pressure from the other direction",
+   "sentence": "Once validated, the Commission must respond within six months, stating \"the measures it plans to take, if any, as well as justifications.\" That's not legislation, and \"if any\" is doing real work in that sentence."
+  },
+  {
+   "id": 20,
+   "quote": "That single announcement is a useful lens",
+   "doc_id": "subscription-game-libraries.r2.md",
+   "topic": "subscription-game-libraries",
+   "repeat": 2,
+   "line": 281,
+   "section": "(intro)",
+   "sentence": "That single announcement is a useful lens on the whole subscription model, because it compresses most of the model's tensions into one event: pricing power, bundled value, the difference between a library you rent and a library you own, and the awkward question of who these services are actually growing for."
+  },
+  {
+   "id": 21,
+   "quote": "That's not accidental",
+   "doc_id": "subscription-game-libraries.r2.md",
+   "topic": "subscription-game-libraries",
+   "repeat": 2,
+   "line": 287,
+   "section": "The price trajectory",
+   "sentence": "That's not accidental."
+  },
+  {
+   "id": 22,
+   "quote": "Access is not ownership — and buying isn't either",
+   "doc_id": "subscription-game-libraries.r2.md",
+   "topic": "subscription-game-libraries",
+   "repeat": 2,
+   "line": 293,
+   "section": "Access is not ownership — and buying isn't either",
+   "sentence": "## Access is not ownership — and buying isn't either"
+  },
+  {
+   "id": 23,
+   "quote": "it's a difference of degree, not of kind",
+   "doc_id": "subscription-game-libraries.r2.md",
+   "topic": "subscription-game-libraries",
+   "repeat": 2,
+   "line": 301,
+   "section": "Access is not ownership — and buying isn't either",
+   "sentence": "That's a real difference — but it's a difference of degree, not of kind."
+  },
+  {
+   "id": 24,
+   "quote": "That's a real difference",
+   "doc_id": "subscription-game-libraries.r2.md",
+   "topic": "subscription-game-libraries",
+   "repeat": 2,
+   "line": 301,
+   "section": "Access is not ownership — and buying isn't either",
+   "sentence": "That's a real difference — but it's a difference of degree, not of kind."
+  },
+  {
+   "id": 25,
+   "quote": "That asymmetry is the single most useful thing a subscriber can internalise",
+   "doc_id": "subscription-game-libraries.r2.md",
+   "topic": "subscription-game-libraries",
+   "repeat": 2,
+   "line": 311,
+   "section": "Catalogue churn is structural",
+   "sentence": "That asymmetry is the single most useful thing a subscriber can internalise."
+  },
+  {
+   "id": 26,
+   "quote": "Here's the part that explains the pricing behaviour.",
+   "doc_id": "subscription-game-libraries.r2.md",
+   "topic": "subscription-game-libraries",
+   "repeat": 2,
+   "line": 319,
+   "section": "The subscriber plateau",
+   "sentence": "Here's the part that explains the pricing behaviour."
+  },
+  {
+   "id": 27,
+   "quote": "he absence of updated official disclosure is itself a signal",
+   "doc_id": "subscription-game-libraries.r2.md",
+   "topic": "subscription-game-libraries",
+   "repeat": 2,
+   "line": 321,
+   "section": "The subscriber plateau",
+   "sentence": "But the absence of updated official disclosure is itself a signal."
+  },
+  {
+   "id": 28,
+   "quote": "and worth treating as an estimate rather than a fact",
+   "doc_id": "subscription-game-libraries.r2.md",
+   "topic": "subscription-game-libraries",
+   "repeat": 2,
+   "line": 321,
+   "section": "The subscriber plateau",
+   "sentence": "Press reporting sourced to the Wall Street Journal puts the current number around 30 million against an internal target of 77 million by 2026 — unconfirmed by Microsoft, and worth treating as an estimate rather than a fact."
+  },
+  {
+   "id": 29,
+   "quote": "\"If any\" is doing a lot of work there",
+   "doc_id": "subscription-game-libraries.r2.md",
+   "topic": "subscription-game-libraries",
+   "repeat": 2,
+   "line": 331,
+   "section": "Regulatory pressure is building",
+   "sentence": "\"If any\" is doing a lot of work there — an ECI compels a response, not legislation."
+  },
+  {
+   "id": 30,
+   "quote": "The cold open is not backstory; it is a tension deposit.",
+   "doc_id": "why-novels-open-with-prologues.r1.md",
+   "topic": "why-novels-open-with-prologues",
+   "repeat": 1,
+   "line": 365,
+   "section": "The cold open, imported",
+   "sentence": "The cold open is not backstory; it is a tension deposit. It buys the show permission to be slow for the next twenty minutes."
+  },
+  {
+   "id": 31,
+   "quote": "is not aesthetic at all — it's arithmetical",
+   "doc_id": "why-novels-open-with-prologues.r1.md",
+   "topic": "why-novels-open-with-prologues",
+   "repeat": 1,
+   "line": 387,
+   "section": "The submission-pages problem",
+   "sentence": "The strongest objection to prologues is not aesthetic at all — it's arithmetical."
+  },
+  {
+   "id": 32,
+   "quote": "This is strange enough to be worth explaining",
+   "doc_id": "why-novels-open-with-prologues.r2.md",
+   "topic": "why-novels-open-with-prologues",
+   "repeat": 2,
+   "line": 407,
+   "section": "(intro)",
+   "sentence": "This is strange enough to be worth explaining."
+  },
+  {
+   "id": 33,
+   "quote": "It is load-bearing",
+   "doc_id": "why-novels-open-with-prologues.r2.md",
+   "topic": "why-novels-open-with-prologues",
+   "repeat": 2,
+   "line": 435,
+   "section": "Tartt and the flash-forward model",
+   "sentence": "It is load-bearing."
+  },
+  {
+   "id": 34,
+   "quote": "and it's worth taking seriously",
+   "doc_id": "why-novels-open-with-prologues.r2.md",
+   "topic": "why-novels-open-with-prologues",
+   "repeat": 2,
+   "line": 447,
+   "section": "The submission-pages problem",
+   "sentence": "The practical objection survives all of this, and it's worth taking seriously because it's arithmetical rather than aesthetic."
+  },
+  {
+   "id": 35,
+   "quote": "The honest version",
+   "doc_id": "why-novels-open-with-prologues.r2.md",
+   "topic": "why-novels-open-with-prologues",
+   "repeat": 2,
+   "line": 467,
+   "section": "The counter-case",
+   "sentence": "The honest version of the rule isn't \"avoid prologues.\" It's: your prologue must be unmovable."
+  },
+  {
+   "id": 36,
+   "quote": "is not a niche — it's the norm",
+   "doc_id": "against-the-48-hour-city-break.r1.md",
+   "topic": "against-the-48-hour-city-break",
+   "repeat": 1,
+   "line": 477,
+   "section": "The short break is not a niche — it's the norm",
+   "sentence": "## The short break is not a niche — it's the norm"
+  },
+  {
+   "id": 37,
+   "quote": "The numbers are stark",
+   "doc_id": "against-the-48-hour-city-break.r1.md",
+   "topic": "against-the-48-hour-city-break",
+   "repeat": 1,
+   "line": 489,
+   "section": "The carbon arithmetic gets worse as trips get shorter",
+   "sentence": "The numbers are stark."
+  },
+  {
+   "id": 38,
+   "quote": "is not really a problem of numbers. It is a problem of distribution",
+   "doc_id": "against-the-48-hour-city-break.r1.md",
+   "topic": "against-the-48-hour-city-break",
+   "repeat": 1,
+   "line": 517,
+   "section": "The concentration problem",
+   "sentence": "Overtourism — visitor volumes exceeding a destination's carrying capacity for residents, infrastructure or heritage — is not really a problem of numbers. It is a problem of distribution."
+  },
+  {
+   "id": 39,
+   "quote": "is not a niche. It's the norm",
+   "doc_id": "against-the-48-hour-city-break.r2.md",
+   "topic": "against-the-48-hour-city-break",
+   "repeat": 2,
+   "line": 533,
+   "section": "The short break is not a niche. It's the norm.",
+   "sentence": "## The short break is not a niche. It's the norm."
+  },
+  {
+   "id": 40,
+   "quote": "The data complicates it",
+   "doc_id": "against-the-48-hour-city-break.r2.md",
+   "topic": "against-the-48-hour-city-break",
+   "repeat": 2,
+   "line": 561,
+   "section": "Short stays are worse business than they look",
+   "sentence": "The data complicates it."
+  },
+  {
+   "id": 41,
+   "quote": "running the numbers honestly",
+   "doc_id": "against-the-stand-mixer.r1.md",
+   "topic": "against-the-stand-mixer",
+   "repeat": 1,
+   "line": 599,
+   "section": "(intro)",
+   "sentence": "Before you do, it's worth running the numbers honestly — not on whether a stand mixer is good (it is), but on whether it's the right purchase for the baking you actually do."
+  },
+  {
+   "id": 42,
+   "quote": "are how that number gets built",
+   "doc_id": "against-the-stand-mixer.r1.md",
+   "topic": "against-the-stand-mixer",
+   "repeat": 1,
+   "line": 609,
+   "section": "The price is not the price",
+   "sentence": "Attachment ecosystems are how that number gets built."
+  },
+  {
+   "id": 43,
+   "quote": "is the whole argument.",
+   "doc_id": "against-the-stand-mixer.r1.md",
+   "topic": "against-the-stand-mixer",
+   "repeat": 1,
+   "line": 615,
+   "section": "It never leaves the counter",
+   "sentence": "That weight is the whole argument. Prudent Reviews states the downside plainly: \"Bulky and heavy: The stand mixers are heavy and take up a significant amount of counter space.\" Reviewers routinely list \"heavy to move\" as a con, which is a polite way of saying you will not be moving it."
+  },
+  {
+   "id": 44,
+   "quote": "a fact worth internalizing",
+   "doc_id": "against-the-stand-mixer.r1.md",
+   "topic": "against-the-stand-mixer",
+   "repeat": 1,
+   "line": 645,
+   "section": "The nylon gear is supposed to break",
+   "sentence": "It's also a fact worth internalizing before you frame this purchase as \"buy it for life.\" You are buying a serviceable machine with a consumable component, backed by a one-year warranty, that you will at some point need to open up, degrease, and re-pack with food-grade grease — or pay someone to."
+  },
+  {
+   "id": 45,
+   "quote": "the default isn't automatic",
+   "doc_id": "against-the-stand-mixer.r1.md",
+   "topic": "against-the-stand-mixer",
+   "repeat": 1,
+   "line": 655,
+   "section": "Who should actually buy one",
+   "sentence": "And even then, the default isn't automatic: America's Test Kitchen steers serious bread bakers toward the Ankarsrum rather than the standard KitchenAid, space-constrained buyers toward the Mini, and notes its overall winner, the NutriMill Artiste, is seven pounds lighter."
+  },
+  {
+   "id": 46,
+   "quote": "deserves a moment",
+   "doc_id": "against-the-stand-mixer.r2.md",
+   "topic": "against-the-stand-mixer",
+   "repeat": 2,
+   "line": 673,
+   "section": "The sticker price is the down payment",
+   "sentence": "That warranty term deserves a moment."
+  },
+  {
+   "id": 47,
+   "quote": "is the whole pitch",
+   "doc_id": "against-the-stand-mixer.r2.md",
+   "topic": "against-the-stand-mixer",
+   "repeat": 2,
+   "line": 675,
+   "section": "The sticker price is the down payment",
+   "sentence": "The power hub — the front port that drives accessories — is the whole pitch: your mixer becomes a pasta maker, a grinder, an ice cream churn."
+  },
+  {
+   "id": 48,
+   "quote": "Here is the thing nobody mentions",
+   "doc_id": "against-the-stand-mixer.r2.md",
+   "topic": "against-the-stand-mixer",
+   "repeat": 2,
+   "line": 699,
+   "section": "The capacity is wrong in both directions",
+   "sentence": "Here is the thing nobody mentions: a 5-quart bowl is not usable at 5 quarts."
+  },
+  {
+   "id": 49,
+   "quote": "is precisely the risk",
+   "doc_id": "against-the-stand-mixer.r2.md",
+   "topic": "against-the-stand-mixer",
+   "repeat": 2,
+   "line": 727,
+   "section": "Where it's the right call",
+   "sentence": "Quickbreads and biscuits are better mixed by hand; the machine's efficiency is precisely the risk."
+  },
+  {
+   "id": 50,
+   "quote": "the honest summary",
+   "doc_id": "against-the-stand-mixer.r2.md",
+   "topic": "against-the-stand-mixer",
+   "repeat": 2,
+   "line": 729,
+   "section": "Where it's the right call",
+   "sentence": "Which is the honest summary."
+  },
+  {
+   "id": 51,
+   "quote": "This is the gap that matters",
+   "doc_id": "against-vibe-checking-llm-output.r2.md",
+   "topic": "against-vibe-checking-llm-output",
+   "repeat": 2,
+   "line": 814,
+   "section": "Why single samples lie",
+   "sentence": "This is the gap that matters in production."
+  },
+  {
+   "id": 52,
+   "quote": "and worth knowing by name",
+   "doc_id": "against-vibe-checking-llm-output.r2.md",
+   "topic": "against-vibe-checking-llm-output",
+   "repeat": 2,
+   "line": 832,
+   "section": "Promoting your gut to an LLM judge doesn't fix it",
+   "sentence": "Three biases are well-characterised and worth knowing by name."
+  },
+  {
+   "id": 53,
+   "quote": "None of this is research work; it's a config change",
+   "doc_id": "against-vibe-checking-llm-output.r2.md",
+   "topic": "against-vibe-checking-llm-output",
+   "repeat": 2,
+   "line": 840,
+   "section": "Promoting your gut to an LLM judge doesn't fix it",
+   "sentence": "None of this is research work; it's a config change."
+  },
+  {
+   "id": 54,
+   "quote": "Take all of this with salt",
+   "doc_id": "in-defence-of-abandoning-books.r1.md",
+   "topic": "in-defence-of-abandoning-books",
+   "repeat": 1,
+   "line": 911,
+   "section": "The Hawking Index, and why we can't rerun it",
+   "sentence": "Take all of this with salt."
+  },
+  {
+   "id": 55,
+   "quote": "That's the whole thing",
+   "doc_id": "in-defence-of-abandoning-books.r1.md",
+   "topic": "in-defence-of-abandoning-books",
+   "repeat": 1,
+   "line": 919,
+   "section": "Why we don't quit",
+   "sentence": "Crucially, they attributed it to \"the desire not to appear wasteful.\" That's the whole thing."
+  },
+  {
+   "id": 56,
+   "quote": "That's not failure. That's satiety",
+   "doc_id": "in-defence-of-abandoning-books.r1.md",
+   "topic": "in-defence-of-abandoning-books",
+   "repeat": 1,
+   "line": 935,
+   "section": "Partial reading is still reading",
+   "sentence": "That's not failure. That's satiety — a category we accept without embarrassment in every other domain of consumption."
+  },
+  {
+   "id": 57,
+   "quote": "the honest answer",
+   "doc_id": "in-defence-of-abandoning-books.r2.md",
+   "topic": "in-defence-of-abandoning-books",
+   "repeat": 2,
+   "line": 949,
+   "section": "(intro)",
+   "sentence": "But first it's worth looking at how common this actually is, because the honest answer is that nobody really knows."
+  },
+  {
+   "id": 58,
+   "quote": "isn't an event you log; it's an absence of events",
+   "doc_id": "in-defence-of-abandoning-books.r2.md",
+   "topic": "in-defence-of-abandoning-books",
+   "repeat": 2,
+   "line": 955,
+   "section": "Everyone does it; nobody admits it",
+   "sentence": "Abandoning a book isn't an event you log; it's an absence of events."
+  },
+  {
+   "id": 59,
+   "quote": "The guilt is real and it's documented",
+   "doc_id": "in-defence-of-abandoning-books.r2.md",
+   "topic": "in-defence-of-abandoning-books",
+   "repeat": 2,
+   "line": 971,
+   "section": "Why quitting feels bad",
+   "sentence": "The guilt is real and it's documented."
+  },
+  {
+   "id": 60,
+   "quote": "Here is the argument in one line",
+   "doc_id": "in-defence-of-abandoning-books.r2.md",
+   "topic": "in-defence-of-abandoning-books",
+   "repeat": 2,
+   "line": 985,
+   "section": "The case for stopping",
+   "sentence": "Here is the argument in one line: Pew found Americans read a mean of about 14 books in the prior year, with a median of 5 (1,502 adults, surveyed January–February 2021)."
+  },
+  {
+   "id": 61,
+   "quote": "The having-read is a status; the reading is the point",
+   "doc_id": "in-defence-of-abandoning-books.r2.md",
+   "topic": "in-defence-of-abandoning-books",
+   "repeat": 2,
+   "line": 993,
+   "section": "The case for stopping",
+   "sentence": "Mark Twain reportedly defined a classic as \"something that everybody wants to have read, and nobody wants to read.\" The having-read is a status; the reading is the point."
+  },
+  {
+   "id": 62,
+   "quote": "The demo works. That's the problem.",
+   "doc_id": "why-agent-demos-fail-in-production.r1.md",
+   "topic": "why-agent-demos-fail-in-production",
+   "repeat": 1,
+   "line": 1001,
+   "section": "(intro)",
+   "sentence": "The demo works. That's the problem."
+  },
+  {
+   "id": 63,
+   "quote": "That distinction matters",
+   "doc_id": "why-agent-demos-fail-in-production.r1.md",
+   "topic": "why-agent-demos-fail-in-production",
+   "repeat": 1,
+   "line": 1011,
+   "section": "First, what we mean by \"agent\"",
+   "sentence": "That distinction matters, because most production failures come from the scaffold and the environment, not the model's raw reasoning."
+  },
+  {
+   "id": 64,
+   "quote": "A demo is one sample from a distribution. Production is the distribution",
+   "doc_id": "why-agent-demos-fail-in-production.r1.md",
+   "topic": "why-agent-demos-fail-in-production",
+   "repeat": 1,
+   "line": 1015,
+   "section": "Demo vs. distribution",
+   "sentence": "A demo is one sample from a distribution. Production is the distribution."
+  },
+  {
+   "id": 65,
+   "quote": "Read that again",
+   "doc_id": "why-agent-demos-fail-in-production.r1.md",
+   "topic": "why-agent-demos-fail-in-production",
+   "repeat": 1,
+   "line": 1019,
+   "section": "Demo vs. distribution",
+   "sentence": "Read that again."
+  },
+  {
+   "id": 66,
+   "quote": "the honest framing",
+   "doc_id": "why-agent-demos-fail-in-production.r1.md",
+   "topic": "why-agent-demos-fail-in-production",
+   "repeat": 1,
+   "line": 1034,
+   "section": "Benchmark numbers are lower than you think — and still inflated",
+   "sentence": "So the honest framing: report accuracy against dollars spent, and compare your clever scaffold against a dumb baseline before you believe the architecture is doing the work."
+  },
+  {
+   "id": 67,
+   "quote": "load-bearing",
+   "doc_id": "why-agent-demos-fail-in-production.r1.md",
+   "topic": "why-agent-demos-fail-in-production",
+   "repeat": 1,
+   "line": 1042,
+   "section": "Errors compound over long horizons",
+   "sentence": "Context engineering — deliberately curating what occupies the window — becomes load-bearing on long runs, because context rot (degradation as the window fills with stale, irrelevant history) is a failure mode that a two-turn demo will never surface."
+  },
+  {
+   "id": 68,
+   "quote": "Your demo corpus was not trying to hijack your agent. Your inbox is",
+   "doc_id": "why-agent-demos-fail-in-production.r1.md",
+   "topic": "why-agent-demos-fail-in-production",
+   "repeat": 1,
+   "line": 1058,
+   "section": "The environment is the part demos fake",
+   "sentence": "Your demo corpus was not trying to hijack your agent. Your inbox is."
+  },
+  {
+   "id": 69,
+   "quote": "It's a directional finding, not a law of physics",
+   "doc_id": "why-agent-demos-fail-in-production.r1.md",
+   "topic": "why-agent-demos-fail-in-production",
+   "repeat": 1,
+   "line": 1066,
+   "section": "And then the organisational failure modes",
+   "sentence": "It's a directional finding, not a law of physics."
+  },
+  {
+   "id": 70,
+   "quote": "A demo is one sample from a distribution. Production is the distribution",
+   "doc_id": "why-agent-demos-fail-in-production.r2.md",
+   "topic": "why-agent-demos-fail-in-production",
+   "repeat": 2,
+   "line": 1100,
+   "section": "Demo vs. distribution",
+   "sentence": "A demo is one sample from a distribution. Production is the distribution."
+  },
+  {
+   "id": 71,
+   "quote": "The practical takeaway",
+   "doc_id": "why-agent-demos-fail-in-production.r2.md",
+   "topic": "why-agent-demos-fail-in-production",
+   "repeat": 2,
+   "line": 1114,
+   "section": "Benchmark inflation",
+   "sentence": "The practical takeaway: report accuracy and spend, and always include a dumb baseline."
+  },
+  {
+   "id": 72,
+   "quote": "A twelve-turn demo never hits this. A three-hour session does",
+   "doc_id": "why-agent-demos-fail-in-production.r2.md",
+   "topic": "why-agent-demos-fail-in-production",
+   "repeat": 2,
+   "line": 1132,
+   "section": "The environment problem",
+   "sentence": "A twelve-turn demo never hits this. A three-hour session does."
+  },
+  {
+   "id": 73,
+   "quote": "This didn't happen because designers ran out of ideas. It happened because the money got scary.",
+   "doc_id": "why-open-worlds-got-boring.r1.md",
+   "topic": "why-open-worlds-got-boring",
+   "repeat": 1,
+   "line": 1174,
+   "section": "The economics that made bigger the safe bet",
+   "sentence": "This didn't happen because designers ran out of ideas. It happened because the money got scary."
+  },
+  {
+   "id": 74,
+   "quote": "isn't cowardice — it's arithmetic",
+   "doc_id": "why-open-worlds-got-boring.r1.md",
+   "topic": "why-open-worlds-got-boring",
+   "repeat": 1,
+   "line": 1178,
+   "section": "The economics that made bigger the safe bet",
+   "sentence": "When a single project costs that much, risk aversion isn't cowardice — it's arithmetic."
+  },
+  {
+   "id": 75,
+   "quote": "Length was never really the problem. Low-authorship content was",
+   "doc_id": "why-open-worlds-got-boring.r1.md",
+   "topic": "why-open-worlds-got-boring",
+   "repeat": 1,
+   "line": 1202,
+   "section": "The counterexamples got it right by subtracting",
+   "sentence": "Length was never really the problem. Low-authorship content was."
+  },
+  {
+   "id": 76,
+   "quote": "Here's the data that should terrify anyone greenlighting a 100-hour campaign",
+   "doc_id": "why-open-worlds-got-boring.r2.md",
+   "topic": "why-open-worlds-got-boring",
+   "repeat": 2,
+   "line": 1246,
+   "section": "The attention problem nobody priced in",
+   "sentence": "Here's the data that should terrify anyone greenlighting a 100-hour campaign."
+  },
+  {
+   "id": 77,
+   "quote": "One detail matters",
+   "doc_id": "prompt-optimization-from-traces.r1.md",
+   "topic": "prompt-optimization-from-traces",
+   "repeat": 1,
+   "line": 1292,
+   "section": "What a usable trace contains",
+   "sentence": "One detail matters enormously for prompt optimization: prompt and completion payload capture is optional per instrumentation config."
+  },
+  {
+   "id": 78,
+   "quote": "You don't write an eval set first. You mine one",
+   "doc_id": "prompt-optimization-from-traces.r1.md",
+   "topic": "prompt-optimization-from-traces",
+   "repeat": 1,
+   "line": 1298,
+   "section": "From traces to a training set",
+   "sentence": "LangSmith's documented cold-start path is blunt about the ordering: \"Start by capturing production traces with LangSmith, then sample interesting or problematic runs into a dataset.\" You don't write an eval set first. You mine one."
+  },
+  {
+   "id": 79,
+   "quote": "Sampling strategy is the interesting part",
+   "doc_id": "prompt-optimization-from-traces.r1.md",
+   "topic": "prompt-optimization-from-traces",
+   "repeat": 1,
+   "line": 1300,
+   "section": "From traces to a training set",
+   "sentence": "Sampling strategy is the interesting part."
+  },
+  {
+   "id": 80,
+   "quote": "The numbers back it",
+   "doc_id": "prompt-optimization-from-traces.r1.md",
+   "topic": "prompt-optimization-from-traces",
+   "repeat": 1,
+   "line": 1318,
+   "section": "The optimizer families",
+   "sentence": "The numbers back it."
+  },
+  {
+   "id": 81,
+   "quote": "That's real lock-in",
+   "doc_id": "prompt-optimization-from-traces.r1.md",
+   "topic": "prompt-optimization-from-traces",
+   "repeat": 1,
+   "line": 1320,
+   "section": "The optimizer families",
+   "sentence": "That's real lock-in."
+  },
+  {
+   "id": 82,
+   "quote": "The catch is architectural",
+   "doc_id": "prompt-optimization-from-traces.r1.md",
+   "topic": "prompt-optimization-from-traces",
+   "repeat": 1,
+   "line": 1320,
+   "section": "The optimizer families",
+   "sentence": "The catch is architectural: GEPA's trace-level optimization requires your entire application — LLM calls, tools, retrieval, control flow — to be expressed inside DSPy abstractions, because it depends on DSPy-generated execution traces."
+  },
+  {
+   "id": 83,
+   "quote": "The sharpest dividing line in this space isn't the search algorithm — it's what the optimizer is allowed to read.",
+   "doc_id": "prompt-optimization-from-traces.r1.md",
+   "topic": "prompt-optimization-from-traces",
+   "repeat": 1,
+   "line": 1326,
+   "section": "Scalar versus textual feedback",
+   "sentence": "The sharpest dividing line in this space isn't the search algorithm — it's what the optimizer is allowed to read."
+  },
+  {
+   "id": 84,
+   "quote": "One detail bites everyone",
+   "doc_id": "prompt-optimization-from-traces.r2.md",
+   "topic": "prompt-optimization-from-traces",
+   "repeat": 2,
+   "line": 1361,
+   "section": "Trace capture and schema",
+   "sentence": "One detail bites everyone: prompt and completion payload capture is optional per instrumentation config."
+  },
+  {
+   "id": 85,
+   "quote": "That's real framework lock-in",
+   "doc_id": "prompt-optimization-from-traces.r2.md",
+   "topic": "prompt-optimization-from-traces",
+   "repeat": 2,
+   "line": 1387,
+   "section": "Optimizer families",
+   "sentence": "That's real framework lock-in."
+  },
+  {
+   "id": 86,
+   "quote": "The bottleneck is no longer the algorithm; it's whether your traces contain enough signal to learn from",
+   "doc_id": "prompt-optimization-from-traces.r2.md",
+   "topic": "prompt-optimization-from-traces",
+   "repeat": 2,
+   "line": 1407,
+   "section": "Deployment loop",
+   "sentence": "The bottleneck is no longer the algorithm; it's whether your traces contain enough signal to learn from."
+  },
+  {
+   "id": 87,
+   "quote": "That single architectural fact",
+   "doc_id": "how-frame-generation-works.r1.md",
+   "topic": "how-frame-generation-works",
+   "repeat": 1,
+   "line": 1429,
+   "section": "Interpolation, not extrapolation",
+   "sentence": "That single architectural fact is where the entire latency cost comes from."
+  },
+  {
+   "id": 88,
+   "quote": "This is the headline cost, and it's structural",
+   "doc_id": "how-frame-generation-works.r1.md",
+   "topic": "how-frame-generation-works",
+   "repeat": 1,
+   "line": 1439,
+   "section": "The three costs",
+   "sentence": "This is the headline cost, and it's structural."
+  },
+  {
+   "id": 89,
+   "quote": "Frame generation is smoothness amplification, not performance",
+   "doc_id": "how-frame-generation-works.r1.md",
+   "topic": "how-frame-generation-works",
+   "repeat": 1,
+   "line": 1474,
+   "section": "When not to use it",
+   "sentence": "Frame generation is smoothness amplification, not performance."
+  },
+  {
+   "id": 90,
+   "quote": "nterpolation has a structural consequence",
+   "doc_id": "how-frame-generation-works.r2.md",
+   "topic": "how-frame-generation-works",
+   "repeat": 2,
+   "line": 1496,
+   "section": "Interpolation, not extrapolation",
+   "sentence": "Interpolation has a structural consequence."
+  },
+  {
+   "id": 91,
+   "quote": "The economics follow the latency structure",
+   "doc_id": "how-frame-generation-works.r2.md",
+   "topic": "how-frame-generation-works",
+   "repeat": 2,
+   "line": 1516,
+   "section": "Why multi-frame scales the way it does",
+   "sentence": "The economics follow the latency structure."
+  },
+  {
+   "id": 92,
+   "quote": "Frame generation is a smoothness tool, not a performance tool",
+   "doc_id": "how-frame-generation-works.r2.md",
+   "topic": "how-frame-generation-works",
+   "repeat": 2,
+   "line": 1545,
+   "section": "When not to turn it on",
+   "sentence": "Frame generation is a smoothness tool, not a performance tool."
+  },
+  {
+   "id": 93,
+   "quote": "Here's what's actually happening under the hood, and where it falls apart",
+   "doc_id": "how-llm-as-judge-works.r1.md",
+   "topic": "how-llm-as-judge-works",
+   "repeat": 1,
+   "line": 1557,
+   "section": "(intro)",
+   "sentence": "Here's what's actually happening under the hood, and where it falls apart."
+  },
+  {
+   "id": 94,
+   "quote": "That framing is right, but the word approximate is doing a lot of work",
+   "doc_id": "how-llm-as-judge-works.r1.md",
+   "topic": "how-llm-as-judge-works",
+   "repeat": 1,
+   "line": 1557,
+   "section": "(intro)",
+   "sentence": "That framing is right, but the word approximate is doing a lot of work."
+  },
+  {
+   "id": 95,
+   "quote": "Two refinements matter",
+   "doc_id": "how-llm-as-judge-works.r1.md",
+   "topic": "how-llm-as-judge-works",
+   "repeat": 1,
+   "line": 1568,
+   "section": "The mechanics of a judge call",
+   "sentence": "Two refinements matter."
+  },
+  {
+   "id": 96,
+   "quote": "an underrated decision",
+   "doc_id": "how-llm-as-judge-works.r1.md",
+   "topic": "how-llm-as-judge-works",
+   "repeat": 1,
+   "line": 1580,
+   "section": "Three judging modes",
+   "sentence": "Tie handling is an underrated decision."
+  },
+  {
+   "id": 97,
+   "quote": "JudgeBench changes the question",
+   "doc_id": "how-llm-as-judge-works.r1.md",
+   "topic": "how-llm-as-judge-works",
+   "repeat": 1,
+   "line": 1617,
+   "section": "Where judges break",
+   "sentence": "JudgeBench changes the question."
+  },
+  {
+   "id": 98,
+   "quote": "Use LLM judges for what they are: a cheap, fast, biased instrument that you calibrate, bound, and re-verify. Not an oracle",
+   "doc_id": "how-llm-as-judge-works.r1.md",
+   "topic": "how-llm-as-judge-works",
+   "repeat": 1,
+   "line": 1625,
+   "section": "In production",
+   "sentence": "Use LLM judges for what they are: a cheap, fast, biased instrument that you calibrate, bound, and re-verify. Not an oracle."
+  },
+  {
+   "id": 99,
+   "quote": "A judge is not a metric. It's a prompt, a model, and a parser.",
+   "doc_id": "how-llm-as-judge-works.r2.md",
+   "topic": "how-llm-as-judge-works",
+   "repeat": 2,
+   "line": 1639,
+   "section": "The mechanics of a judge call",
+   "sentence": "A judge is not a metric. It's a prompt, a model, and a parser."
+  },
+  {
+   "id": 100,
+   "quote": "Tie handling is a real design choice",
+   "doc_id": "how-llm-as-judge-works.r2.md",
+   "topic": "how-llm-as-judge-works",
+   "repeat": 2,
+   "line": 1651,
+   "section": "Three judging modes",
+   "sentence": "Tie handling is a real design choice — allowing ties reduces forced noise but inflates the tie bucket if your rubric is vague."
+  },
+  {
+   "id": 101,
+   "quote": "That's the headline result, and it's real",
+   "doc_id": "how-llm-as-judge-works.r2.md",
+   "topic": "how-llm-as-judge-works",
+   "repeat": 2,
+   "line": 1657,
+   "section": "Three judging modes",
+   "sentence": "That's the headline result, and it's real."
+  },
+  {
+   "id": 102,
+   "quote": "deserves a closer look",
+   "doc_id": "how-llm-as-judge-works.r2.md",
+   "topic": "how-llm-as-judge-works",
+   "repeat": 2,
+   "line": 1663,
+   "section": "The bias catalogue",
+   "sentence": "Position bias deserves a closer look because it's widely misdiagnosed as sampling noise."
+  },
+  {
+   "id": 103,
+   "quote": "the ordering itself is doing the work",
+   "doc_id": "how-llm-as-judge-works.r2.md",
+   "topic": "how-llm-as-judge-works",
+   "repeat": 2,
+   "line": 1669,
+   "section": "The bias catalogue",
+   "sentence": "So the model isn't flip-flopping randomly; the ordering itself is doing the work."
+  },
+  {
+   "id": 104,
+   "quote": "Less than you'd think, structurally",
+   "doc_id": "otel-spans-for-ai-agents.r1.md",
+   "topic": "otel-spans-for-ai-agents",
+   "repeat": 1,
+   "line": 1708,
+   "section": "(intro)",
+   "sentence": "Less than you'd think, structurally."
+  },
+  {
+   "id": 105,
+   "quote": "is a small enum worth knowing",
+   "doc_id": "otel-spans-for-ai-agents.r1.md",
+   "topic": "otel-spans-for-ai-agents",
+   "repeat": 1,
+   "line": 1747,
+   "section": "Anatomy of one trace",
+   "sentence": "genai.tool.type is a small enum worth knowing: function for client-side execution, extension for an agent-side call out to an external API, datastore for retrieval over external data."
+  },
+  {
+   "id": 106,
+   "quote": "Here's the part that surprises people",
+   "doc_id": "otel-spans-for-ai-agents.r1.md",
+   "topic": "otel-spans-for-ai-agents",
+   "repeat": 1,
+   "line": 1761,
+   "section": "Content capture and privacy",
+   "sentence": "Here's the part that surprises people migrating from a vendor SDK: \"By default, no prompt content or tool arguments are captured with GenAI telemetry, as these can contain sensitive data.\""
+  },
+  {
+   "id": 107,
+   "quote": "Version markers worth knowing",
+   "doc_id": "otel-spans-for-ai-agents.r1.md",
+   "topic": "otel-spans-for-ai-agents",
+   "repeat": 1,
+   "line": 1782,
+   "section": "Stability and migration",
+   "sentence": "Version markers worth knowing: v1.36.0 is the cutoff — instrumentations emitting it or prior SHOULD NOT change their emitted convention version by default."
+  },
+  {
+   "id": 108,
+   "quote": "Be honest with yourself about what's still missing.",
+   "doc_id": "otel-spans-for-ai-agents.r1.md",
+   "topic": "otel-spans-for-ai-agents",
+   "repeat": 1,
+   "line": 1788,
+   "section": "Known gaps",
+   "sentence": "Be honest with yourself about what's still missing."
+  },
+  {
+   "id": 109,
+   "quote": "earns its keep",
+   "doc_id": "otel-spans-for-ai-agents.r2.md",
+   "topic": "otel-spans-for-ai-agents",
+   "repeat": 2,
+   "line": 1861,
+   "section": "Content capture and privacy",
+   "sentence": "This is where the OTel Collector earns its keep."
+  },
+  {
+   "id": 110,
+   "quote": "Here's the part that bites people",
+   "doc_id": "otel-spans-for-ai-agents.r2.md",
+   "topic": "otel-spans-for-ai-agents",
+   "repeat": 2,
+   "line": 1869,
+   "section": "Stability and migration",
+   "sentence": "Here's the part that bites people."
+  },
+  {
+   "id": 111,
+   "quote": "Notice what the original claim was actually about",
+   "doc_id": "searing-does-not-seal-juices.r1.md",
+   "topic": "searing-does-not-seal-juices",
+   "repeat": 1,
+   "line": 1901,
+   "section": "Where the claim came from",
+   "sentence": "Notice what the original claim was actually about."
+  },
+  {
+   "id": 112,
+   "quote": "The pattern across all of these is consistent",
+   "doc_id": "searing-does-not-seal-juices.r1.md",
+   "topic": "searing-does-not-seal-juices",
+   "repeat": 1,
+   "line": 1915,
+   "section": "The experimental record",
+   "sentence": "The pattern across all of these is consistent."
+  },
+  {
+   "id": 113,
+   "quote": "This is the real mechanism",
+   "doc_id": "searing-does-not-seal-juices.r1.md",
+   "topic": "searing-does-not-seal-juices",
+   "repeat": 1,
+   "line": 1925,
+   "section": "What actually expels the juice",
+   "sentence": "This is the real mechanism, and it is driven by the internal temperature the meat reaches, not by what happened to its surface in the first ninety seconds."
+  },
+  {
+   "id": 114,
+   "quote": "The correlation holds. The explanation attached to it never did",
+   "doc_id": "searing-does-not-seal-juices.r1.md",
+   "topic": "searing-does-not-seal-juices",
+   "repeat": 1,
+   "line": 1958,
+   "section": "Why the myth won't die",
+   "sentence": "The correlation holds. The explanation attached to it never did."
+  },
+  {
+   "id": 115,
+   "quote": "Here's where the idea came from, what the experiments actually show, what really drives moisture out of meat, and how to cook accordingly.",
+   "doc_id": "searing-does-not-seal-juices.r2.md",
+   "topic": "searing-does-not-seal-juices",
+   "repeat": 2,
+   "line": 1968,
+   "section": "(intro)",
+   "sentence": "Here's where the idea came from, what the experiments actually show, what really drives moisture out of meat, and how to cook accordingly."
+  },
+  {
+   "id": 116,
+   "quote": "The timing matters",
+   "doc_id": "searing-does-not-seal-juices.r2.md",
+   "topic": "searing-does-not-seal-juices",
+   "repeat": 2,
+   "line": 1996,
+   "section": "What actually expels the juice",
+   "sentence": "The timing matters."
+  },
+  {
+   "id": 117,
+   "quote": "Here's what actually happens, step by step",
+   "doc_id": "what-happens-to-checked-luggage.r1.md",
+   "topic": "what-happens-to-checked-luggage",
+   "repeat": 1,
+   "line": 2037,
+   "section": "(intro)",
+   "sentence": "Here's what actually happens, step by step."
+  },
+  {
+   "id": 118,
+   "quote": "The tag is the whole story",
+   "doc_id": "what-happens-to-checked-luggage.r1.md",
+   "topic": "what-happens-to-checked-luggage",
+   "repeat": 1,
+   "line": 2039,
+   "section": "The tag is the whole story",
+   "sentence": "## The tag is the whole story"
+  },
+  {
+   "id": 119,
+   "quote": "You are not writing unit tests. You are building a measurement instrument",
+   "doc_id": "build-your-first-evaluator.r1.md",
+   "topic": "build-your-first-evaluator",
+   "repeat": 1,
+   "line": 2167,
+   "section": "(intro)",
+   "sentence": "As OpenAI's docs put it: \"Models sometimes produce different output from the same input, which makes traditional software testing methods insufficient.\" You are not writing unit tests. You are building a measurement instrument, and instruments need calibration."
+  },
+  {
+   "id": 120,
+   "quote": "one caveat worth internalising",
+   "doc_id": "build-your-first-evaluator.r1.md",
+   "topic": "build-your-first-evaluator",
+   "repeat": 1,
+   "line": 2167,
+   "section": "(intro)",
+   "sentence": "Before the mechanics, one caveat worth internalising."
+  },
+  {
+   "id": 121,
+   "quote": "There's a side effect worth naming",
+   "doc_id": "build-your-first-evaluator.r1.md",
+   "topic": "build-your-first-evaluator",
+   "repeat": 1,
+   "line": 2189,
+   "section": "Step 2: Assemble a dataset",
+   "sentence": "There's a side effect worth naming."
+  },
+  {
+   "id": 122,
+   "quote": "This is the step that separates an evaluator from a random number generator.",
+   "doc_id": "build-your-first-evaluator.r1.md",
+   "topic": "build-your-first-evaluator",
+   "repeat": 1,
+   "line": 2215,
+   "section": "Step 5: Validate the judge against humans",
+   "sentence": "This is the step that separates an evaluator from a random number generator."
+  },
+  {
+   "id": 123,
+   "quote": "Two additions worth making deliberately",
+   "doc_id": "build-your-first-evaluator.r2.md",
+   "topic": "build-your-first-evaluator",
+   "repeat": 2,
+   "line": 2323,
+   "section": "4. Write the judge prompt",
+   "sentence": "Two additions worth making deliberately:"
+  },
+  {
+   "id": 124,
+   "quote": "is the headline number",
+   "doc_id": "build-your-first-evaluator.r2.md",
+   "topic": "build-your-first-evaluator",
+   "repeat": 2,
+   "line": 2335,
+   "section": "5. Validate the judge against humans",
+   "sentence": "Raw agreement percentage is the headline number; Cohen's kappa corrects for chance agreement and is the honest version."
+  },
+  {
+   "id": 125,
+   "quote": "That's a real evaluator. Everything else is refinement",
+   "doc_id": "build-your-first-evaluator.r2.md",
+   "topic": "build-your-first-evaluator",
+   "repeat": 2,
+   "line": 2359,
+   "section": "7. Operationalise it",
+   "sentence": "That's a real evaluator. Everything else is refinement."
+  },
+  {
+   "id": 126,
+   "quote": "Three terms do most of the work",
+   "doc_id": "first-trace-python-llm-app.r1.md",
+   "topic": "first-trace-python-llm-app",
+   "repeat": 1,
+   "line": 2373,
+   "section": "Trace anatomy",
+   "sentence": "Three terms do most of the work."
+  },
+  {
+   "id": 127,
+   "quote": "That nesting is the whole point",
+   "doc_id": "first-trace-python-llm-app.r1.md",
+   "topic": "first-trace-python-llm-app",
+   "repeat": 1,
+   "line": 2390,
+   "section": "Trace anatomy",
+   "sentence": "That nesting is the whole point."
+  },
+  {
+   "id": 128,
+   "quote": "That's the foundation everything else sits on",
+   "doc_id": "first-trace-python-llm-app.r1.md",
+   "topic": "first-trace-python-llm-app",
+   "repeat": 1,
+   "line": 2417,
+   "section": "Minimum viable setup",
+   "sentence": "That's the foundation everything else sits on."
+  },
+  {
+   "id": 129,
+   "quote": "Two things to keep in mind",
+   "doc_id": "first-trace-python-llm-app.r1.md",
+   "topic": "first-trace-python-llm-app",
+   "repeat": 1,
+   "line": 2470,
+   "section": "Semantic conventions",
+   "sentence": "Two things to keep in mind."
+  },
+  {
+   "id": 130,
+   "quote": "The portability caveat is attributes",
+   "doc_id": "first-trace-python-llm-app.r1.md",
+   "topic": "first-trace-python-llm-app",
+   "repeat": 1,
+   "line": 2482,
+   "section": "Backend choice and portability",
+   "sentence": "The portability caveat is attributes."
+  },
+  {
+   "id": 131,
+   "quote": "Three terms do most of the work",
+   "doc_id": "first-trace-python-llm-app.r2.md",
+   "topic": "first-trace-python-llm-app",
+   "repeat": 2,
+   "line": 2505,
+   "section": "Trace anatomy",
+   "sentence": "Three terms do most of the work:"
+  },
+  {
+   "id": 132,
+   "quote": "Read that the other way round",
+   "doc_id": "first-trip-to-japan.r1.md",
+   "topic": "first-trip-to-japan",
+   "repeat": 1,
+   "line": 2676,
+   "section": "Money: cashless enough, not cashless",
+   "sentence": "Read that the other way round: most transaction value in Japan is still not cashless."
+  },
+  {
+   "id": 133,
+   "quote": "The single best structural decision",
+   "doc_id": "first-trip-to-japan.r1.md",
+   "topic": "first-trip-to-japan",
+   "repeat": 1,
+   "line": 2698,
+   "section": "Do one region",
+   "sentence": "The single best structural decision for a first trip is to do less geography."
+  },
+  {
+   "id": 134,
+   "quote": "That's the point",
+   "doc_id": "first-trip-to-japan.r2.md",
+   "topic": "first-trip-to-japan",
+   "repeat": 2,
+   "line": 2738,
+   "section": "Transport: the JR Pass is no longer the default answer",
+   "sentence": "That's the point."
+  },
+  {
+   "id": 135,
+   "quote": "ou do not need to plan this. You need to not arrive with zero yen",
+   "doc_id": "first-trip-to-japan.r2.md",
+   "topic": "first-trip-to-japan",
+   "repeat": 2,
+   "line": 2744,
+   "section": "Money: cashless, but not cash-free",
+   "sentence": "You do not need to plan this. You need to not arrive with zero yen."
+  },
+  {
+   "id": 136,
+   "quote": "The lever you control",
+   "doc_id": "first-trip-to-japan.r2.md",
+   "topic": "first-trip-to-japan",
+   "repeat": 2,
+   "line": 2752,
+   "section": "Crowds and costs are a date problem, not an itinerary problem",
+   "sentence": "The lever you control is timing."
+  },
+  {
+   "id": 137,
+   "quote": "the highest-leverage decision",
+   "doc_id": "first-trip-to-japan.r2.md",
+   "topic": "first-trip-to-japan",
+   "repeat": 2,
+   "line": 2762,
+   "section": "Stay in one region",
+   "sentence": "Finally, the highest-leverage decision: don't try to see everything."
+  },
+  {
+   "id": 138,
+   "quote": "is the single biggest obstacle, and it's worth naming",
+   "doc_id": "start-reading-poetry.r1.md",
+   "topic": "start-reading-poetry",
+   "repeat": 1,
+   "line": 2782,
+   "section": "The barrier is a schoolroom hangover",
+   "sentence": "The hunt-the-hidden-meaning habit is the single biggest obstacle, and it's worth naming because it's not your fault and it isn't how poems work."
+  },
+  {
+   "id": 139,
+   "quote": "One term worth having early",
+   "doc_id": "start-reading-poetry.r1.md",
+   "topic": "start-reading-poetry",
+   "repeat": 1,
+   "line": 2796,
+   "section": "Attitude before technique",
+   "sentence": "One term worth having early: paraphrase, restating a poem in plain prose."
+  },
+  {
+   "id": 140,
+   "quote": "The first move is dropping the confession model",
+   "doc_id": "start-reading-poetry.r2.md",
+   "topic": "start-reading-poetry",
+   "repeat": 2,
+   "line": 2851,
+   "section": "The barrier is usually school",
+   "sentence": "The first move is dropping the confession model."
+  },
+  {
+   "id": 141,
+   "quote": "Worth knowing cold, though",
+   "doc_id": "start-reading-poetry.r2.md",
+   "topic": "start-reading-poetry",
+   "repeat": 2,
+   "line": 2885,
+   "section": "A short glossary you can consult for free",
+   "sentence": "Worth knowing cold, though: free verse is poetry without regular metre or rhyme scheme."
+  },
+  {
+   "id": 142,
+   "quote": "Before the creative part, the boring part",
+   "doc_id": "weeknight-pasta-from-nothing.r1.md",
+   "topic": "weeknight-pasta-from-nothing",
+   "repeat": 1,
+   "line": 2927,
+   "section": "Step one: fridge triage",
+   "sentence": "Before the creative part, the boring part."
+  },
+  {
+   "id": 143,
+   "quote": "Two things worth internalising",
+   "doc_id": "weeknight-pasta-from-nothing.r1.md",
+   "topic": "weeknight-pasta-from-nothing",
+   "repeat": 1,
+   "line": 2931,
+   "section": "Step one: fridge triage",
+   "sentence": "Two things worth internalising:"
+  },
+  {
+   "id": 144,
+   "quote": "The stakes here aren't only personal",
+   "doc_id": "weeknight-pasta-from-nothing.r1.md",
+   "topic": "weeknight-pasta-from-nothing",
+   "repeat": 1,
+   "line": 2938,
+   "section": "Step one: fridge triage",
+   "sentence": "The stakes here aren't only personal."
+  },
+  {
+   "id": 145,
+   "quote": "Here's the structure",
+   "doc_id": "weeknight-pasta-from-nothing.r1.md",
+   "topic": "weeknight-pasta-from-nothing",
+   "repeat": 1,
+   "line": 2942,
+   "section": "The slot system",
+   "sentence": "Here's the structure."
+  },
+  {
+   "id": 146,
+   "quote": "the one that matters most",
+   "doc_id": "weeknight-pasta-from-nothing.r1.md",
+   "topic": "weeknight-pasta-from-nothing",
+   "repeat": 1,
+   "line": 2953,
+   "section": "The slot system",
+   "sentence": "The umami anchor is the one people skip and the one that matters most: a teaspoon of tomato paste fried until it darkens, or two anchovy fillets melted into hot oil, gives a fifteen-minute sauce the depth of a two-hour one."
+  },
+  {
+   "id": 147,
+   "quote": "and it's worth following",
+   "doc_id": "weeknight-pasta-from-nothing.r1.md",
+   "topic": "weeknight-pasta-from-nothing",
+   "repeat": 1,
+   "line": 2959,
+   "section": "Boil mechanics",
+   "sentence": "Barilla's own guidance is more specific than most home cooks bother with, and it's worth following."
+  },
+  {
+   "id": 148,
+   "quote": "The second finding is the one that will change your technique",
+   "doc_id": "weeknight-pasta-from-nothing.r1.md",
+   "topic": "weeknight-pasta-from-nothing",
+   "repeat": 1,
+   "line": 2979,
+   "section": "The emulsion step",
+   "sentence": "The second finding is the one that will change your technique."
+  },
+  {
+   "id": 149,
+   "quote": "the small amount of science that actually matters",
+   "doc_id": "weeknight-pasta-from-nothing.r2.md",
+   "topic": "weeknight-pasta-from-nothing",
+   "repeat": 2,
+   "line": 3009,
+   "section": "(intro)",
+   "sentence": "Here is how to do it deliberately, with the small amount of science that actually matters."
+  },
+  {
+   "id": 150,
+   "quote": "The uncomfortable part",
+   "doc_id": "weeknight-pasta-from-nothing.r2.md",
+   "topic": "weeknight-pasta-from-nothing",
+   "repeat": 2,
+   "line": 3017,
+   "section": "Step one: fridge triage",
+   "sentence": "The uncomfortable part: smell and appearance are not a reliable test."
+  },
+  {
+   "id": 151,
+   "quote": "The pasta water is an ingredient, not a utility",
+   "doc_id": "weeknight-pasta-from-nothing.r2.md",
+   "topic": "weeknight-pasta-from-nothing",
+   "repeat": 2,
+   "line": 3051,
+   "section": "Step three: boil mechanics",
+   "sentence": "The pasta water is an ingredient, not a utility."
+  },
+  {
+   "id": 152,
+   "quote": "worth taking seriously",
+   "doc_id": "weeknight-pasta-from-nothing.r2.md",
+   "topic": "weeknight-pasta-from-nothing",
+   "repeat": 2,
+   "line": 3053,
+   "section": "Step three: boil mechanics",
+   "sentence": "Barilla's own guidance — worth taking seriously, since they make the stuff — is an 8–12 quart pot filled three-quarters for one pound of pasta, brought to a full rolling boil before the pasta goes in."
+  },
+  {
+   "id": 153,
+   "quote": "it's the whole trick",
+   "doc_id": "weeknight-pasta-from-nothing.r2.md",
+   "topic": "weeknight-pasta-from-nothing",
+   "repeat": 2,
+   "line": 3059,
+   "section": "Step three: boil mechanics",
+   "sentence": "This is pasta acqua, and it's the whole trick."
+  }
+ ]
+}

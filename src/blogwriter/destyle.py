@@ -29,7 +29,7 @@ from pathlib import Path
 
 import anthropic
 
-from .judge_spec import CLAUDISM_CATEGORIES
+from .judge_spec import CLAUDISM_CATEGORIES, CLAUDISM_CATEGORIES_V2
 
 DEFAULT_MODEL = "claude-opus-5-5"
 DEFAULT_EFFORT = "high"
@@ -52,10 +52,20 @@ SYSTEM = (
 )
 
 
+# The v2 judge's categories, plus the two structural ones it hands to regex.
+# The judge doesn't need to find those, but the rewriter still has to remove
+# them.
+REWRITE_CATEGORIES: dict[str, str] = {
+    **CLAUDISM_CATEGORIES_V2,
+    "rule of three": CLAUDISM_CATEGORIES["rule of three"],
+    "punchy closer": CLAUDISM_CATEGORIES["punchy closer"],
+}
+
+
 def build_prompt(section: str) -> str:
     cats = "\n".join(
         f"{i}. {name} — {desc}"
-        for i, (name, desc) in enumerate(CLAUDISM_CATEGORIES.items(), 1)
+        for i, (name, desc) in enumerate(REWRITE_CATEGORIES.items(), 1)
     )
     return f"""\
 Rewrite the markdown below to remove the rhetorical constructions listed. The
