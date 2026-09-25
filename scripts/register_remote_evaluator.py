@@ -28,12 +28,19 @@ from pathlib import Path
 
 INTEGRATION_NAME = "claudism_spans endpoint"
 EVALUATOR_NAME = "claudism_spans"
+# The schema describes the whole request body, so the evaluator's fields sit
+# under "input". This is the only shape the AX evaluator config accepts and
+# maps variables from; "output" at the top level is not mappable.
 INPUT_SCHEMA = {
     "type": "object",
+    "required": ["input"],
     "properties": {
-        "output": {"type": "string", "description": "The blog post markdown"}
+        "input": {
+            "type": "object",
+            "required": ["output"],
+            "properties": {"output": {"type": "string"}},
+        }
     },
-    "required": ["output"],
 }
 
 

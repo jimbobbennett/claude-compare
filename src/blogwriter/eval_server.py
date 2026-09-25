@@ -93,6 +93,10 @@ def create_app():
         # API spec describes the fields at the top level beside
         # "arize_metadata". Accept both.
         body = body if isinstance(body, dict) else {}
+        # Field names only, never content: enough to see what shape AX sent.
+        shape = {k: sorted(v) if isinstance(v, dict) else type(v).__name__
+                 for k, v in body.items()}
+        print_stderr(f"  request shape: {shape}")
         fields = body.get("input") if isinstance(body.get("input"), dict) else body
         output = fields.get("output")
         if not isinstance(output, str) or not output.strip():
