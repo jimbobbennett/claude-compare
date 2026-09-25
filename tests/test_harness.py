@@ -607,5 +607,7 @@ def test_spans_fit_own_output_detects_results_on_the_wrong_run():
     span = "4-14 | salience_flag | It matters"
     assert spans_fit_own_output(run("Hi. It matters.", span))
     assert spans_fit_own_output(run("Other post here.", span)) is False
+    bold = "5-18 | contrast_reframe | a cold open"
+    assert spans_fit_own_output(run("It's a **cold open**.", bold))
     assert spans_fit_own_output(run("x", "-1--1 | signpost | nowhere")) is None
     assert spans_fit_own_output({"output": "x"}) is None

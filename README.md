@@ -629,8 +629,22 @@ single-experiment task attaches every score correctly, so the `tasks`
 subcommand creates one per experiment and checks each em-dash score against
 the same calculation done locally.
 
-With per-experiment tasks, AX's em-dash scores match the local scan: 12.9 per
-1,000 words for Opus 5 and 0.05 for Opus 5.5.
+With per-experiment tasks, the results in AX match the local runs:
+
+| per 1,000 words, scored in AX | opus-5 | opus-5.5 | change |
+|---|---|---|---|
+| claudism spans (remote evaluator) | 4.79 | 2.38 | −50% |
+| em-dashes (code evaluator) | 12.9 | 0.05 | −100% |
+
+Recall against the hand flags, from the spans AX stored, is 65% on r1 and 59%
+on r2, and all three load-bearing sentences are caught. The local run gave
+69% and 63%; the judge does not accept `temperature=0`, so two passes differ
+a little. The summary is in `results/full-v1-ax-experiments.json`.
+
+`recall` and `report` refuse to run if any stored span is not a passage of the
+run's own post. A remote evaluator task created in the UI over all four
+experiments showed the same fault as the code evaluator, and this check is
+what caught it.
 
 ---
 

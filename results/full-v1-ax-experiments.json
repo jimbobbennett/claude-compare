@@ -1,0 +1,53 @@
+{
+  "run_id": "full-v1",
+  "experiments": {
+    "full-v1 opus-5 r1": {
+      "n": 20,
+      "claudism_spans": 4.88,
+      "em_dash_density": 12.8,
+      "claudism_count": 4.15,
+      "claudism_recall": 0.65
+    },
+    "full-v1 opus-5 r2": {
+      "n": 20,
+      "claudism_spans": 4.7,
+      "em_dash_density": 13.0,
+      "claudism_count": 3.5,
+      "claudism_recall": 0.61
+    },
+    "full-v1 opus-5.5 r1": {
+      "n": 20,
+      "claudism_spans": 2.49,
+      "em_dash_density": 0.07,
+      "claudism_count": null,
+      "claudism_recall": null
+    },
+    "full-v1 opus-5.5 r2": {
+      "n": 20,
+      "claudism_spans": 2.26,
+      "em_dash_density": 0.03,
+      "claudism_count": null,
+      "claudism_recall": null
+    }
+  },
+  "models": {
+    "opus-5": {
+      "n": 40,
+      "claudism_spans": 4.79,
+      "em_dash_density": 12.9,
+      "claudism_count": 3.83,
+      "claudism_recall": 0.63
+    },
+    "opus-5.5": {
+      "n": 40,
+      "claudism_spans": 2.38,
+      "em_dash_density": 0.05,
+      "claudism_count": null,
+      "claudism_recall": null
+    }
+  },
+  "change_pct": {
+    "claudism_spans": -50,
+    "em_dash_density": -100
+  }
+}

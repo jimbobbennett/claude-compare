@@ -488,7 +488,9 @@ def spans_fit_own_output(run: dict) -> bool | None:
     located = [s for s in parse_lines(ev["explanation"]) if s.start >= 0]
     if not located:
         return None
-    return all(run["output"][s.start:s.end] == s.quote for s in located)
+    # The judge often drops markdown from its quotes ("cold open" for
+    # "**cold open**"), so a span fits if its quote locates to its own offsets.
+    return all(locate(s.quote, run["output"]) == (s.start, s.end) for s in located)
 
 
 def check_attachment(state: dict) -> int:
