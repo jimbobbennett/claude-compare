@@ -476,8 +476,39 @@ def recall_for_run(run: dict, doc_id: str) -> dict | None:
             "load_bearing_missed": lb_missed}
 
 
+def spans_fit_own_output(run: dict) -> bool | None:
+    """Whether the evaluator's located spans are passages of this run's post.
+
+    Guards against results attached to the wrong run, which happened with
+    tasks covering several experiments. None when there is nothing to check.
+    """
+    ev = evaluation(run, SPANS_EVAL)
+    if not ev or not ev.get("explanation"):
+        return None
+    located = [s for s in parse_lines(ev["explanation"]) if s.start >= 0]
+    if not located:
+        return None
+    return all(run["output"][s.start:s.end] == s.quote for s in located)
+
+
+def check_attachment(state: dict) -> int:
+    """Print and return the number of runs carrying another run's spans."""
+    wrong = 0
+    for name in sorted(state["experiments"]):
+        runs = export_runs(name, state["dataset_id"])
+        bad = [r for r in runs if spans_fit_own_output(r) is False]
+        wrong += len(bad)
+        if bad:
+            print_stderr(f"  {name}: {len(bad)} runs carry spans from another post")
+    return wrong
+
+
 def cmd_recall(args: argparse.Namespace) -> int:
     state = load_state(args.run_id)
+    if check_attachment(state):
+        print_stderr("  evaluator results are attached to the wrong runs; "
+                     "re-run with one task per experiment")
+        return 1
     alias = json.loads(ANNOTATIONS.read_text())["model_alias"]
     slugs = {r["id"]: row_field(r, "topic_slug")
              for r in export_dataset(state["dataset"], args.space)}
@@ -611,6 +642,9 @@ def summarise_runs(runs: list[dict]) -> dict:
 
 def cmd_report(args: argparse.Namespace) -> int:
     state = load_state(args.run_id)
+    if check_attachment(state):
+        print_stderr("  refusing to report: evaluator results are on the wrong runs")
+        return 1
     by_model: dict[str, list[dict]] = {}
     rows = {}
     for name in sorted(state["experiments"]):

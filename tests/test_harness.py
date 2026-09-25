@@ -595,3 +595,17 @@ def test_evaluation_reads_the_flat_export_shape():
     assert evaluation(run, "claudism_spans") == {"explanation": "1-2 | signpost | x"}
     assert evaluation(run, "missing") is None
     assert evaluation({"evaluations": {"x": {"score": 1}}}, "x") == {"score": 1}
+
+
+def test_spans_fit_own_output_detects_results_on_the_wrong_run():
+    from blogwriter.ax_experiments import spans_fit_own_output
+
+    def run(output, explanation):
+        key = "eval.claudism_spans.explanation"
+        return {"output": output, "additional_properties": {key: explanation}}
+
+    span = "4-14 | salience_flag | It matters"
+    assert spans_fit_own_output(run("Hi. It matters.", span))
+    assert spans_fit_own_output(run("Other post here.", span)) is False
+    assert spans_fit_own_output(run("x", "-1--1 | signpost | nowhere")) is None
+    assert spans_fit_own_output({"output": "x"}) is None
