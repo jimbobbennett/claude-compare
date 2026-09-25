@@ -566,7 +566,9 @@ above.
 ### 10. Put the run into AX as a dataset and experiments
 
 This represents `full-v1` in AX's experiment model and scores it there. It
-needs the `server` dependency group and `cloudflared` for the tunnel.
+needs the `server` dependency group and `cloudflared` for the tunnel. The
+full write-up, including the endpoint's contract and everything learned about
+AX along the way, is in [docs/ax-experiments.md](docs/ax-experiments.md).
 
 ```bash
 uv sync --group server
@@ -609,7 +611,9 @@ created through the API with the code or template task type accepts the remote
 evaluator but is cancelled without calling the endpoint. In the UI, create one
 evaluation task **per experiment** on the `claude-compare-full-v1` dataset,
 with the `claudism_spans` evaluator and `output` mapped to the run's `output`,
-and run it. Then:
+and run it. The integration's input schema must nest the field under `input`
+(`{"input": {"output": "..."}}`), which is what the register script sets; the
+UI cannot map a top-level `output`. Then:
 
 ```bash
 uv run blogwriter-ax-experiments recall     # evaluator spans vs hand flags
@@ -801,6 +805,7 @@ claude-compare/
 │   ├── positions.py         # the `start-end | quote` line format
 │   └── eval_server.py       # the v2 span judge as an AX remote evaluator
 ├── scripts/                 # tunnel launcher, remote evaluator registration
+├── docs/                    # the AX experiment write-up, and the banner
 └── tests/                   # pure-logic tests, no network
 ```
 

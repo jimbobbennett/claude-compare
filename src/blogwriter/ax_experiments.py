@@ -20,9 +20,11 @@ the comparison lives where AX compares things:
 annotations, writing ``claudism_recall`` onto each annotated run. ``report``
 aggregates the lot.
 
-Subcommands run in order: ``upload``, ``annotate``, then (after the
-evaluators have run in AX) ``recall`` and ``report``. State - dataset and
-experiment IDs - is kept in ``output/<run>/ax/state.json``.
+Subcommands run in order: ``upload``, ``annotate``, ``tasks`` (one task per
+experiment; the remote evaluator's tasks are created in the UI), then
+``recall`` and ``report``. State (dataset, experiment and task IDs) is kept in
+``output/<run>/ax/state.json``. docs/ax-experiments.md has the full workflow
+and the AX behaviour it works around.
 """
 
 from __future__ import annotations
