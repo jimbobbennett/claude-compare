@@ -245,6 +245,17 @@ put a list of quotes in the explanation field. So the local command sends the
 same prompt to `gpt-6-luna` through OpenAI, and writes
 the quotes to a JSON file per model. The judge is still not a Claude model.
 
+The same run can also be represented as an AX experiment, which puts the whole
+comparison inside AX. `blogwriter-ax-experiments` uploads a dataset of the 20
+topics (each with its brief and the exact writer prompt) and four experiments,
+one per model and repeat, whose runs are the posts already written. The
+hand-flagged claudisms go onto the Opus 5 runs as annotations. The v2 judge
+runs in AX as a **remote evaluator**: `blogwriter-eval-server` serves the same
+prompt and parsing over HTTP, and AX calls it for each run and stores the
+score, the band and the quoted spans. A remote evaluator can return the spans
+because its explanation is whatever the endpoint sends, not text AX wraps in
+its own label instruction. Step 10 below sets this up.
+
 ### Checking the evaluator against a human reader
 
 v1 gives each post one label, and there is no way to check one label against a
@@ -552,6 +563,75 @@ bullets, rule-of-three and em-dashes) at a finer grain than the AX evaluators.
 It is useful while iterating, and it is the source of the "swapped tics" table
 above.
 
+### 10. Put the run into AX as a dataset and experiments
+
+This represents `full-v1` in AX's experiment model and scores it there. It
+needs the `server` dependency group and `cloudflared` for the tunnel.
+
+```bash
+uv sync --group server
+export ARIZE_SPACE="<your space name>"
+
+# Dataset of 20 topics and four experiments of 20 runs, from the existing posts.
+# Checks every prompt hash against the manifest and every served model first.
+uv run blogwriter-ax-experiments upload
+
+# The 153 hand flags onto the Opus 5 runs, as `claudisms` and `claudism_count`.
+uv run blogwriter-ax-experiments annotate
+
+# The em-dash code evaluator, one task per experiment.
+uv run blogwriter-ax-experiments tasks --evaluator "Em Dash Density"
+```
+
+Each flag is stored as a line of `start-end | quote`, with character offsets
+into the run's output. AX annotations are plain text on the whole run, so this
+is how a position survives. The same format, with the category in the middle,
+is what the remote evaluator returns, so the two can be matched by position.
+
+Then serve the span judge and register it:
+
+```bash
+./scripts/serve-evaluator.sh          # prints the tunnel URL; leave it running
+~/.local/share/uv/tools/arize-ax-cli/bin/python \
+  scripts/register_remote_evaluator.py https://<tunnel>.trycloudflare.com \
+  --space "$ARIZE_SPACE"
+```
+
+The register script creates the `EVALUATOR` integration (endpoint, bearer
+header from `.eval-token`, input schema) and the `claudism_spans` remote
+evaluator through the REST API, using the SDK inside the `ax` CLI and your `ax`
+profile. The CLI cannot create the integration itself. A quick tunnel gets a
+new URL each time it starts; re-run the register script after a restart and it
+updates the endpoint.
+
+The task that runs a remote evaluator has to be created in the AX UI. A task
+created through the API with the code or template task type accepts the remote
+evaluator but is cancelled without calling the endpoint. In the UI, create one
+evaluation task **per experiment** on the `claude-compare-full-v1` dataset,
+with the `claudism_spans` evaluator and `output` mapped to the run's `output`,
+and run it. Then:
+
+```bash
+uv run blogwriter-ax-experiments recall     # evaluator spans vs hand flags
+uv run blogwriter-ax-experiments report --json results/full-v1-ax-experiments.json
+```
+
+`recall` writes `claudism_recall` onto each annotated run and fails if a
+load-bearing sentence was missed. `report` prints each evaluator and
+annotation per experiment and per model.
+
+**One task per experiment, not one task over several.** A task covering
+several experiments wrote each experiment's scores onto the runs of a
+different experiment. With the four experiments, `opus-5 r1` got the scores of
+`opus-5 r2`, and `opus-5 r2` got those of `opus-5.5 r1`. It reproduces with
+two experiments (the `zz repro A/B` experiments and task in the space). A
+single-experiment task attaches every score correctly, so the `tasks`
+subcommand creates one per experiment and checks each em-dash score against
+the same calculation done locally.
+
+With per-experiment tasks, AX's em-dash scores match the local scan: 12.9 per
+1,000 words for Opus 5 and 0.05 for Opus 5.5.
+
 ---
 
 ## The evaluator prompts
@@ -702,7 +782,11 @@ claude-compare/
 │   ├── validate.py          # check v2 against the hand-flagged claudisms
 │   ├── destyle.py           # rewrite markdown to remove claudisms
 │   ├── merge_rewrites.py    # merge rewrites section by section
-│   └── ax_report.py         # read AX scores back and rank
+│   ├── ax_report.py         # read AX scores back and rank
+│   ├── ax_experiments.py    # the run as an AX dataset, experiments, annotations
+│   ├── positions.py         # the `start-end | quote` line format
+│   └── eval_server.py       # the v2 span judge as an AX remote evaluator
+├── scripts/                 # tunnel launcher, remote evaluator registration
 └── tests/                   # pure-logic tests, no network
 ```
 
@@ -788,9 +872,9 @@ the model it scores lower.
 **Recalibrate the v2 bands.** The density cut-offs need setting from the
 judge's own distribution before the 1–5 score means anything.
 
-**Send the v2 spans back to AX.** The span judge runs outside AX today, so its
-results are not beside the v1 scores on the traces. Writing them back as span
-annotations would put both judges in one place.
+**Host the remote evaluator properly.** It runs on a laptop behind a quick
+tunnel, which changes URL on every restart. A small always-on deployment would
+let the evaluator run continuously on new spans as well as on experiments.
 
 **Raise the repeat count.** At two samples per cell the aggregate is sound but
 individual topics are noisy. Three or more would make per-topic numbers

@@ -23,11 +23,19 @@ blogwriter-destyle = "blogwriter.destyle:main"
 blogwriter-merge = "blogwriter.merge_rewrites:main"
 blogwriter-validate = "blogwriter.validate:main"
 blogwriter-judge = "blogwriter.judge:main"
+blogwriter-ax-experiments = "blogwriter.ax_experiments:main"
+blogwriter-eval-server = "blogwriter.eval_server:main"
 
 [dependency-groups]
 dev = [
+    "httpx>=0.28.1",
     "pytest>=8.0",
     "ruff>=0.14",
+]
+# The remote evaluator (blogwriter-eval-server). Not needed for the harness.
+server = [
+    "fastapi>=0.115",
+    "uvicorn>=0.30",
 ]
 
 [tool.pytest.ini_options]

@@ -453,3 +453,145 @@ def test_judge_post_scores_the_reply(tmp_path, monkeypatch):
     assert result["instances"] == [{"quote": "a", "category": "signpost"}]
     assert result["instances_per_1k"] == 1.0
     assert result["score"] == 3
+
+
+# --- AX experiments: positions, annotations, remote evaluator ---------------
+
+
+def test_locate_is_exact_first_then_tolerates_dropped_markdown():
+    from blogwriter.positions import locate
+
+    text = "The `effort` parameter is the replacement. It is *very* load-bearing."
+    assert locate("It is", text) == (43, 48)
+    start, end = locate("The effort parameter is the replacement", text)
+    assert text[start:end] == "The `effort` parameter is the replacement"
+    start, end = locate("It is very  load-bearing", text)
+    assert text[start:end] == "It is *very* load-bearing"
+    assert locate("not in the post", text) is None
+    assert locate("   ", text) is None
+
+
+def test_position_lines_round_trip_with_and_without_category():
+    from blogwriter.positions import Located, format_lines, parse_lines
+
+    items = [
+        Located(40, 52, "That's it | really", "verdict_intensifier"),
+        Located(3, 10, "a quote"),
+        Located(-1, -1, "unlocated", "signpost"),
+    ]
+    text = format_lines(items)
+    assert text.splitlines()[0] == "-1--1 | signpost | unlocated"
+    assert sorted(parse_lines(text), key=lambda x: x.start) == sorted(
+        items, key=lambda x: x.start
+    )
+    assert parse_lines("garbage\n\n") == []
+
+
+def test_flag_lines_use_the_text_as_it_appears_and_enforce_the_limit():
+    import pytest
+
+    from blogwriter.ax_experiments import flag_lines
+
+    output = "Intro. The word *approximate* is doing a lot of work. End."
+    flags = [{"id": 1, "quote": "The word approximate is doing a lot of work"}]
+    assert flag_lines(flags, output) == (
+        "7-52 | The word *approximate* is doing a lot of work"
+    )
+    with pytest.raises(SystemExit, match="cannot locate"):
+        flag_lines([{"id": 2, "quote": "missing"}], output)
+    long_output = "x " * 2000
+    many = [{"id": i, "quote": "x " * 100} for i in range(10)]
+    with pytest.raises(SystemExit, match="exceeds"):
+        flag_lines(many, long_output)
+
+
+def test_recall_matches_evaluator_spans_to_flags_by_position():
+    from blogwriter.ax_experiments import recall_for_run
+
+    run = {
+        "evaluations": {
+            "claudism_spans": {
+                "score": 2.0,
+                "explanation": "0-10 | signpost | Here's why\n"
+                "50-60 | stock_metaphor | load-bearing",
+            }
+        },
+        "annotations": [
+            {"name": "claudisms", "text": "2-8 | Here's\n100-120 | something else"}
+        ],
+    }
+    result = recall_for_run(run, "not-a-load-bearing-post.r1.md")
+    assert result == {"flags": 2, "found": 1, "spans": 2, "load_bearing_missed": []}
+    assert recall_for_run({"evaluations": {}}, "x.r1.md") is None
+
+
+def test_recall_flags_a_missed_load_bearing_sentence():
+    from blogwriter.ax_experiments import recall_for_run
+    from blogwriter.validate import KNOWN_LOAD_BEARING
+
+    doc_id, snippet = KNOWN_LOAD_BEARING[0]
+    run = {"evaluations": {"claudism_spans": {"explanation": ""}}}
+    assert recall_for_run(run, doc_id)["load_bearing_missed"] == [snippet]
+
+
+def test_eval_server_requires_the_token_and_returns_positions(monkeypatch):
+    import pytest
+
+    pytest.importorskip("fastapi")
+    from fastapi.testclient import TestClient
+
+    import blogwriter.eval_server as server
+
+    calls = []
+
+    def fake_judge(text, *, model, api_key):
+        calls.append(text)
+        return {
+            "instances": [{"quote": "It matters", "category": "salience_flag"}],
+            "instances_per_1k": 4.2,
+            "instance_count": 1,
+            "label": "strong",
+        }
+
+    monkeypatch.setenv("CLAUDISM_EVAL_TOKEN", "secret")
+    monkeypatch.setenv("OPENAI_API_KEY", "k")
+    monkeypatch.setattr(server, "judge_text", fake_judge)
+    client = TestClient(server.create_app())
+    body = {"metadata": {"record_id": "r1"}, "input": {"output": "Hi. It matters."}}
+
+    assert client.post("/v1/evaluate", json=body).status_code == 401
+    wrong = {"Authorization": "Bearer nope"}
+    assert client.post("/v1/evaluate", json=body, headers=wrong).status_code == 401
+
+    auth = {"Authorization": "Bearer secret"}
+    reply = client.post("/v1/evaluate", json=body, headers=auth)
+    assert reply.status_code == 200
+    assert reply.json() == {
+        "score": 4.2,
+        "label": "strong",
+        "explanation": "4-14 | salience_flag | It matters",
+    }
+    # A retry of the same record reuses the first judge call.
+    client.post("/v1/evaluate", json=body, headers=auth)
+    assert len(calls) == 1
+
+    flat = {"arize_metadata": {"record_id": "r2"}, "output": "Hi. It matters."}
+    assert client.post("/v1/evaluate", json=flat, headers=auth).json()["score"] == 4.2
+
+    bad = {"input": {"output": ""}}
+    assert client.post("/v1/evaluate", json=bad, headers=auth).status_code == 400
+
+
+def test_evaluation_reads_the_flat_export_shape():
+    from blogwriter.ax_experiments import evaluation
+
+    run = {"additional_properties": {
+        "eval.em_dash_density.score": 12.5,
+        "eval.em_dash_density.label": "heavy",
+        "eval.claudism_spans.explanation": "1-2 | signpost | x",
+        "model_id": "claude-opus-5",
+    }}
+    assert evaluation(run, "em_dash_density") == {"score": 12.5, "label": "heavy"}
+    assert evaluation(run, "claudism_spans") == {"explanation": "1-2 | signpost | x"}
+    assert evaluation(run, "missing") is None
+    assert evaluation({"evaluations": {"x": {"score": 1}}}, "x") == {"score": 1}

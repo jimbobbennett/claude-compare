@@ -17,3 +17,4 @@ output/
 # per skill), plus local Claude Code session config. Not project code.
 .agents/
 .claude/
+.eval-token

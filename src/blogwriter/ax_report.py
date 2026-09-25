@@ -26,6 +26,7 @@ import tempfile
 from collections import Counter
 from pathlib import Path
 
+from .ax_experiments import ax_binary
 from .determinism import print_stderr
 
 DEFAULT_PROJECT = "claude-compare-blogwriter"
@@ -129,7 +130,7 @@ def export_scored_spans(project: str, space: str, limit: int) -> list[dict]:
     with tempfile.TemporaryDirectory() as tmp:
         result = subprocess.run(
             [
-                "ax", "spans", "export", project,
+                ax_binary(), "spans", "export", project,
                 "--space", space,
                 "--filter", SCORED_FILTER,
                 "-l", str(limit),
