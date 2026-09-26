@@ -72,14 +72,18 @@ def call_judge(prompt: str, *, model: str, api_key: str, retries: int = 4) -> st
     raise RuntimeError("unreachable")
 
 
-def judge_post(path: Path, *, model: str, api_key: str) -> dict:
-    text = path.read_text()
+def judge_text(text: str, *, model: str, api_key: str) -> dict:
+    """Judge one post's markdown, with or without front-matter."""
     raw = call_judge(build_prompt(text), model=model, api_key=api_key)
     instances = parse_judge_output(raw)
     return {
         "instances": instances,
         **score_instances(instances, score_text(text).word_count),
     }
+
+
+def judge_post(path: Path, *, model: str, api_key: str) -> dict:
+    return judge_text(path.read_text(), model=model, api_key=api_key)
 
 
 def summarise(results: dict[str, dict]) -> dict:

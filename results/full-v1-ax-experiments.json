@@ -1,0 +1,71 @@
+{
+  "run_id": "full-v1",
+  "experiments": {
+    "full-v1 opus-5 r1": {
+      "n": 20,
+      "claudism_spans": 4.88,
+      "em_dash_density": 12.8,
+      "claudism_count": 4.15,
+      "claudism_recall": 0.65
+    },
+    "full-v1 opus-5 r2": {
+      "n": 20,
+      "claudism_spans": 4.7,
+      "em_dash_density": 13.0,
+      "claudism_count": 3.5,
+      "claudism_recall": 0.61
+    },
+    "full-v1 opus-5.5 r1": {
+      "n": 20,
+      "claudism_spans": 2.49,
+      "em_dash_density": 0.07,
+      "claudism_count": null,
+      "claudism_recall": null
+    },
+    "full-v1 opus-5.5 r2": {
+      "n": 20,
+      "claudism_spans": 2.26,
+      "em_dash_density": 0.03,
+      "claudism_count": null,
+      "claudism_recall": null
+    }
+  },
+  "models": {
+    "opus-5": {
+      "n": 40,
+      "claudism_spans": 4.79,
+      "em_dash_density": 12.9,
+      "claudism_count": 3.83,
+      "claudism_recall": 0.63
+    },
+    "opus-5.5": {
+      "n": 40,
+      "claudism_spans": 2.38,
+      "em_dash_density": 0.05,
+      "claudism_count": null,
+      "claudism_recall": null
+    }
+  },
+  "change_pct": {
+    "claudism_spans": -50,
+    "em_dash_density": -100
+  },
+  "category_per_1k": {
+    "opus-5": {
+      "salience_flag": 1.67,
+      "contrast_reframe": 0.63,
+      "verdict_intensifier": 1.1,
+      "signpost": 0.79,
+      "gotcha_framing": 0.16,
+      "stock_metaphor": 0.43
+    },
+    "opus-5.5": {
+      "salience_flag": 0.93,
+      "contrast_reframe": 0.27,
+      "verdict_intensifier": 0.38,
+      "signpost": 0.53,
+      "gotcha_framing": 0.13,
+      "stock_metaphor": 0.13
+    }
+  }
+}
