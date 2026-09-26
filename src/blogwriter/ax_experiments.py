@@ -23,8 +23,8 @@ aggregates the lot.
 Subcommands run in order: ``upload``, ``annotate``, ``tasks`` (one task per
 experiment; the remote evaluator's tasks are created in the UI), then
 ``recall`` and ``report``. State (dataset, experiment and task IDs) is kept in
-``output/<run>/ax/state.json``. docs/ax-experiments.md has the full workflow
-and the AX behaviour it works around.
+``output/<run>/ax/state.json``. The README has the full workflow and the AX
+behaviour it works around.
 """
 
 from __future__ import annotations
@@ -40,8 +40,9 @@ import tempfile
 import time
 from pathlib import Path
 
-from .claudisms import strip_front_matter
+from .claudisms import score_text, strip_front_matter
 from .determinism import REPO_ROOT, load_verified_brief, print_stderr, sha256_text
+from .judge_spec import CLAUDISM_CATEGORIES_V2
 from .positions import MAX_TEXT, Located, format_lines, locate, parse_lines
 from .prompts import build_writer_prompt
 from .topics import load_topics
@@ -644,6 +645,19 @@ def summarise_runs(runs: list[dict]) -> dict:
     }
 
 
+def category_rates(runs: list[dict]) -> dict[str, float]:
+    """Evaluator spans per 1,000 prose words, by category, pooled over runs."""
+    words = sum(score_text(r["output"]).word_count for r in runs)
+    counts = dict.fromkeys(CLAUDISM_CATEGORIES_V2, 0)
+    for run in runs:
+        ev = evaluation(run, SPANS_EVAL) or {}
+        for span in parse_lines(ev.get("explanation") or ""):
+            if span.category in counts:
+                counts[span.category] += 1
+    return {c: round(n * 1000 / words, 2) if words else 0.0
+            for c, n in counts.items()}
+
+
 def cmd_report(args: argparse.Namespace) -> int:
     state = load_state(args.run_id)
     if check_attachment(state):
@@ -656,6 +670,7 @@ def cmd_report(args: argparse.Namespace) -> int:
         rows[name] = summarise_runs(runs)
         by_model.setdefault(name.split()[1], []).extend(runs)
     models = {alias: summarise_runs(runs) for alias, runs in sorted(by_model.items())}
+    categories = {a: category_rates(runs) for a, runs in sorted(by_model.items())}
 
     cols = [SPANS_EVAL, EMDASH_EVAL, COUNT_CONFIG, RECALL_CONFIG]
     print(f"  {'experiment':22}{'n':>4}" + "".join(f"{c:>18}" for c in cols))
@@ -671,10 +686,17 @@ def cmd_report(args: argparse.Namespace) -> int:
                 change[c] = round(100 * (b - a) / a)
                 print(f"  {c}: opus-5 {a} -> opus-5.5 {b} ({change[c]:+d}%)")
 
+    print(f"  {'category (spans per 1k prose words)':38}"
+          + "".join(f"{a:>10}" for a in categories))
+    for cat in CLAUDISM_CATEGORIES_V2:
+        print(f"  {cat:38}" + "".join(
+            f"{categories[a][cat]:>10}" for a in categories))
+
     if args.json:
         Path(args.json).write_text(json.dumps(
             {"run_id": args.run_id, "experiments": rows, "models": models,
-             "change_pct": change}, indent=2) + "\n")
+             "change_pct": change, "category_per_1k": categories},
+            indent=2) + "\n")
         print(f"  -> {args.json}")
     return 0
 

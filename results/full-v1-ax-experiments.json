@@ -49,5 +49,23 @@
   "change_pct": {
     "claudism_spans": -50,
     "em_dash_density": -100
+  },
+  "category_per_1k": {
+    "opus-5": {
+      "salience_flag": 1.67,
+      "contrast_reframe": 0.63,
+      "verdict_intensifier": 1.1,
+      "signpost": 0.79,
+      "gotcha_framing": 0.16,
+      "stock_metaphor": 0.43
+    },
+    "opus-5.5": {
+      "salience_flag": 0.93,
+      "contrast_reframe": 0.27,
+      "verdict_intensifier": 0.38,
+      "signpost": 0.53,
+      "gotcha_framing": 0.13,
+      "stock_metaphor": 0.13
+    }
   }
 }
